@@ -13,7 +13,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
-import { FaPlus, FaSearch } from "react-icons/fa";
+import { FaPlus, FaRegEye, FaRegTrashAlt, FaSearch } from "react-icons/fa";
 
 const Departements: React.FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -181,6 +181,9 @@ const Departements: React.FC = () => {
                   <th scope="col" className="px-6 py-3">
                     Pays Reference
                   </th>
+                  <th scope="col" className="px-6 py-3">
+                    <span className="sr-only">Action</span>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -196,6 +199,12 @@ const Departements: React.FC = () => {
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     Haiti
+                  </td>
+                  <td className="text-left py-3 px-4 border-b border-gray-200">
+                    <div className="flex ">
+                      <FaRegTrashAlt className="h-3 w-3 cursor-pointer text-red-600 mr-4" />
+                      <FaRegEye className="h-3 w-3 cursor-pointer text-blue-600" />
+                    </div>
                   </td>
                 </tr>
               </tbody>
