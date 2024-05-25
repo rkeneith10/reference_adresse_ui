@@ -1,11 +1,15 @@
+"use client";
 import Chart from "@/components/barchart";
 import RootLayout from "@/components/rootLayout";
 import countries from "@/data/pays";
-import React from "react";
+import React, { useEffect } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaRegFlag, FaTreeCity } from "react-icons/fa6";
 
 const Home: React.FC = () => {
+  useEffect(() => {
+    document.title = "Tableau de bord";
+  }, []);
   return (
     <RootLayout isAuthenticated={true}>
       <div className="flex flex-wrap justify-center md:justify-between">

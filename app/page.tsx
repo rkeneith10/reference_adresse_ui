@@ -2,7 +2,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineLock, AiOutlineMail } from "react-icons/ai";
 import RootLayout from "../components/rootLayout";
 import BackImage1 from "../public/images/téléchargement.jpg";
@@ -12,6 +12,10 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    document.title = "Referentiel d'adresse";
+  });
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
