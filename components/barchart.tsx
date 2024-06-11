@@ -1,9 +1,9 @@
 "use client";
 import axios from "axios";
 
-import { CountryAttributes } from "@/pages/api/models/paysModel";
 import React, { useEffect, useState } from "react";
 import Chart from "react-google-charts";
+import { CountryAttributes } from "../app/api/models/paysModel";
 export const options = {
   chart: {
     title: "Nombre pays par continent",
