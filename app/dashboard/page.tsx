@@ -1,7 +1,7 @@
 "use client";
 import Chart from "@/components/barchart";
 import RootLayout from "@/components/rootLayout";
-import { CountryAttributes } from "@/pages/api/models/paysModel";
+import { CountryAttributes } from "../api/models/paysModel";
 //import countries from "@/data/pays";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
