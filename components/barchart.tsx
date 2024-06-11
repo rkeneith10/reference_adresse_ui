@@ -1,7 +1,8 @@
 "use client";
+import axios from "axios";
 
-import countries from "@/data/pays";
-import React from "react";
+import { CountryAttributes } from "@/pages/api/models/paysModel";
+import React, { useEffect, useState } from "react";
 import Chart from "react-google-charts";
 export const options = {
   chart: {
@@ -10,6 +11,18 @@ export const options = {
 };
 
 const BarChart: React.FC = () => {
+  const [countries, setCountries] = useState<CountryAttributes[]>([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/paysCtrl");
+        setCountries(response.data.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchData();
+  }, []);
   // Count the number of countries in each continent
   const countriesByContinent = countries.reduce(
     (acc: { [continent: string]: number }, country) => {

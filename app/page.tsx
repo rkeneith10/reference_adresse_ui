@@ -34,10 +34,10 @@ const LoginPage: React.FC = () => {
   return (
     <RootLayout isAuthenticated={isAuthenticated}>
       <div
-        className="h-screen  max-w-screen-2xl mx-auto flex flex-col justify-center items-center   bg-center bg-cover bg-no-repeat "
+        className="h-screen w-full sm:mx-auto flex flex-col justify-center items-center bg-center bg-cover bg-no-repeat"
         style={{ backgroundImage: `url(${BackImage1.src})` }}
       >
-        <div className="bg-white rounded-md shadow-md p-10">
+        <div className="bg-white rounded-md shadow-md p-10 w-full max-w-screen-sm sm:mx-auto ">
           <h2 className="text-2xl font-bold text-center">CONNEXION</h2>
 
           <form onSubmit={handleSubmit}>

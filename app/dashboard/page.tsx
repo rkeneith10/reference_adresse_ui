@@ -1,14 +1,27 @@
 "use client";
 import Chart from "@/components/barchart";
 import RootLayout from "@/components/rootLayout";
-import countries from "@/data/pays";
-import React, { useEffect } from "react";
+import { CountryAttributes } from "@/pages/api/models/paysModel";
+//import countries from "@/data/pays";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaRegFlag, FaTreeCity } from "react-icons/fa6";
 
 const Home: React.FC = () => {
+  const [countries, setCountries] = useState<CountryAttributes[]>([]);
   useEffect(() => {
     document.title = "Tableau de bord";
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/paysCtrl");
+        setCountries(response.data.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchData();
   }, []);
   return (
     <RootLayout isAuthenticated={true}>
