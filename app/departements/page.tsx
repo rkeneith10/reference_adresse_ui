@@ -1,8 +1,8 @@
 "use client";
-import { Input, Select, SelectItem } from "@nextui-org/react";
+import { Input } from "@nextui-org/react";
 
 import RootLayout from "@/components/rootLayout";
-import countries from "@/data/pays";
+//import countries from "@/data/pays";
 import {
   Button,
   Modal,
@@ -61,7 +61,7 @@ const Departements: React.FC = () => {
                         Ajouter un d&eacute;partement
                       </ModalHeader>
                       <ModalBody>
-                        <div className="mb-1">
+                        {/* <div className="mb-1">
                           <label
                             htmlFor="codepays"
                             className="block  text-medium font-normal"
@@ -84,7 +84,7 @@ const Departements: React.FC = () => {
                                 </SelectItem>
                               ))}
                           </Select>
-                        </div>
+                        </div> */}
                         <div className="mb-1">
                           <label
                             htmlFor="codepays"
