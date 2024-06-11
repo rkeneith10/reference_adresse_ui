@@ -1,7 +1,7 @@
 "use client";
 
 import RootLayout from "@/components/rootLayout";
-import countries from "@/data/pays";
+//import countries from "@/data/pays";
 import {
   Button,
   Input,
@@ -99,7 +99,7 @@ const Commune: React.FC = () => {
                         Ajouter une commune
                       </ModalHeader>
                       <ModalBody>
-                        <div className="mb-1">
+                        {/* <div className="mb-1">
                           <label
                             htmlFor="codepays"
                             className="block text-sm font-normal"
@@ -122,7 +122,7 @@ const Commune: React.FC = () => {
                                 </SelectItem>
                               ))}
                           </Select>
-                        </div>
+                        </div> */}
                         <div className="mb-1">
                           <label
                             htmlFor="codepays"
