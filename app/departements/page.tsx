@@ -12,7 +12,7 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { FaPlus, FaRegEye, FaRegTrashAlt, FaSearch } from "react-icons/fa";
 
 const Departements: React.FC = () => {
@@ -28,6 +28,7 @@ const Departements: React.FC = () => {
   }, []);
   return (
     <RootLayout isAuthenticated={true}>
+      <Suspense fallback={<div>Loading...</div>}>
       <div className="bg-gray-100">
         <div className="font-semibold text-xl mb-4 text-gray-90">
           D&eacute;partements
@@ -212,6 +213,7 @@ const Departements: React.FC = () => {
           </div>
         </div>
       </div>
+      </Suspense>
     </RootLayout>
   );
 };

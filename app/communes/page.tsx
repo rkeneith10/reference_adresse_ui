@@ -15,7 +15,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { FaPlus, FaSearch } from "react-icons/fa";
 
 const Commune: React.FC = () => {
@@ -65,7 +65,8 @@ const Commune: React.FC = () => {
 
   return (
     <RootLayout isAuthenticated={true}>
-      <div className="bg-gray-100">
+    <Suspense fallback={<div>Loading...</div>}>
+    <div className="bg-gray-100">
         <div className="font-semibold text-xl mb-4 text-gray-90">
           Communes / Villes
         </div>
@@ -331,6 +332,7 @@ const Commune: React.FC = () => {
           </div> */}
         </div>
       </div>
+    </Suspense>
     </RootLayout>
   );
 };

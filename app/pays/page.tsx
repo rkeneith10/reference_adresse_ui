@@ -13,7 +13,7 @@ import {
 } from "@nextui-org/react";
 import axios from "axios";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import {
   FaChevronLeft,
   FaChevronRight,
@@ -110,6 +110,7 @@ const Pays: React.FC = () => {
 
   return (
     <RootLayout isAuthenticated={true}>
+      <Suspense fallback={<div>loading...</div>}>
       <div className=" bg-gray-100 ">
         <div className="font-semibold text-xl mb-4 text-gray-900">{loading ?(""):("Pays")}</div>
 
@@ -409,6 +410,7 @@ const Pays: React.FC = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      </Suspense>
     </RootLayout>
   );
 };

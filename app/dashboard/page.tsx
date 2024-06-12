@@ -4,7 +4,7 @@ import RootLayout from "@/components/rootLayout";
 import { CountryAttributes } from "../api/models/paysModel";
 //import countries from "@/data/pays";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaRegFlag, FaTreeCity } from "react-icons/fa6";
 
@@ -25,6 +25,7 @@ const Home: React.FC = () => {
   }, []);
   return (
     <RootLayout isAuthenticated={true}>
+      <Suspense fallback={<div>Loading...</div>}>
       <div className="flex flex-wrap justify-center md:justify-between">
         <div className="w-full md:w-1/3 p-4">
           <div className="bg-white shadow-md rounded-md p-6 text-center">
@@ -65,6 +66,7 @@ const Home: React.FC = () => {
       <div className="">
         <Chart />
       </div>
+      </Suspense>
     </RootLayout>
   );
 };

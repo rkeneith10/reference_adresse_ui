@@ -1,10 +1,12 @@
 import RootLayout from "@/components/rootLayout";
-import React from "react";
+import React, { Suspense } from "react";
 
 const Adresses: React.FC = () => {
   return (
     <RootLayout isAuthenticated={true}>
-      <div>Adresses</div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <div>Adresses</div>
+      </Suspense>
     </RootLayout>
   );
 };

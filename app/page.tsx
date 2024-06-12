@@ -2,7 +2,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { AiOutlineLock, AiOutlineMail } from "react-icons/ai";
 import RootLayout from "../components/rootLayout";
 import BackImage1 from "../public/images/téléchargement.jpg";
@@ -33,6 +33,7 @@ const LoginPage: React.FC = () => {
   };
   return (
     <RootLayout isAuthenticated={isAuthenticated}>
+      <Suspense fallback={<div>loading...</div>}>
       <div
         className="h-screen w-full sm:mx-auto flex flex-col justify-center items-center bg-center bg-cover bg-no-repeat"
         style={{ backgroundImage: `url(${BackImage1.src})` }}
@@ -84,6 +85,7 @@ const LoginPage: React.FC = () => {
           </form>
         </div>
       </div>
+      </Suspense>
     </RootLayout>
   );
 };

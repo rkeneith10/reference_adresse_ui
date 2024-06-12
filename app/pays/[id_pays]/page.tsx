@@ -2,7 +2,7 @@
 import RootLayout from "@/components/rootLayout";
 import { Spinner } from "@nextui-org/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { updateCountry } from "../../actions/actionCountry";
 
 
@@ -73,6 +73,7 @@ const DetailPays = ({ params }: { params: { id_pays: string } }) => {
 
   return (
     <RootLayout isAuthenticated={true}>
+      <Suspense fallback={<div>loading ...</div>}>
       {loading ? (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
         <Spinner size="lg" color="primary"/>
@@ -162,6 +163,7 @@ const DetailPays = ({ params }: { params: { id_pays: string } }) => {
       ) : (
         <div>Pays introuvable</div>
       )}
+      </Suspense>
     </RootLayout>
   );
 };
