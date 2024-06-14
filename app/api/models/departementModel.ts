@@ -1,0 +1,70 @@
+import sequelize from "@/lib/sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
+import Country from "./paysModel";
+
+export interface DepartementAttributes {
+  id_departement: number;
+  libelle: string;
+  code_departement: string;
+  chef_lieux: string;
+  id_pays: number;
+}
+
+interface DepartementCreationAttributes
+  extends Optional<DepartementAttributes, "id_departement"> { }
+
+class Departement
+  extends Model<DepartementAttributes, DepartementCreationAttributes>
+  implements DepartementAttributes {
+  public id_departement!: number;
+  public libelle!: string;
+  public code_departement!: string;
+  public chef_lieux!: string;
+  public id_pays!: number;
+
+  // Timestamps
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
+
+Departement.init(
+  {
+    id_departement: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    libelle: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
+    code_departement: {
+      type: DataTypes.STRING(5),
+      allowNull: false,
+    },
+    chef_lieux: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
+    id_pays: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
+      references: {
+        model: Country,
+        key: 'id_pays',
+      },
+    },
+  },
+  {
+    sequelize,
+    modelName: "Departement",
+    tableName: "departements",
+    timestamps: false, // Automatically adds createdAt and updatedAt fields
+  }
+);
+
+// Define association
+Country.hasMany(Departement, { foreignKey: 'id_pays' });
+Departement.belongsTo(Country, { foreignKey: 'id_pays' });
+
+export default Departement;
