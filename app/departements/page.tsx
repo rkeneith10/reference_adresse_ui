@@ -171,7 +171,7 @@ const Departements: React.FC = () => {
                 >
                   Ajouter
                 </Button>
-                <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
+                <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior="outside">
                   <ModalContent>
                     <>
                       <ModalHeader className="flex flex-col gap-1">

@@ -1,13 +1,16 @@
 "use client";
+import { updateCountry } from "@/app/actions/actionCountry";
+import CountryFormModal from "@/components/CountryFormModal";
 import RootLayout from "@/components/rootLayout";
-import { Spinner } from "@nextui-org/react";
+import { Spinner, useDisclosure } from "@nextui-org/react";
 import axios from "axios";
+//import { useRouter } from "next/router";
 import { Suspense, useEffect, useState } from "react";
-import { updateCountry } from "../../actions/actionCountry";
 
 
 const DetailPays = ({ params }: { params: { id_pays: string } }) => {
   const { id_pays } = params;
+  //const router = useRouter();
   const [country, setCountry] = useState<any>(null);
   const [formData, setFormData] = useState<any>({
     libelle: "",
@@ -18,6 +21,11 @@ const DetailPays = ({ params }: { params: { id_pays: string } }) => {
   });
   const [loading, setLoading] = useState<Boolean>(true);
   const [updating, setUpdating] = useState<Boolean>(false);
+  const [confirmation, setConfirmation] = useState(false)
+  const [modalMessage, setModalMessage] = useState("")
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
+  const { isOpen: isConfirmationOpen, onOpen: onConfirmationOpen, onClose: onConfirmationClose } = useDisclosure();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -51,8 +59,10 @@ const DetailPays = ({ params }: { params: { id_pays: string } }) => {
     fetchCountry();
   }, [id_pays]);
 
-  const handleUpdateCountry = async () => {
+  const handleUpdateCountry = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setUpdating(true);
+
     try {
       const updatedCountry = await updateCountry(
         country.id_pays,
@@ -63,17 +73,31 @@ const DetailPays = ({ params }: { params: { id_pays: string } }) => {
         formData.fuseau_horaire
       );
       setCountry(updatedCountry);
+      setConfirmation(true)
       setUpdating(false);
     } catch (error) {
       setUpdating(false);
       console.error("Update error:", error);
     }
-
   };
+
+  const handleAddCountrySuccess = () => {
+
+    setModalMessage("Le pays a été modifié avec succès");
+    onConfirmationOpen();
+    // setTimeout(() => {
+    //   router.push('/pays'); // Assurez-vous que cette route est correcte dans votre projet
+    // }, 2000);
+  };
+  const handleAddCountryFailed = () => {
+    setModalMessage("Erreur lors de la modification du pays")
+    onConfirmationOpen();
+  }
 
   return (
     <RootLayout isAuthenticated={true}>
       <Suspense fallback={<div>loading ...</div>}>
+        {confirmation && (<CountryFormModal isOpen={isOpen} onClose={onClose} onSuccess={handleAddCountrySuccess} onFailed={handleAddCountryFailed} />)}
         {loading ? (
           <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
             <Spinner size="lg" color="primary" />
@@ -83,7 +107,7 @@ const DetailPays = ({ params }: { params: { id_pays: string } }) => {
         ) :
           country ? (
             <div className="h-auto bg-white rounded-md shadow-md p-10 justify-center items-center mt-10">
-              <form action={handleUpdateCountry}>
+              <form onSubmit={handleUpdateCountry}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col">
                     <label htmlFor="libelle" className="mb-2 font-medium">
