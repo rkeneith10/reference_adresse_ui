@@ -22,6 +22,8 @@ const Departements: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [modalMessge, setMessageModal] = useState("");
   const [departement, setDepartement] = useState({
     libelle: "",
     code_departement: "",
@@ -40,6 +42,9 @@ const Departements: React.FC = () => {
     const { name, value } = e.target;
     setDepartement({ ...departement, [name]: value });
     setErrors({ ...errors, [name]: "" });
+  };
+  const handleCloseConfirmation = () => {
+    setIsConfirmationOpen(false);
   };
 
   const validateForm = () => {
@@ -89,9 +94,13 @@ const Departements: React.FC = () => {
           id_pays: "",
         });
         onClose();
+        setMessageModal("Le département a été enregistré avec succès.")
+        setIsConfirmationOpen(true); // Ouvrir le modal de confirmation
         fetchData();
       }
     } catch (error) {
+      setMessageModal("Ce département est déjà existé")
+      setIsConfirmationOpen(true);
       console.error("Échec de l'ajout du département", error);
     } finally {
       setAdding(false);
@@ -364,6 +373,15 @@ const Departements: React.FC = () => {
           </div>
         )}
       </div>
+      <Modal backdrop="blur" isOpen={isConfirmationOpen} onClose={handleCloseConfirmation}>
+        <ModalContent>
+          <ModalHeader>Confirmation</ModalHeader>
+          <ModalBody>{modalMessge}</ModalBody>
+          <ModalFooter>
+            <Button onPress={handleCloseConfirmation} color="primary">OK</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </RootLayout>
   );
 };

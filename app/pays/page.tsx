@@ -40,6 +40,7 @@ const Pays: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [scrollBehavior, setScrollBehavior] = useState<any>("inside");
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [deleting, setDeleting] = useState<Boolean>(false)
   const [pays, setPays] = useState({
     libelle: "",
@@ -62,7 +63,9 @@ const Pays: React.FC = () => {
     setPays({ ...pays, [name]: value });
     setErrors({ ...errors, [name]: "" }); // Clear the error message when the user starts typing
   };
-
+  const handleCloseConfirmation = () => {
+    setIsConfirmationOpen(false);
+  };
   const validateForm = () => {
     let valid = true;
     const newErrors = { libelle: "", code_pays: "", continent: "", indicatif_tel: "", fuseau_horaire: "" };
@@ -123,17 +126,24 @@ const Pays: React.FC = () => {
           fuseau_horaire: "",
         });
         onClose(); // Fermer le modal si nécessaire
-
+        setModalMessage("Le pays a été enregistré avec succès.")
+        setIsConfirmationOpen(true);
         fetchData();
-        setModalMessage("Pays ajouté avec succès")
-      } else if (response.status === 400) {
-        setModalMessage(response.data.message);
-      } else {
+
+      }
+      // else if (response.status === 400) {
+      //   setAdding(false);
+      //   onClose();
+      //   setModalMessage(response.data.message);
+      //   setIsConfirmationOpen(true);
+      // } 
+      else {
         console.log("Échec de l'ajout du pays");
       }
     } catch (error) {
       console.log("Échec de l'ajout du pays", error);
-      setModalMessage("Échec de l'ajout du pays");
+      setIsConfirmationOpen(true);
+      setModalMessage("Ce Pays est déjà  existé");
     } finally {
       setAdding(false); // Assurez-vous que l'état de l'ajout est toujours faux
     }
@@ -407,14 +417,18 @@ const Pays: React.FC = () => {
                               </td>
                               <td className="text-left py-3 px-4 border-b border-gray-200">
                                 <div className="flex ">
-                                  <FaRegTrashAlt className="h-3 w-3 cursor-pointer text-red-600 mr-4" onClick={() => {
+                                  <Button isIconOnly size="sm" color="danger" variant="light" onClick={() => {
                                     setSelectedCountryId(country.id_pays);
                                     setDeleteModalOpen(true);
-                                  }} />
+                                  }} >
+                                    <FaRegTrashAlt className="text-lg" />
+                                  </Button>
                                   <Link href={`/pays/${country.id_pays}`}>
-                                    {" "}
-                                    <FaRegEye className="h-3 w-3 cursor-pointer text-blue-600" />
+                                    <Button isIconOnly size="sm" color="primary" variant="light">
+                                      <FaRegEye className="text-lg" />
+                                    </Button>
                                   </Link>
+
                                 </div>
                               </td>
                             </tr>
@@ -498,7 +512,15 @@ const Pays: React.FC = () => {
           </div>
         )}
       </div>
-
+      <Modal backdrop="blur" isOpen={isConfirmationOpen} onClose={handleCloseConfirmation}>
+        <ModalContent>
+          <ModalHeader>Confirmation</ModalHeader>
+          <ModalBody>{modalMessage}</ModalBody>
+          <ModalFooter>
+            <Button onPress={handleCloseConfirmation} color="primary">OK</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </RootLayout>
   );
 };
