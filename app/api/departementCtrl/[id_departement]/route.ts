@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Departement from "../../models/departementModel";
+import { default as Commune, default as Departement } from "../../models/departementModel";
 
 // Handler for GET request
 export async function GET(
@@ -57,6 +57,7 @@ export async function DELETE(
       );
     }
 
+    await Commune.destroy({ where: { id_departement } })
     await Departement.destroy({ where: { id_departement } });
     return NextResponse.json(
       { message: "Le departement a été supprimé avec succès." },
@@ -104,7 +105,7 @@ export async function PUT(
     console.error(error);
     return NextResponse.json(
       {
-        message: "Erreur lors de la mise à jour du pays",
+        message: "Erreur lors de la mise à jour du departement",
         error: error.message,
       },
       { status: 500 }

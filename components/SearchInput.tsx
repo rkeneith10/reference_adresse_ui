@@ -13,7 +13,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ searchTerm, setSearchTerm }) 
     <Input
       isClearable
       className="w-full sm:max-w-[20%] mr-4"
-      placeholder="Rechercher un pays"
+      placeholder="Recherche..."
       startContent={<FaSearch className="text-gray-500" />}
       value={searchTerm}
       onChange={(e: any) => setSearchTerm(e.target.value)}

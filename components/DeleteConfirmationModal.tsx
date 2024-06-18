@@ -15,7 +15,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({ isOpe
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">Confirmation de suppression</ModalHeader>
         <ModalBody>
-          <p>Êtes-vous sûr de vouloir supprimer ce pays ?</p>
+          <p>Êtes-vous sûr de vouloir supprimer cet élément ?</p>
         </ModalBody>
         <ModalFooter>
           <Button color="danger" onPress={onDelete}>

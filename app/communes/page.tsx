@@ -1,338 +1,147 @@
 "use client";
 
+import CommuneFormModal from "@/components/CommuneFormModal";
+import CommuneTable from "@/components/CommuneTable";
+import ConfirmationModal from "@/components/ConfirmationModal";
+import DeleteConfirmationModal from "@/components/DeleteConfirmationModal";
 import RootLayout from "@/components/rootLayout";
-//import countries from "@/data/pays";
+import SearchInput from "@/components/SearchInput";
 import {
   Button,
-  Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  Select,
-  SelectItem,
-  useDisclosure,
+  Spinner,
+  useDisclosure
 } from "@nextui-org/react";
 import axios from "axios";
-import React, { Suspense, useEffect, useState } from "react";
-import { FaPlus, FaSearch } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { FaPlus } from "react-icons/fa";
+import { CommuneAttributes } from "../api/models/communeModel";
+import { DepartementAttributes } from "../api/models/departementModel";
 
 const Commune: React.FC = () => {
-  const [commune, setCommune] = useState("");
-  const [long, setLong] = useState<string>("");
-  const [lat, setLat] = useState<string>("");
+
+  const [departements, setDepartements] = useState<DepartementAttributes[]>([])
+  const [commune, setCommune] = useState<CommuneAttributes[]>([])
+  const [searchTerm, setSearchTerm] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedCommuneId, setSelectedCommuneId] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [itemsPerPage] = useState(10);
+  const [loading, setLoading] = useState<boolean>(true)
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
+  const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
+  const { isOpen: isConfirmationOpen, onOpen: onConfirmationOpen, onClose: onConfirmationClose } = useDisclosure();
 
   useEffect(() => {
     document.title = "Communes";
+    fetchDepartement();
+    fetchCommune();
   }, []);
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  const handleCommune = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCommune(e.target.value);
+  const fetchCommune = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get("/api/communeCtrl");
+      setCommune(response.data.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+    }
+  };
+  const fetchDepartement = async () => {
+    try {
+      const response = await axios.get("/api/departementCtrl");
+      setDepartements(response.data.data);
+    } catch (error) {
+      console.error("Error fetching departement:", error);
+    }
+  }
+  const handleDeleteCommune = async (id: number) => {
+    setDeleteLoading(true);
+    try {
+      await axios.delete(`/api/communeCtrl/${id}`);
+      setCommune(commune.filter((com) => com.id_commune !== id));
+      setModalMessage("La ville a été supprimée avec succès");
+      onConfirmationOpen();
+    } catch (error) {
+      console.error("Failed to delete coomune:", error);
+    } finally {
+      setDeleteLoading(false);
+      onDeleteClose();
+    }
   };
 
-  useEffect(() => {
-    if (commune) {
-      handleSearch();
-    } else {
-      setLat("");
-      setLong("");
-    }
-  }, [commune]);
+  const handleAddCommuneuccess = () => {
+    fetchCommune();
+    setModalMessage("La commune a été enregistrée avec succès");
+    onConfirmationOpen();
+  };
 
-  const handleSearch = () => {
-    axios
-      .get(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${commune}`
-      )
-      .then((response) => {
-        if (response.data && response.data.length > 0) {
-          const { lon, lat } = response.data[0];
-          setLong(lon.toString());
-          setLat(lat.toString());
-        } else {
-          console.log("Aucune ville correspondante trouvée");
-          setLong("");
-          setLat("");
-        }
-      })
-      .catch((error) => {
-        console.error("Erreur lors de la recherche de la ville", error);
-      });
+  const handleAddCommuneFailed = () => {
+    setModalMessage("Cette commune existe déjà dans la base de données");
+    onConfirmationOpen();
+  };
+
+  const getDepartementNameById = (id: number) => {
+    const dept = departements.find((d) => d.id_departement === id);
+    return dept ? dept.libelle : "Pays Inconnu";
   };
 
   return (
     <RootLayout isAuthenticated={true}>
-    <Suspense fallback={<div>Loading...</div>}>
-    <div className="bg-gray-100">
-        <div className="font-semibold text-xl mb-4 text-gray-90">
-          Communes / Villes
+
+      <div className="bg-gray-100">
+        <div className="font-semibold text-xl mb-4 text-gray-900">
+          {loading ? "" : "Gestion Communes"}
         </div>
 
-        <div className="bg-white shadow-md rounded-md p-5">
-          <div className="flex flex-row justify-between mb-4">
-            <Input
-              isClearable
-              className="w-full sm:max-w-[20%] mr-4 "
-              placeholder="Rechercher une commune"
-              startContent={<FaSearch className="text-gray-500" />}
-            />
-            <div>
-              <Button
-                color="primary"
-                className="text-white"
-                onPress={onOpen}
-                startContent={<FaPlus />}
-              >
+        {loading ? (
+          <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+            <Spinner size="lg" color="primary" />
+            <div className="loader">Chargement en cours...</div>
+          </div>
+        ) : (
+          <div className="bg-white shadow-md rounded-md p-5">
+            <div className="flex flex-row justify-between mb-4">
+              <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+              <Button color="primary" className="text-white" onPress={onOpen} startContent={<FaPlus />}>
                 Ajouter
               </Button>
-              <Modal
-                backdrop="blur"
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-              >
-                <ModalContent>
-                  {(onClose) => (
-                    <>
-                      <ModalHeader className="flex flex-col gap-1">
-                        Ajouter une commune
-                      </ModalHeader>
-                      <ModalBody>
-                        {/* <div className="mb-1">
-                          <label
-                            htmlFor="codepays"
-                            className="block text-sm font-normal"
-                          >
-                            Choisir un pays
-                          </label>
-                          <Select
-                            placeholder="Choisir un pays"
-                            className="w-full"
-                            disableSelectorIconRotation
-                          >
-                            {countries
-                              .sort((a, b) => a.name.localeCompare(b.name))
-                              .map((country) => (
-                                <SelectItem
-                                  key={country.dialCode}
-                                  value={country.name}
-                                >
-                                  {country.name}
-                                </SelectItem>
-                              ))}
-                          </Select>
-                        </div> */}
-                        <div className="mb-1">
-                          <label
-                            htmlFor="codepays"
-                            className="block text-sm font-normal"
-                          >
-                            Choisir un d&eacute;partement
-                          </label>
-                          <Select
-                            placeholder="Choisir un departement"
-                            className="w-full"
-                            disableSelectorIconRotation
-                          >
-                            <SelectItem key={1} value="Nord">
-                              Nord
-                            </SelectItem>
-                            <SelectItem key={2} value="Sud">
-                              Sud
-                            </SelectItem>
-                            <SelectItem key={3} value="Ouest">
-                              Ouest
-                            </SelectItem>
-                          </Select>
-                        </div>
-                        <div className="mb-1">
-                          <label
-                            htmlFor="codepays"
-                            className="block text-sm font-normal"
-                          >
-                            Choisir un arrondissement
-                          </label>
-                          <Select
-                            placeholder="Choisir un departement"
-                            className="w-full"
-                            disableSelectorIconRotation
-                          >
-                            <SelectItem key={1} value="Nord">
-                              Cap-haitien
-                            </SelectItem>
-                            <SelectItem key={2} value="Sud">
-                              Limonade
-                            </SelectItem>
-                            <SelectItem key={3} value="Ouest">
-                              Quartier-Morin
-                            </SelectItem>
-                          </Select>
-                        </div>
-                        <div className="flex flex-row justify-between mb-1">
-                          <div className="mr-2">
-                            <label
-                              htmlFor="commune"
-                              className="block text-sm font-normal"
-                            >
-                              Commune
-                            </label>
-                            <input
-                              type="text"
-                              placeholder="Entrer la commune"
-                              id="commune"
-                              name="commune"
-                              onChange={handleCommune}
-                              className="border rounded-md w-full p-2 text-sm"
-                            />
-                          </div>
-                          <div className="">
-                            <label
-                              htmlFor="codepostal"
-                              className="block text-sm font-normal"
-                            >
-                              Code Postal
-                            </label>
-                            <input
-                              type="text"
-                              placeholder="Entrer le code postal"
-                              id="codepostal"
-                              name="codepostal"
-                              className="border rounded-md w-full p-2 text-sm"
-                            />
-                          </div>
-                        </div>
-                        <div className="mb-1">
-                          <div className="flex flex-row items-center justify-between">
-                            <div className="mr-2">
-                              {" "}
-                              <label
-                                htmlFor="long"
-                                className="block text-sm font-normal"
-                              >
-                                Longitude
-                              </label>
-                              <input
-                                type="text"
-                                placeholder="Longitude"
-                                readOnly
-                                id="long"
-                                name="long"
-                                value={long}
-                                className="border rounded-md w-full p-2 text-sm"
-                              />
-                            </div>
-                            <div>
-                              {" "}
-                              <label
-                                htmlFor="lat"
-                                className="block text-sm font-normal"
-                              >
-                                Latitude
-                              </label>
-                              <input
-                                type="text"
-                                placeholder="Latitude"
-                                readOnly
-                                id="lat"
-                                name="lat"
-                                value={lat}
-                                className="border rounded-md w-full p-2 text-sm"
-                              />
-                            </div>
-                            {/* <div>
-                              <FaSearch
-                                size={20}
-                                className="text-gray-500 cursor-pointer"
-                                onClick={handleSearch}
-                              />
-                            </div> */}
-                          </div>
-                        </div>
-                      </ModalBody>
-                      <ModalFooter>
-                        <Button
-                          color="danger"
-                          variant="light"
-                          onPress={onClose}
-                        >
-                          Close
-                        </Button>
-                        <Button color="primary" onPress={onClose}>
-                          Enregistrer
-                        </Button>
-                      </ModalFooter>
-                    </>
-                  )}
-                </ModalContent>
-              </Modal>
             </div>
+            <CommuneTable
+              comm={commune}
+              getDepartementNameById={getDepartementNameById}
+              searchTerm={searchTerm}
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              setCurrentPage={setCurrentPage}
+              onDelete={(id) => {
+                setSelectedCommuneId(id);
+                onDeleteOpen();
+              }}
+            />
           </div>
-          {/* <div className="relative overflow-x-scroll">
-            <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    Arrondissement
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    D&eacute;partement Reference
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    <span className="sr-only">Action</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="bg-white hover:bg-gray-50">
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    Cap-Haitien
-                  </td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    Nord
-                  </td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    <div className="flex ">
-                      <FaRegTrashAlt className="h-3 w-3 cursor-pointer text-red-600 mr-4" />
-                      <FaRegEye className="h-3 w-3 cursor-pointer text-blue-600" />
-                    </div>
-                  </td>
-                </tr>
-                <tr className="bg-white hover:bg-gray-50">
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    Quartier-Morin
-                  </td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    Nord
-                  </td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    <div className="flex ">
-                      <FaRegTrashAlt className="h-3 w-3 cursor-pointer text-red-600 mr-4" />
-                      <FaRegEye className="h-3 w-3 cursor-pointer text-blue-600" />
-                    </div>
-                  </td>
-                </tr>{" "}
-                <tr className="bg-white hover:bg-gray-50">
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    Limonade
-                  </td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    Nord
-                  </td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    <div className="flex ">
-                      <FaRegTrashAlt className="h-3 w-3 cursor-pointer text-red-600 mr-4" />
-                      <FaRegEye className="h-3 w-3 cursor-pointer text-blue-600" />
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div> */}
-        </div>
+        )}
+
       </div>
-    </Suspense>
+      <CommuneFormModal
+        departements={departements}
+        isOpen={isOpen}
+        onClose={onClose}
+        onSuccess={handleAddCommuneuccess}
+        onFailed={handleAddCommuneFailed} />
+
+      <ConfirmationModal
+        isOpen={isConfirmationOpen}
+        onClose={onConfirmationClose}
+        message={modalMessage}
+      />
+      <DeleteConfirmationModal
+        isOpen={isDeleteOpen}
+        onClose={onDeleteClose}
+        onDelete={() => selectedCommuneId && handleDeleteCommune(selectedCommuneId)}
+        deleteLoading={deleteLoading}
+      />
     </RootLayout>
   );
 };

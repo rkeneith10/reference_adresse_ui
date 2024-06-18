@@ -1,16 +1,16 @@
 "use client";
 import { updateCountry } from "@/app/actions/actionCountry";
-import CountryFormModal from "@/components/CountryFormModal";
+import ConfirmationModal from "@/components/ConfirmationModal";
 import RootLayout from "@/components/rootLayout";
 import { Spinner, useDisclosure } from "@nextui-org/react";
 import axios from "axios";
-//import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
 
 const DetailPays = ({ params }: { params: { id_pays: string } }) => {
   const { id_pays } = params;
-  //const router = useRouter();
+  const router = useRouter();
   const [country, setCountry] = useState<any>(null);
   const [formData, setFormData] = useState<any>({
     libelle: "",
@@ -73,31 +73,37 @@ const DetailPays = ({ params }: { params: { id_pays: string } }) => {
         formData.fuseau_horaire
       );
       setCountry(updatedCountry);
-      setConfirmation(true)
+      setConfirmation(true);
+      setModalMessage("Le pays a été modifié avec succès");
+      onConfirmationOpen();
+
+
+
       setUpdating(false);
     } catch (error) {
       setUpdating(false);
+
+      setModalMessage("Erreur lors de la modification du pays");
+      onConfirmationOpen();
       console.error("Update error:", error);
     }
   };
 
-  const handleAddCountrySuccess = () => {
-
-    setModalMessage("Le pays a été modifié avec succès");
-    onConfirmationOpen();
-    // setTimeout(() => {
-    //   router.push('/pays'); // Assurez-vous que cette route est correcte dans votre projet
-    // }, 2000);
+  const handleModalClose = () => {
+    onConfirmationClose();
+    router.push('../../pays');
   };
-  const handleAddCountryFailed = () => {
-    setModalMessage("Erreur lors de la modification du pays")
-    onConfirmationOpen();
-  }
 
   return (
     <RootLayout isAuthenticated={true}>
       <Suspense fallback={<div>loading ...</div>}>
-        {confirmation && (<CountryFormModal isOpen={isOpen} onClose={onClose} onSuccess={handleAddCountrySuccess} onFailed={handleAddCountryFailed} />)}
+
+        <ConfirmationModal
+          isOpen={isConfirmationOpen}
+          onClose={handleModalClose}
+          message={modalMessage}
+
+        />
         {loading ? (
           <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
             <Spinner size="lg" color="primary" />
@@ -183,7 +189,7 @@ const DetailPays = ({ params }: { params: { id_pays: string } }) => {
                 >
                   {updating ? (
                     <>
-                      Modification en cours <Spinner size="sm" color="white" className="ml-2 " />
+                      Modifier <Spinner size="sm" color="white" className="ml-2 " />
                     </>
                   ) : "Modifier"}
                 </button>

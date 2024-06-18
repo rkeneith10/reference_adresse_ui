@@ -35,6 +35,7 @@ const CountryTable: React.FC<CountryTableProps> = ({
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
+              <th scope="col" className="px-6 py-3">#</th>
               <th scope="col" className="px-6 py-3">Pays</th>
               <th scope="col" className="px-6 py-3">Code pays</th>
               <th scope="col" className="px-6 py-3">Continent</th>
@@ -51,8 +52,9 @@ const CountryTable: React.FC<CountryTableProps> = ({
                 </td>
               </tr>
             ) : (
-              filteredCountries.slice(startIndex, endIndex).map((country) => (
+              filteredCountries.slice(startIndex, endIndex).map((country, index) => (
                 <tr key={country.indicatif_tel} className="bg-white hover:bg-gray-50">
+                  <td className="text-left py-3 px-4 border-b border-gray-200">{index + 1}</td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">{country.libelle}</td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">{country.code_pays}</td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">{country.continent}</td>

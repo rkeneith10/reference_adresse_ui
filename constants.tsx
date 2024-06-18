@@ -5,7 +5,6 @@ import { MdListAlt } from "react-icons/md";
 
 import { RiBuilding2Line } from "react-icons/ri";
 
-import { BiMapPin } from "react-icons/bi";
 import { SideNavItem } from "./types";
 
 export const SIDENAV_ITEMS: SideNavItem[] = [
@@ -24,11 +23,11 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     path: "/departements",
     icon: <MdListAlt size={20} />,
   },
-  {
-    title: "Arrondissements",
-    path: "/arrondissements",
-    icon: <BiMapPin size={20} />,
-  },
+  // {
+  //   title: "Arrondissements",
+  //   path: "/arrondissements",
+  //   icon: <BiMapPin size={20} />,
+  // },
   {
     title: "Communes",
     path: "/communes",

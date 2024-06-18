@@ -14,12 +14,11 @@ export interface CountryAttributes {
 }
 
 interface CountryCreationAttributes
-  extends Optional<CountryAttributes, "id_pays"> {}
+  extends Optional<CountryAttributes, "id_pays"> { }
 
 class Country
   extends Model<CountryAttributes, CountryCreationAttributes>
-  implements CountryAttributes
-{
+  implements CountryAttributes {
   public id_pays!: number;
   public libelle!: string;
   public code_pays!: string;

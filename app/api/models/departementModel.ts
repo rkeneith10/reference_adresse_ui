@@ -1,3 +1,4 @@
+
 import sequelize from "@/lib/sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
 import Country from "./paysModel";
