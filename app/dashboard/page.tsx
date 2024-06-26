@@ -3,6 +3,8 @@ import Chart from "@/components/barchart";
 import RootLayout from "@/components/rootLayout";
 import { Spinner } from "@nextui-org/react";
 import axios from "axios";
+import { getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaRegFlag, FaTreeCity } from "react-icons/fa6";
@@ -11,9 +13,12 @@ import { CountryAttributes } from "../api/models/paysModel";
 const Home: React.FC = () => {
   const [countries, setCountries] = useState<CountryAttributes[]>([]);
   const [loading, setLoading] = useState<Boolean>(true);
+  const router = useRouter();
+
 
   useEffect(() => {
     document.title = "Tableau de bord";
+
 
     const fetchData = async () => {
       try {
@@ -27,6 +32,18 @@ const Home: React.FC = () => {
     fetchData();
   }, []);
 
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const session = await getSession();
+
+      if (!session) {
+        router.push('/'); // Redirection vers la page d'accueil si la session n'est pas active
+      }
+    };
+
+    checkSession();
+  }, [router]);
   return (
     <RootLayout isAuthenticated={true}>
       <>
@@ -82,6 +99,8 @@ const Home: React.FC = () => {
       </>
     </RootLayout>
   );
+
+
 };
 
 export default Home;
