@@ -4,6 +4,7 @@ import ConfirmationModal from '@/components/ConfirmationModal';
 import RootLayout from '@/components/rootLayout';
 import { Spinner, useDisclosure } from '@nextui-org/react';
 import axios from 'axios';
+import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
@@ -69,6 +70,18 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
     fetchCommune();
     fetchDept();
   }, [id_commune]);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const session = await getSession();
+
+      if (!session) {
+        router.push('/'); // Redirection vers la page d'accueil si la session n'est pas active
+      }
+    };
+
+    checkSession();
+  }, [router]);
 
   const handleUpdateCommune = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

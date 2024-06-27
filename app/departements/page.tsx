@@ -10,12 +10,15 @@ import {
   Button, Spinner, useDisclosure
 } from "@nextui-org/react";
 import axios from "axios";
+import { getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { DepartementAttributes } from "../api/models/departementModel";
 import { CountryAttributes } from "../api/models/paysModel";
 
 const Departements: React.FC = () => {
+  const router = useRouter();
   const [countries, setCountries] = useState<CountryAttributes[]>([]);
   const [departments, setDepartments] = useState<DepartementAttributes[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -56,6 +59,18 @@ const Departements: React.FC = () => {
     fetchCountries();
     fetchDepartments();
   }, []);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const session = await getSession();
+
+      if (!session) {
+        router.push('/'); // Redirection vers la page d'accueil si la session n'est pas active
+      }
+    };
+
+    checkSession();
+  }, [router]);
 
   const handleDeleteDepartment = async (id: number) => {
     setDeleteLoading(true);

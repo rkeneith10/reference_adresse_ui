@@ -1,6 +1,7 @@
 import { AuthProv } from "@/layout/authProv";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ChakraProviders } from "./chakraProvider";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,7 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AuthProv>
-          {children}
+          <ChakraProviders>
+            {children}
+          </ChakraProviders>
         </AuthProv></body>
     </html>
   );

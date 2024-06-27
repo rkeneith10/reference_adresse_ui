@@ -3,6 +3,8 @@
 import RootLayout from "@/components/rootLayout";
 import { Button, Spinner, useDisclosure } from "@nextui-org/react";
 import axios from "axios";
+import { getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import ConfirmationModal from "../../components/ConfirmationModal";
@@ -16,7 +18,7 @@ const Pays: React.FC = () => {
   const [countries, setCountries] = useState<CountryAttributes[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState<Boolean>(true);
-
+  const router = useRouter();
   const [modalMessage, setModalMessage] = useState("");
   const [selectedCountryId, setSelectedCountryId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
@@ -43,6 +45,18 @@ const Pays: React.FC = () => {
     document.title = "Pays";
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const session = await getSession();
+
+      if (!session) {
+        router.push('/'); // Redirection vers la page d'accueil si la session n'est pas active
+      }
+    };
+
+    checkSession();
+  }, [router]);
 
   const handleDeleteCountry = async (id_pays: number) => {
     setDeleteLoading(true);

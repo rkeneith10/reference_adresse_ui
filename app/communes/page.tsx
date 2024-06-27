@@ -12,13 +12,15 @@ import {
   useDisclosure
 } from "@nextui-org/react";
 import axios from "axios";
+import { getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { CommuneAttributes } from "../api/models/communeModel";
 import { DepartementAttributes } from "../api/models/departementModel";
 
 const Commune: React.FC = () => {
-
+  const router = useRouter()
   const [departements, setDepartements] = useState<DepartementAttributes[]>([])
   const [commune, setCommune] = useState<CommuneAttributes[]>([])
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,6 +39,18 @@ const Commune: React.FC = () => {
     fetchDepartement();
     fetchCommune();
   }, []);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const session = await getSession();
+
+      if (!session) {
+        router.push('/'); // Redirection vers la page d'accueil si la session n'est pas active
+      }
+    };
+
+    checkSession();
+  }, [router]);
 
   const fetchCommune = async () => {
     setLoading(true);
