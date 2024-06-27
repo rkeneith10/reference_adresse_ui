@@ -93,7 +93,7 @@ const LoginPage: React.FC = () => {
                     Se Connecter<Spinner size="sm" color="white" className="ml-2 " />
                   </>
                 ) : (
-                  "Se Connecter"
+                  <div>Se Connecter</div>
                 )}
               </button>
             </div>

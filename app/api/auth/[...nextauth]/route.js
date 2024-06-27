@@ -53,7 +53,7 @@ const authOptions = {
     strategy: "jwt",
     maxAge: 86400,
   },
-  secret: process.env.JWT_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/page.tsx",
   },

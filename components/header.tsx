@@ -24,9 +24,6 @@ const Header = () => {
   const btnRef = React.useRef()
 
 
-  // const toggleDropdown = () => {
-  //   setIsOpen(!isOpen);
-  // };
 
   return (
     <div className="sticky inset-x-0 top-0 z-30 w-full transition-all border-b border-gray-200">
