@@ -6,16 +6,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiOutlineLock, AiOutlineMail } from "react-icons/ai";
-import { toast, ToastContainer } from "react-toastify";
 import RootLayout from "../components/rootLayout";
 import BackImage1 from "../public/images/téléchargement.jpg";
 
-import "react-toastify/dist/ReactToastify.css";
+import {
+  useToast
+} from '@chakra-ui/react';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
+  const toast = useToast()
   const router = useRouter();
 
   useEffect(() => {
@@ -35,15 +37,21 @@ const LoginPage: React.FC = () => {
       router.push('/dashboard');
       setLoading(false);
     } else {
+      toast({
+        title: `Email ou mot de passe incorrect`,
+        status: 'error',
+        isClosable: true,
+        position: 'top-right',
+      })
+
       setLoading(false);
       console.error('Login failed', result?.error);
-      toast.error(`Email ou mot de passe incorrect`);
+      //toast.error(`Email ou mot de passe incorrect`);
     }
   };
 
   return (
     <RootLayout isAuthenticated={false}>
-      <div><ToastContainer /></div>
       <div
         className="h-screen w-full sm:mx-auto flex flex-col justify-center items-center bg-center bg-cover bg-no-repeat"
         style={{ backgroundImage: `url(${BackImage1.src})` }}

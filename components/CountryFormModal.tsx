@@ -92,7 +92,7 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
   };
 
   return (
-    <Modal backdrop="blur" isOpen={isOpen} onClose={onClose} scrollBehavior="outside">
+    <Modal backdrop="blur" isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">Ajouter un pays</ModalHeader>
         <ModalBody className="overflow-auto max-h-[50vh]">
