@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiOutlineLock, AiOutlineMail } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
 import { toast, ToastContainer } from "react-toastify";
 import RootLayout from "../components/rootLayout";
 import BackImage1 from "../public/images/téléchargement.jpg";
@@ -99,14 +98,14 @@ const LoginPage: React.FC = () => {
               </button>
             </div>
 
-            <div className="mt-6 text-center">
+            {/* <div className="mt-6 text-center">
               <button
                 onClick={() => signIn('google')}
                 className="w-full flex justify-center items-center rounded-md border border-gray-300 bg-white py-2 px-4 text-gray-500 font-medium hover:bg-gray-50"
               >
                 <FcGoogle className="mr-2" /> Connexion avec Google
               </button>
-            </div>
+            </div> */}
 
             <div className="mt-6 text-center">
               <Link href="/forgot-password">Mot de passe oublié?</Link>
