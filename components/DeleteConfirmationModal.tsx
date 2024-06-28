@@ -1,5 +1,5 @@
 // DeleteConfirmationModal.tsx
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner } from "@nextui-org/react";
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner } from "@chakra-ui/react";
 import React from "react";
 
 interface DeleteConfirmationModalProps {
@@ -18,7 +18,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({ isOpe
           <p>Êtes-vous sûr de vouloir supprimer cet élément ?</p>
         </ModalBody>
         <ModalFooter>
-          <Button color="danger" onPress={onDelete}>
+          <Button colorScheme="red" onClick={onDelete} mr={3}>
             {deleteLoading ? (
               <>
                 <Spinner size="sm" color="white" />
@@ -28,7 +28,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({ isOpe
               "Supprimer"
             )}
           </Button>
-          <Button color="primary" onPress={onClose}>
+          <Button colorScheme="blue" onClick={onClose}>
             Annuler
           </Button>
         </ModalFooter>

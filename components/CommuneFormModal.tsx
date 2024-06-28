@@ -1,5 +1,15 @@
 import { DepartementAttributes } from '@/app/api/models/departementModel';
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem } from '@nextui-org/react';
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Select
+} from '@chakra-ui/react';
+
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -127,10 +137,14 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
 
   return (
     <Modal
-      backdrop="blur"
+
       isOpen={isOpen}
-      onOpenChange={onClose}
+      onClose={onClose}
     >
+      <ModalOverlay
+        bg="blackAlpha.600"
+        backdropFilter="blur(10px)"
+      />
       <ModalContent>
         <>
           <ModalHeader className="flex flex-col gap-1">
@@ -149,13 +163,12 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
                 name="id_departement"
                 onChange={handleinputChange}
                 value={commune.id_departement}
-                className="w-full"
-                disableSelectorIconRotation
+                width="100%" // Utilisation de la propriété width de Chakra UI
               >
                 {departements.map(dept => (
-                  <SelectItem key={dept.id_departement} value={dept.id_departement}>
+                  <option key={dept.id_departement} value={dept.id_departement}>
                     {dept.libelle}
-                  </SelectItem>
+                  </option>
                 ))}
               </Select>
               {errors.id_departement && <span className="text-red-500 text-sm">{errors.id_departement}</span>}
@@ -237,15 +250,15 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
           </ModalBody>
           <ModalFooter>
             <Button
-              color="danger"
-              variant="light"
-              onPress={onClose}
+              colorScheme='red'
+              mr={3}
+              onClick={onClose}
             >
               Fermer
             </Button>
             <Button
-              color="primary"
-              onPress={addCommune}
+              colorScheme='blue'
+              onClick={addCommune}
               isLoading={adding}
             >
               Enregistrer

@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Chart from "react-google-charts";
 import { CountryAttributes } from "../app/api/models/paysModel";
@@ -13,7 +13,7 @@ export const options = {
 
 const BarChart: React.FC = () => {
   const [countries, setCountries] = useState<CountryAttributes[]>([]);
-  const [loading, setLoading]=useState<Boolean>(true)
+  const [loading, setLoading] = useState<Boolean>(true)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,19 +52,19 @@ const BarChart: React.FC = () => {
   return (
     <>
       <div className="bg-white rounded-md shadow-md p-5">
-        {loading ?(
+        {loading ? (
           <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-          <Spinner size="lg" color="primary" />
-          
-        </div>
-        ):( <Chart
+            <Spinner size="lg" color="primary" />
+
+          </div>
+        ) : (<Chart
           chartType="Bar"
           data={chartData}
           options={options}
           width="100%"
           height="400px"
         />)}
-       
+
       </div>
     </>
   );

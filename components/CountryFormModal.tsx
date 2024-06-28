@@ -6,7 +6,8 @@ import {
   ModalBody,
   ModalContent,
   ModalFooter,
-  ModalHeader
+  ModalHeader,
+  ModalOverlay
 } from '@chakra-ui/react';
 import axios from "axios";
 import React, { useState } from "react";
@@ -100,7 +101,10 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
+    <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">    <ModalOverlay
+      bg="blackAlpha.600"
+      backdropFilter="blur(10px)"
+    />
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">Ajouter un pays</ModalHeader>
         <ModalBody className="overflow-auto max-h-[50vh]">

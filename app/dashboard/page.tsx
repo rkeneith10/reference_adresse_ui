@@ -1,7 +1,7 @@
 "use client";
 import Chart from "@/components/barchart";
 import RootLayout from "@/components/rootLayout";
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@chakra-ui/react";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";

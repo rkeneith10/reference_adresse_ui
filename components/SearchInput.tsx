@@ -1,7 +1,8 @@
 // SearchInput.tsx
-import { Input } from "@nextui-org/react";
+import { IconButton, Input, InputGroup, InputLeftElement, InputRightElement } from '@chakra-ui/react';
 import React from "react";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaTimes } from 'react-icons/fa';
+
 
 interface SearchInputProps {
   searchTerm: string;
@@ -10,15 +11,26 @@ interface SearchInputProps {
 
 const SearchInput: React.FC<SearchInputProps> = ({ searchTerm, setSearchTerm }) => {
   return (
-    <Input
-      isClearable
-      className="w-full sm:max-w-[20%] mr-4"
-      placeholder="Recherche..."
-      startContent={<FaSearch className="text-gray-500" />}
-      value={searchTerm}
-      onChange={(e: any) => setSearchTerm(e.target.value)}
-      onClear={() => setSearchTerm("")}
-    />
+    <InputGroup className="w-full sm:max-w-[20%] mr-4">
+      <InputLeftElement pointerEvents="none">
+        <FaSearch className="text-gray-500" />
+      </InputLeftElement>
+      <Input
+        placeholder="Recherche..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      {searchTerm && (
+        <InputRightElement>
+          <IconButton
+            aria-label="Clear search"
+            icon={<FaTimes />}
+            size="sm"
+            onClick={() => setSearchTerm('')}
+          />
+        </InputRightElement>
+      )}
+    </InputGroup>
   );
 };
 

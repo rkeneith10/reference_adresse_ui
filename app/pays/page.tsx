@@ -1,7 +1,7 @@
 // Pays.tsx
 "use client";
 import RootLayout from "@/components/rootLayout";
-import { Button, Spinner, useDisclosure } from "@nextui-org/react";
+import { Button, Spinner, useDisclosure } from "@chakra-ui/react";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -98,7 +98,7 @@ const Pays: React.FC = () => {
           <div className="bg-white p-5 shadow-md rounded-md">
             <div className="flex flex-row justify-between mb-4">
               <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-              <Button color="primary" className="text-white" onPress={onOpen} startContent={<FaPlus />}>
+              <Button color="primary" className="text-white" onClick={onOpen} leftIcon={<FaPlus />}>
                 Ajouter
               </Button>
             </div>

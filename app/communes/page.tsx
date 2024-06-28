@@ -10,7 +10,7 @@ import {
   Button,
   Spinner,
   useDisclosure
-} from "@nextui-org/react";
+} from "@chakra-ui/react";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -118,7 +118,7 @@ const Commune: React.FC = () => {
           <div className="bg-white shadow-md rounded-md p-5">
             <div className="flex flex-row justify-between mb-4">
               <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-              <Button color="primary" className="text-white" onPress={onOpen} startContent={<FaPlus />}>
+              <Button color="primary" className="text-white" onClick={onOpen} leftIcon={<FaPlus />}>
                 Ajouter
               </Button>
             </div>

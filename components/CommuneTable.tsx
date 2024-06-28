@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react";
+import { Button } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
 import { FaChevronLeft, FaChevronRight, FaRegEye, FaRegTrashAlt } from "react-icons/fa";
@@ -88,14 +88,29 @@ const CommuneTable: React.FC<CommuneTableProps> = ({
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     <div className="flex space-x-2">
-                      <Button isIconOnly size="sm" color="danger" variant="light">
-                        <FaRegTrashAlt className="text-lg" onClick={() => onDelete(co.id_commune)} />
+                      <Button
+                        size="sm"
+                        colorScheme="red"
+                        variant="ghost"
+                        onClick={() => onDelete(co.id_commune)}
+                        p={0}
+                        minWidth="auto"
+                      >
+                        <FaRegTrashAlt className="text-lg" />
                       </Button>
+
                       <Link href={`/communes/${co.id_commune}`}>
-                        <Button isIconOnly size="sm" color="primary" variant="light">
+                        <Button
+                          size="sm"
+                          colorScheme="blue"
+                          variant="ghost"
+                          p={0}
+                          minWidth="auto"
+                        >
                           <FaRegEye className="text-lg" />
                         </Button>
                       </Link>
+
                     </div>
                   </td>
                 </tr>

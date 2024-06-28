@@ -1,5 +1,5 @@
 // ConfirmationModal.tsx
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@chakra-ui/react";
 import React from "react";
 
 interface ConfirmationModalProps {
@@ -17,7 +17,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onClose, 
           <p>{message}</p>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onPress={onClose}>
+          <Button colorScheme="blue" onClick={onClose}>
             Fermer
           </Button>
         </ModalFooter>

@@ -1,5 +1,15 @@
 import { CountryAttributes } from "@/app/api/models/paysModel";
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Spinner } from "@nextui-org/react";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Select,
+  Spinner
+} from '@chakra-ui/react';
 import axios from "axios";
 import React, { useState } from "react";
 
@@ -89,7 +99,11 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
     }
   };
   return (
-    <Modal backdrop="blur" isOpen={isOpen} onClose={onClose} scrollBehavior="outside">
+    <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
+      <ModalOverlay
+        bg="blackAlpha.600"
+        backdropFilter="blur(10px)"
+      />
       <ModalContent>
         <>
           <ModalHeader className="flex flex-col gap-1">
@@ -100,21 +114,22 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
               <label htmlFor="codepays" className="block text-medium font-normal">
                 Choisir un pays
               </label>
+
               <Select
                 placeholder="Choisir un pays"
-                className="w-full"
+                className="w-full" // Chakra UI utilise souvent des classes utilitaires comme "width" ou "w"
                 name="id_pays"
                 onChange={handleInputChange}
-                disableSelectorIconRotation
               >
                 {countries
                   .sort((a, b) => a.libelle.localeCompare(b.libelle))
                   .map((country) => (
-                    <SelectItem key={country.id_pays} value={country.id_pays}>
+                    <option key={country.id_pays} value={country.id_pays}>
                       {country.libelle}
-                    </SelectItem>
+                    </option>
                   ))}
               </Select>
+
               {errors.id_pays && (
                 <span className="text-red-500 text-sm">{errors.id_pays}</span>
               )}
@@ -169,10 +184,10 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button color="danger" variant="light" onPress={onClose}>
+            <Button colorScheme="red" mr={3} onClick={onClose}>
               Fermer
             </Button>
-            <Button color="primary" onClick={addDepartement} disabled={adding}>
+            <Button colorScheme="blue" onClick={addDepartement} disabled={adding}>
               {adding ? (
                 <>
                   Enregistrer <Spinner size="sm" color="white" className="ml-2" />

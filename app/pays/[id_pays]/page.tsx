@@ -2,7 +2,7 @@
 import { updateCountry } from "@/app/actions/actionCountry";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import RootLayout from "@/components/rootLayout";
-import { Spinner, useDisclosure } from "@nextui-org/react";
+import { Spinner, useDisclosure } from "@chakra-ui/react";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";

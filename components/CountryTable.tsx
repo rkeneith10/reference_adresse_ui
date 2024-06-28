@@ -1,5 +1,5 @@
 // CountryTable.tsx
-import { Button } from "@nextui-org/react";
+import { Button } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
 import { FaChevronLeft, FaChevronRight, FaRegEye, FaRegTrashAlt } from "react-icons/fa";
@@ -62,11 +62,25 @@ const CountryTable: React.FC<CountryTableProps> = ({
                   <td className="text-left py-3 px-4 border-b border-gray-200">{country.fuseau_horaire}</td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     <div className="flex">
-                      <Button isIconOnly size="sm" color="danger" variant="light" onClick={() => onDelete(country.id_pays)}>
+                      <Button
+                        size="sm"
+                        colorScheme="red"
+                        variant="ghost"
+                        onClick={() => onDelete(country.id_pays)}
+                        p={0}
+                        minWidth="auto"
+                      >
                         <FaRegTrashAlt className="text-lg" />
                       </Button>
+
                       <Link href={`/pays/${country.id_pays}`}>
-                        <Button isIconOnly size="sm" color="primary" variant="light">
+                        <Button
+                          size="sm"
+                          colorScheme="blue"
+                          variant="ghost"
+                          p={0}
+                          minWidth="auto"
+                        >
                           <FaRegEye className="text-lg" />
                         </Button>
                       </Link>
