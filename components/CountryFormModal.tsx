@@ -176,10 +176,10 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="danger" onClick={onClose}>
+          <Button onClick={onClose}>
             Annuler
           </Button>
-          <Button color="primary" onClick={addCountry} disabled={adding} isLoading={adding}>
+          <Button colorScheme='blue' ml={3} onClick={addCountry} disabled={adding} isLoading={adding}>
             Ajouter
           </Button>
         </ModalFooter>
