@@ -1,5 +1,13 @@
 // CountryFormModal.tsx
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
+//import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader
+} from '@chakra-ui/react';
 import axios from "axios";
 import React, { useState } from "react";
 
@@ -92,7 +100,7 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
   };
 
   return (
-    <Modal backdrop="blur" isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
+    <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">Ajouter un pays</ModalHeader>
         <ModalBody className="overflow-auto max-h-[50vh]">
@@ -168,10 +176,10 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="danger" onPress={onClose}>
+          <Button color="danger" onClick={onClose}>
             Annuler
           </Button>
-          <Button color="primary" onPress={addCountry} disabled={adding} isLoading={adding}>
+          <Button color="primary" onClick={addCountry} disabled={adding} isLoading={adding}>
             Ajouter
           </Button>
         </ModalFooter>
