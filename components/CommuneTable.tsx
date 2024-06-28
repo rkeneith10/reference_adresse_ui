@@ -91,6 +91,7 @@ const CommuneTable: React.FC<CommuneTableProps> = ({
                       <Button
                         size="sm"
                         colorScheme="red"
+                        mr={2}
                         variant="ghost"
                         onClick={() => onDelete(co.id_commune)}
                         p={0}

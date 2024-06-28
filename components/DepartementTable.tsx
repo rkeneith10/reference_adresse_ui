@@ -89,6 +89,7 @@ const DepartementTable: React.FC<DepartementTableProps> = ({
                         onClick={() => onDelete(dp.id_departement)}
                         p={0}
                         minWidth="auto"
+                        mr={2}
                       >
                         <FaRegTrashAlt className="text-lg" />
                       </Button>

@@ -69,6 +69,7 @@ const CountryTable: React.FC<CountryTableProps> = ({
                         onClick={() => onDelete(country.id_pays)}
                         p={0}
                         minWidth="auto"
+                        mr={2}
                       >
                         <FaRegTrashAlt className="text-lg" />
                       </Button>
