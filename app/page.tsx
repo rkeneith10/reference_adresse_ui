@@ -5,7 +5,7 @@ import { signIn } from 'next-auth/react';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AiOutlineMail } from "react-icons/ai";
+import { AiOutlineLock, AiOutlineMail } from "react-icons/ai";
 import RootLayout from "../components/rootLayout";
 import BackImage1 from "../public/images/téléchargement.jpg";
 
@@ -90,6 +90,7 @@ const LoginPage: React.FC = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-10 pr-4 py-2 w-full rounded-md border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
                 />
+                <AiOutlineLock className="absolute top-3 left-3 text-gray-500" />
                 <button
                   type="button"
                   onClick={handleClick}
