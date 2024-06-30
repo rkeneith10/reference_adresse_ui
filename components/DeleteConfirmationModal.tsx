@@ -1,5 +1,5 @@
 // DeleteConfirmationModal.tsx
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner } from "@chakra-ui/react";
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner } from "@chakra-ui/react";
 import React from "react";
 
 interface DeleteConfirmationModalProps {
@@ -12,6 +12,8 @@ interface DeleteConfirmationModalProps {
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({ isOpen, onClose, onDelete, deleteLoading }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay bg="blackAlpha.600"
+        backdropFilter="blur(10px)" />
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">Confirmation de suppression</ModalHeader>
         <ModalBody>

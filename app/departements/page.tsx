@@ -118,7 +118,7 @@ const Departements: React.FC = () => {
           <div className="bg-white p-5 shadow-md rounded-md">
             <div className="flex flex-row justify-between mb-4">
               <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-              <Button color="primary" className="text-white" onClick={onOpen} leftIcon={<FaPlus />}>
+              <Button colorScheme="blue" className="text-white" onClick={onOpen} leftIcon={<FaPlus />}>
                 Ajouter
               </Button>
             </div>

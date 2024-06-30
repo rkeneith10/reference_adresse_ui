@@ -1,5 +1,5 @@
 // ConfirmationModal.tsx
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@chakra-ui/react";
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/react";
 import React from "react";
 
 interface ConfirmationModalProps {
@@ -11,6 +11,8 @@ interface ConfirmationModalProps {
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onClose, message }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay bg="blackAlpha.600"
+        backdropFilter="blur(10px)" />
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">Confirmation</ModalHeader>
         <ModalBody>

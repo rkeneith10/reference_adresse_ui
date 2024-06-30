@@ -118,7 +118,7 @@ const Commune: React.FC = () => {
           <div className="bg-white shadow-md rounded-md p-5">
             <div className="flex flex-row justify-between mb-4">
               <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-              <Button color="primary" className="text-white" onClick={onOpen} leftIcon={<FaPlus />}>
+              <Button colorScheme="blue" className="text-white" onClick={onOpen} leftIcon={<FaPlus />}>
                 Ajouter
               </Button>
             </div>
