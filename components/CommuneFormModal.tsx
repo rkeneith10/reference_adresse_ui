@@ -209,44 +209,46 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
               />
               {errors.code_postal && <span className="text-red-500 text-sm">{errors.code_postal}</span>}
             </div>
-            <div className="flex flex-row items-center justify-between mb-1">
-              <div className="mr-2">
-                <label
-                  htmlFor="longitude"
-                  className="block text-sm font-normal"
-                >
-                  Longitude
-                </label>
-                <input
-                  type="text"
-                  placeholder="Longitude"
-                  id="longitude"
-                  name="longitude"
-                  readOnly
-                  value={commune.longitude}
-                  className=" border rounded-md w-full p-2 text-sm"
-                />
-                {errors.longitude && <span className="text-red-500 text-sm">{errors.longitude}</span>}
+            {commune.lattitude !== "" && commune.longitude != "" && (
+              <div className="flex flex-row items-center justify-between mb-1">
+                <div className="mr-2">
+                  <label
+                    htmlFor="longitude"
+                    className="block text-sm font-normal"
+                  >
+                    Longitude
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Longitude"
+                    id="longitude"
+                    name="longitude"
+                    readOnly
+                    value={commune.longitude}
+                    className=" border rounded-md w-full p-2 text-sm"
+                  />
+                  {errors.longitude && <span className="text-red-500 text-sm">{errors.longitude}</span>}
+                </div>
+                <div>
+                  <label
+                    htmlFor="latitude"
+                    className="block text-sm font-normal"
+                  >
+                    Latitude
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Latitude"
+                    id="latitude"
+                    name="latitude"
+                    readOnly
+                    value={commune.lattitude}
+                    className="border rounded-md w-full p-2 text-sm"
+                  />
+                  {errors.lattitude && <span className="text-red-500 text-sm">{errors.lattitude}</span>}
+                </div>
               </div>
-              <div>
-                <label
-                  htmlFor="latitude"
-                  className="block text-sm font-normal"
-                >
-                  Latitude
-                </label>
-                <input
-                  type="text"
-                  placeholder="Latitude"
-                  id="latitude"
-                  name="latitude"
-                  readOnly
-                  value={commune.lattitude}
-                  className="border rounded-md w-full p-2 text-sm"
-                />
-                {errors.lattitude && <span className="text-red-500 text-sm">{errors.lattitude}</span>}
-              </div>
-            </div>
+            )}
           </ModalBody>
           <ModalFooter>
             <Button

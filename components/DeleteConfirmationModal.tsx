@@ -11,7 +11,7 @@ interface DeleteConfirmationModalProps {
 
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({ isOpen, onClose, onDelete, deleteLoading }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} size="sm">
       <ModalOverlay bg="blackAlpha.600"
         backdropFilter="blur(10px)" />
       <ModalContent>

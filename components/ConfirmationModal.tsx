@@ -10,7 +10,7 @@ interface ConfirmationModalProps {
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onClose, message }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} size="sm">
       <ModalOverlay bg="blackAlpha.600"
         backdropFilter="blur(10px)" />
       <ModalContent>
