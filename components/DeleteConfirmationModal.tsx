@@ -20,7 +20,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({ isOpe
           <p>Êtes-vous sûr de vouloir supprimer cet élément ?</p>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="red" onClick={onDelete} mr={3}>
+          <Button colorScheme="red" onClick={onDelete} mr={3} disabled={deleteLoading}>
             {deleteLoading ? (
               <>
                 <Spinner size="sm" color="white" />

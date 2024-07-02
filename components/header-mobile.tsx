@@ -1,12 +1,13 @@
 "use client";
 
-import { ReactNode, useEffect, useRef } from "react";
-
+import { SIDENAV_ITEMS } from "@/constants";
+import { Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure } from '@chakra-ui/react';
+import { motion, useCycle } from "framer-motion";
+import { signOut, useSession } from 'next-auth/react';
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-import { SIDENAV_ITEMS } from "@/constants";
-import { motion, useCycle } from "framer-motion";
+import { ReactNode, useEffect, useRef } from "react";
+import { FaSignOutAlt, FaUser } from 'react-icons/fa';
 
 const sidebar = {
   open: (height = 1000) => ({
@@ -32,15 +33,16 @@ const HeaderMobile = () => {
   const containerRef = useRef(null);
   const { height } = useDimensions(containerRef);
   const [isOpen, toggleOpen] = useCycle(false, true);
+  const { data: session } = useSession();
+  const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
+  const btnRef = useRef(null);
 
   return (
     <motion.nav
       initial={false}
       animate={isOpen ? "open" : "closed"}
       custom={height}
-      className={`fixed inset-0 z-50 w-full md:hidden ${
-        isOpen ? "" : "pointer-events-none"
-      }`}
+      className={`fixed inset-0 z-50 w-full md:hidden ${isOpen ? "" : "pointer-events-none"}`}
       ref={containerRef}
     >
       <motion.div
@@ -52,7 +54,7 @@ const HeaderMobile = () => {
         className="absolute grid w-full gap-3 px-10 py-16 max-h-screen overflow-y-auto"
       >
         {SIDENAV_ITEMS.map((item, idx) => {
-          const isLastItem = idx === SIDENAV_ITEMS.length - 1; // Check if it's the last item
+          const isLastItem = idx === SIDENAV_ITEMS.length - 1;
 
           return (
             <div key={idx}>
@@ -60,22 +62,53 @@ const HeaderMobile = () => {
                 <Link
                   href={item.path}
                   onClick={() => toggleOpen()}
-                  className={`flex w-full text-2xl ${
-                    item.path === pathname ? "font-bold" : ""
-                  }`}
+                  className={`flex w-full text-2xl ${item.path === pathname ? "font-bold" : ""}`}
                 >
                   {item.title}
                 </Link>
               </MenuItem>
-
-              {!isLastItem && (
-                <MenuItem className="my-3 h-px w-full bg-gray-300" />
-              )}
+              {!isLastItem && <MenuItem className="my-3 h-px w-full bg-gray-300" />}
             </div>
           );
         })}
       </motion.ul>
       <MenuToggle toggle={toggleOpen} />
+      {session && session.user && (
+        <>
+          <button
+            ref={btnRef}
+            onClick={onDrawerOpen}
+            className="pointer-events-auto absolute right-4 bottom-14 z-30 bg-blue-500 text-white p-2 rounded-full"
+          >
+            <FaUser />
+          </button>
+          <Drawer isOpen={isDrawerOpen} placement='right' onClose={onDrawerClose} finalFocusRef={btnRef}>
+            <DrawerOverlay />
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerHeader>User Info</DrawerHeader>
+              <DrawerBody>
+                <p className='text-gray-900 font-bold px-4 py-2 mt-4'>Bienvenue</p>
+                <p className="px-4 text-gray-500 font-semibold mb-4">{session.user.name}</p>
+                <div className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer border border-gray-200 rounded-md">
+                  <FaUser className="h-5 w-5 text-blue-500 mr-2" />
+                  <div>
+                    <span className="font-bold">Profil</span>
+                    <span className="block text-sm text-gray-500">{session.user.email}</span>
+                  </div>
+                </div>
+                <div className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer border border-gray-200 rounded-md mt-5" onClick={() => signOut({ callbackUrl: '/' })}>
+                  <FaSignOutAlt className="h-5 w-5 text-blue-500 mr-2" />
+                  <div>
+                    <span className="font-bold">Se Déconnecter</span>
+                    <span className="block text-sm text-gray-500">Fermer votre session</span>
+                  </div>
+                </div>
+              </DrawerBody>
+            </DrawerContent>
+          </Drawer>
+        </>
+      )}
     </motion.nav>
   );
 };
@@ -122,19 +155,11 @@ const Path = (props: any) => (
   />
 );
 
-const MenuItem = ({
-  className,
-  children,
-}: {
-  className?: string;
-  children?: ReactNode;
-}) => {
-  return (
-    <motion.li variants={MenuItemVariants} className={className}>
-      {children}
-    </motion.li>
-  );
-};
+const MenuItem = ({ className, children }: { className?: string; children?: ReactNode; }) => (
+  <motion.li variants={MenuItemVariants} className={className}>
+    {children}
+  </motion.li>
+);
 
 const MenuItemVariants = {
   open: {
