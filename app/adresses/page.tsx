@@ -2,6 +2,7 @@
 import AdresseFormModal from "@/components/AdresseFormModal";
 import AdresseTable from "@/components/AdresseTable";
 import ConfirmationModal from "@/components/ConfirmationModal";
+import DeleteConfirmationModal from "@/components/DeleteConfirmationModal";
 import RootLayout from "@/components/rootLayout";
 import SearchInput from "@/components/SearchInput";
 import {
@@ -22,7 +23,7 @@ const Adresses: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
   const [modalMessage, setModalMessage] = useState("");
-  const [selectedSectiontId, setSelectedSectionId] = useState<number | null>(null);
+  const [selectedAdressetId, setSelectedAdresseId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage] = useState(10); // Fixed items per page
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
@@ -46,6 +47,20 @@ const Adresses: React.FC = () => {
     return sect ? sect.libelle : " Inconnu";
   };
 
+  const handleDeleteAdresse = async (id: number) => {
+    setDeleteLoading(true);
+    try {
+      await axios.delete(`/api/adresseCtrl/${id}`);
+      setAdresse(adresse.filter((adr) => adr.id_adresses !== id));
+      setModalMessage("L'adresse a été supprimée avec succès");
+      onConfirmationOpen();
+    } catch (error) {
+      console.error("Failed to delete adresse:", error);
+    } finally {
+      setDeleteLoading(false);
+      onDeleteClose();
+    }
+  };
   const fetchAdresse = async () => {
     setLoading(true)
     try {
@@ -110,7 +125,7 @@ const Adresses: React.FC = () => {
               itemsPerPage={itemsPerPage}
               setCurrentPage={setCurrentPage}
               onDelete={(id) => {
-                setSelectedSectionId(id);
+                setSelectedAdresseId(id);
                 onDeleteOpen();
               }}
               getSectionNameById={getSectionNameById}
@@ -125,12 +140,12 @@ const Adresses: React.FC = () => {
         onFailed={handleAddAdresseFailed}
         sectioncommunales={section}
       />
-      {/* <DeleteConfirmationModal
+      <DeleteConfirmationModal
         isOpen={isDeleteOpen}
         onClose={onDeleteClose}
-        onDelete={() => selectedSectiontId && handleDeleteAdresse(selectedSectiontId)}
+        onDelete={() => selectedAdressetId && handleDeleteAdresse(selectedAdressetId)}
         deleteLoading={deleteLoading}
-      /> */}
+      />
       <ConfirmationModal
         isOpen={isConfirmationOpen}
         onClose={onConfirmationClose}

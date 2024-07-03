@@ -4,14 +4,17 @@ import RootLayout from "@/components/rootLayout";
 import { Spinner } from "@chakra-ui/react";
 import axios from "axios";
 import { getSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaRegFlag, FaTreeCity } from "react-icons/fa6";
+import { AdresseAttributes } from "../api/models/adresseModel";
 import { CountryAttributes } from "../api/models/paysModel";
 
 const Home: React.FC = () => {
   const [countries, setCountries] = useState<CountryAttributes[]>([]);
+  const [adresse, setAdresse] = useState<AdresseAttributes[]>([])
   const [loading, setLoading] = useState<Boolean>(true);
   const router = useRouter();
 
@@ -23,7 +26,9 @@ const Home: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/api/paysCtrl");
+        const responseadresse = await axios.get("/api/adresseCtrl")
         setCountries(response.data.data);
+        setAdresse(responseadresse.data.data)
         setLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -55,19 +60,28 @@ const Home: React.FC = () => {
         ) : (
           <>
             <div className="flex flex-wrap justify-center md:justify-between">
-              <div className="w-full md:w-1/3 p-4">
+              <div className="w-full md:w-1/3 p-4 relative">
                 <div className="bg-white shadow-md rounded-md p-6 text-center">
-                  <div className="flex justify-center items-center mb-4">
-                    <h2 className="text-lg font-semibold text-blue-600">Pays</h2>
-                    <span className="ml-2">
-                      <FaRegFlag size={20} className="text-blue-500" />
-                    </span>
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center">
+                      <h2 className="text-lg font-semibold text-blue-600">Pays</h2>
+                      <span className="ml-2">
+                        <FaRegFlag size={20} className="text-blue-500" />
+                      </span>
+                    </div>
+                    <Link href="../pays">
+                      <button
+                        className="text-blue-600 hover:text-blue-800 font-medium"
+
+                      >
+                        Voir tous
+                      </button>
+                    </Link>
                   </div>
-                  <p className="font-bold text-lg text-blue-500">
-                    {countries.length}
-                  </p>
+                  <p className="font-bold text-lg text-blue-500">{countries.length}</p>
                 </div>
               </div>
+
               <div className="w-full md:w-1/3 p-4">
                 <div className="bg-white shadow-md rounded-md p-6 text-center">
                   <div className="flex justify-center items-center mb-4">
@@ -79,17 +93,29 @@ const Home: React.FC = () => {
                   <p className="font-bold text-lg text-blue-500">110</p>
                 </div>
               </div>
-              <div className="w-full md:w-1/3 p-4">
+
+              <div className="w-full md:w-1/3 p-4 relative">
                 <div className="bg-white shadow-md rounded-md p-6 text-center">
-                  <div className="flex justify-center items-center mb-4">
-                    <h2 className="text-lg font-semibold text-blue-600">Adresses</h2>
-                    <span className="ml-2">
-                      <FaMapMarkerAlt size={20} className="text-blue-500" />
-                    </span>
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center">
+                      <h2 className="text-lg font-semibold text-blue-600">Adresses</h2>
+                      <span className="ml-2">
+                        <FaMapMarkerAlt size={20} className="text-blue-500" />
+                      </span>
+                    </div>
+                    <Link href="../adresses">
+                      <button
+                        className="text-blue-600 hover:text-blue-800 font-medium"
+
+                      >
+                        Voir tous
+                      </button>
+                    </Link>
                   </div>
-                  <p className="font-bold text-lg text-blue-500">127</p>
+                  <p className="font-bold text-lg text-blue-500">{adresse.length}</p>
                 </div>
               </div>
+
             </div>
             <div className="">
               <Chart />

@@ -89,7 +89,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
       }
     } catch (error) {
       onFailed();
-      console.error("Échec de l'ajout de la commune", error);
+      console.error("Échec de l'ajout de la section communale", error);
     } finally {
       setAdding(false);
     }
