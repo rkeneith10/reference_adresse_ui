@@ -1,5 +1,6 @@
 "use client";
 import AdresseFormModal from "@/components/AdresseFormModal";
+import AdresseTable from "@/components/AdresseTable";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import RootLayout from "@/components/rootLayout";
 import SearchInput from "@/components/SearchInput";
@@ -21,7 +22,7 @@ const Adresses: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
   const [modalMessage, setModalMessage] = useState("");
-  const [selectedDepartmentId, setSelectedDepartmentId] = useState<number | null>(null);
+  const [selectedSectiontId, setSelectedSectionId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage] = useState(10); // Fixed items per page
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
@@ -40,9 +41,22 @@ const Adresses: React.FC = () => {
     }
 
   };
+  const getSectionNameById = (id: number) => {
+    const sect = section.find((c) => c.id_sectioncommune === id);
+    return sect ? sect.libelle : " Inconnu";
+  };
+
+  const fetchAdresse = async () => {
+    setLoading(true)
+    try {
+      const response = await axios.get("/api/adresseCtrl")
+      setAdresse(response.data.data)
+      setLoading(false);
+    } catch (error) { console.error('Error fetching adresse') }
+  }
 
   const handleAddAdressSuccess = () => {
-    //fetchDepartments();
+    fetchAdresse();
     setModalMessage("L'adresse a été enregistré avec succès");
     onConfirmationOpen();
   };
@@ -67,14 +81,14 @@ const Adresses: React.FC = () => {
   useEffect(() => {
     document.title = "Adresses";
     fetchSection();
-    //fetchDepartments();
+    fetchAdresse();
   }, []);
   return (
     <RootLayout isAuthenticated={true}>
 
       <div className="bg-gray-100">
         <div className="font-semibold text-xl mb-4 text-gray-900">
-          {loading ? "" : "Gestion Départements"}
+          {loading ? "" : "Gestion Adresses"}
         </div>
         {loading ? (
           <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
@@ -89,18 +103,18 @@ const Adresses: React.FC = () => {
                 Ajouter
               </Button>
             </div>
-            {/* <DepartementTable
-              dept={departments}
+            <AdresseTable
+              adresse={adresse}
               searchTerm={searchTerm}
               currentPage={currentPage}
               itemsPerPage={itemsPerPage}
               setCurrentPage={setCurrentPage}
               onDelete={(id) => {
-                setSelectedDepartmentId(id);
+                setSelectedSectionId(id);
                 onDeleteOpen();
               }}
-              getCountryNameById={getCountryNameById}
-            /> */}
+              getSectionNameById={getSectionNameById}
+            />
           </div>
         )}
       </div>
@@ -114,7 +128,7 @@ const Adresses: React.FC = () => {
       {/* <DeleteConfirmationModal
         isOpen={isDeleteOpen}
         onClose={onDeleteClose}
-        onDelete={() => selectedDepartmentId && handleDeleteDepartment(selectedDepartmentId)}
+        onDelete={() => selectedSectiontId && handleDeleteAdresse(selectedSectiontId)}
         deleteLoading={deleteLoading}
       /> */}
       <ConfirmationModal
@@ -122,11 +136,11 @@ const Adresses: React.FC = () => {
         onClose={onConfirmationClose}
         message={modalMessage}
       />
-      {/* {deleteLoading && (
+      {deleteLoading && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
           <Spinner size="lg" color="primary" />
         </div>
-      )} */}
+      )}
 
     </RootLayout>
   );

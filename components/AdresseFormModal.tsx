@@ -109,7 +109,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
       <ModalContent>
         <>
           <ModalHeader className="flex flex-col gap-1">
-            Ajouter une commune
+            Ajouter une adresse
           </ModalHeader>
           <ModalBody>
             <div className="mb-1">

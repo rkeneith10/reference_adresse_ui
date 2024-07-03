@@ -6,6 +6,17 @@ import Departement from "../models/departementModel";
 import Pays from "../models/paysModel";
 import SectionCommunale from "../models/sectionCommunalModel";
 
+export async function GET() {
+  try {
+    const adr = await Adresse.findAll({})
+    if (adr) {
+      return NextResponse.json({ data: adr }, { status: 200 })
+    }
+  } catch (error: any) {
+    console.error(error)
+  }
+}
+
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
     const { numero_rue, libelle, statut, id_sectioncommune } = await req.json();

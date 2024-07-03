@@ -41,11 +41,11 @@ Adresse.init(
       allowNull: false,
     },
     cle_unicite: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     statut: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(20),
       allowNull: false,
       defaultValue: 'Valide', // assuming default status
     },
@@ -68,8 +68,8 @@ Adresse.init(
 );
 
 // Define associations
-SectionCommunale.hasMany(Adresse, { foreignKey: 'id_type_immeuble' });
-Adresse.belongsTo(SectionCommunale, { foreignKey: 'id_type_immeuble' });
+SectionCommunale.hasMany(Adresse, { foreignKey: 'id_sectioncommune' });
+Adresse.belongsTo(SectionCommunale, { foreignKey: 'id_sectioncommune' });
 
 
 
