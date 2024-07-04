@@ -1,6 +1,5 @@
-"use server";
+import axios from 'axios';
 
-import Adresse from "../api/models/adresseModel";
 export async function updateAdresse(
   id_adresses: number,
   libelle: string,
@@ -8,21 +7,24 @@ export async function updateAdresse(
   id_sectioncommune: number,
   cle_unicite: string,
   statut: string
-
-
-
 ) {
-  const adr = await Adresse.findOne({ where: { id_adresses } });
-  if (!adr) {
-    throw new Error("Adresse not found");
-  }
-  await adr.update({
-    libelle,
-    numero_rue,
-    id_sectioncommune,
-    cle_unicite,
-    statut
+  try {
+    const response = await axios.post('/api/adresseCtrl/updateadresse', {
+      id_adresses,
+      libelle,
+      numero_rue,
+      id_sectioncommune,
+      cle_unicite,
+      statut
+    });
 
-  });
-  return adr.toJSON();
+    if (response.status !== 200) {
+      throw new Error(response.data.message || 'Something went wrong');
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating address:", error);
+    throw error;
+  }
 }

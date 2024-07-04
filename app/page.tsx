@@ -13,6 +13,7 @@ import {
   useToast
 } from '@chakra-ui/react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import validator from 'validator';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -30,28 +31,45 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    const result = await signIn('credentials', {
-      redirect: false,
-      email,
-      password,
-    });
-
-    if (result?.ok) {
-      router.push('/dashboard');
-      setLoading(false);
-    } else {
+    if (email === " " || password === "") {
       toast({
-        title: `Email ou mot de passe incorrect`,
+        title: `Veuillez remplir tous les champs`,
         status: 'error',
         isClosable: true,
         position: 'top-right',
       })
+    } else if (!validator.isEmail(email)) {
+      toast({
+        title: `Votre adresse email est incorrect`,
+        status: 'error',
+        isClosable: true,
+        position: 'top-right',
+      })
+    } else {
+      setLoading(true);
+      const result = await signIn('credentials', {
+        redirect: false,
+        email,
+        password,
+      });
 
-      setLoading(false);
-      console.error('Login failed', result?.error);
-      //toast.error(`Email ou mot de passe incorrect`);
+      if (result?.ok) {
+        router.push('/dashboard');
+        setLoading(false);
+      } else {
+        toast({
+          title: `Email ou mot de passe incorrect`,
+          status: 'error',
+          isClosable: true,
+          position: 'top-right',
+        })
+
+        setLoading(false);
+        console.error('Login failed', result?.error);
+        //toast.error(`Email ou mot de passe incorrect`);
+      }
     }
+
   };
 
   return (

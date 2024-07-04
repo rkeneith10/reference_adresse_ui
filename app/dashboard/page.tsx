@@ -1,7 +1,7 @@
 "use client";
 import Chart from "@/components/barchart";
 import RootLayout from "@/components/rootLayout";
-import { Spinner } from "@chakra-ui/react";
+import { Button, Spinner } from "@chakra-ui/react";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import Link from "next/link";
@@ -10,10 +10,12 @@ import React, { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaRegFlag, FaTreeCity } from "react-icons/fa6";
 import { AdresseAttributes } from "../api/models/adresseModel";
+import { CommuneAttributes } from "../api/models/communeModel";
 import { CountryAttributes } from "../api/models/paysModel";
 
 const Home: React.FC = () => {
   const [countries, setCountries] = useState<CountryAttributes[]>([]);
+  const [commune, setCommune] = useState<CommuneAttributes[]>([])
   const [adresse, setAdresse] = useState<AdresseAttributes[]>([])
   const [loading, setLoading] = useState<Boolean>(true);
   const router = useRouter();
@@ -27,8 +29,10 @@ const Home: React.FC = () => {
       try {
         const response = await axios.get("/api/paysCtrl");
         const responseadresse = await axios.get("/api/adresseCtrl")
+        const responseCommune = await axios.get("/api/communeCtrl")
         setCountries(response.data.data);
         setAdresse(responseadresse.data.data)
+        setCommune(responseCommune.data.data)
         setLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -70,29 +74,34 @@ const Home: React.FC = () => {
                       </span>
                     </div>
                     <Link href="../pays">
-                      <button
-                        className="text-blue-600 hover:text-blue-800 font-medium"
-
-                      >
+                      <Button colorScheme='blue' variant='outline'>
                         Voir tous
-                      </button>
+                      </Button>
                     </Link>
                   </div>
-                  <p className="font-bold text-lg text-blue-500">{countries.length}</p>
+                  <p className="font-bold text-2xl text-blue-500">{countries.length}</p>
                 </div>
               </div>
 
-              <div className="w-full md:w-1/3 p-4">
+              <div className="w-full md:w-1/3 p-4 relative">
                 <div className="bg-white shadow-md rounded-md p-6 text-center">
-                  <div className="flex justify-center items-center mb-4">
-                    <h2 className="text-lg font-semibold text-blue-600">Villes</h2>
-                    <span className="ml-2">
-                      <FaTreeCity size={20} className="text-blue-500" />
-                    </span>
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center">
+                      <h2 className="text-lg font-semibold text-blue-600">Villes</h2>
+                      <span className="ml-2">
+                        <FaTreeCity size={20} className="text-blue-500" />
+                      </span>
+                    </div>
+                    <Link href="../communes">
+                      <Button colorScheme='blue' variant='outline'>
+                        Voir tous
+                      </Button>
+                    </Link>
                   </div>
-                  <p className="font-bold text-lg text-blue-500">110</p>
+                  <p className="font-bold text-2xl text-blue-500">{commune.length}</p>
                 </div>
               </div>
+
 
               <div className="w-full md:w-1/3 p-4 relative">
                 <div className="bg-white shadow-md rounded-md p-6 text-center">
@@ -104,15 +113,12 @@ const Home: React.FC = () => {
                       </span>
                     </div>
                     <Link href="../adresses">
-                      <button
-                        className="text-blue-600 hover:text-blue-800 font-medium"
-
-                      >
+                      <Button colorScheme='blue' variant='outline'>
                         Voir tous
-                      </button>
+                      </Button>
                     </Link>
                   </div>
-                  <p className="font-bold text-lg text-blue-500">{adresse.length}</p>
+                  <p className="font-bold text-2xl text-blue-500">{adresse.length}</p>
                 </div>
               </div>
 
