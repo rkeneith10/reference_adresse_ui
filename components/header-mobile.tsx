@@ -86,7 +86,7 @@ const HeaderMobile = () => {
             <DrawerOverlay />
             <DrawerContent>
               <DrawerCloseButton />
-              <DrawerHeader>User Info</DrawerHeader>
+              <DrawerHeader></DrawerHeader>
               <DrawerBody>
                 <p className='text-gray-900 font-bold px-4 py-2 mt-4'>Bienvenue</p>
                 <p className="px-4 text-gray-500 font-semibold mb-4">{session.user.name}</p>
