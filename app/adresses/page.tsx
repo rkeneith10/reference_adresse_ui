@@ -6,22 +6,25 @@ import DeleteConfirmationModal from "@/components/DeleteConfirmationModal";
 import RootLayout from "@/components/rootLayout";
 import SearchInput from "@/components/SearchInput";
 import {
-  Button, Spinner, useDisclosure
+  Button, Input, Spinner, useDisclosure
 } from "@chakra-ui/react";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaFileImport, FaPlus } from "react-icons/fa";
+import * as XLSX from "xlsx";
 import { AdresseAttributes } from "../api/models/adresseModel";
 import { SectionCommuneAttributes } from "../api/models/sectionCommunalModel";
 
 const Adresses: React.FC = () => {
   const router = useRouter();
   const [adresse, setAdresse] = useState<AdresseAttributes[]>([]);
+  const [file, setFile] = useState<File | null>(null)
   const [section, setSection] = useState<SectionCommuneAttributes[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadingExcel, setLoadingExcel] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState("");
   const [selectedAdressetId, setSelectedAdresseId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
@@ -80,6 +83,48 @@ const Adresses: React.FC = () => {
     setModalMessage("Cette adresse existe déjà dans la base de données");
     onConfirmationOpen();
   };
+  const handleFileChange = (event: any) => {
+    const file = event.target.files[0];
+    console.log("File selected:", event.target.files[0]);
+
+    if (file) {
+      setLoadingExcel(true);
+      console.log("File selected:", file); // Log the selected file
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const data = e.target?.result;
+        console.log("File data:", data); // Log the file data
+        if (data) {
+          try {
+            const workbook = XLSX.read(data, { type: 'binary' });
+            console.log("Workbook:", workbook); // Log the workbook
+            const sheetName = workbook.SheetNames[0];
+            const workSheet = workbook.Sheets[sheetName];
+            const json = XLSX.utils.sheet_to_json(workSheet);
+            console.log("Converted JSON:", json); // Log the JSON data
+
+            try {
+              await axios.post('/api/adresseCtrl/importExcel', json); // Envoi les données JSON au serveur
+              console.log("Data successfully imported");
+              fetchAdresse(); // Rafraîchit les adresses après import
+            } catch (error) {
+              console.error("Error importing data:", error);
+            }
+          } catch (error) {
+            console.error("Error reading file:", error);
+          } finally {
+            setLoadingExcel(false);
+          }
+        } else {
+          console.error("No data read from file");
+          setLoadingExcel(false);
+        }
+      };
+      reader.readAsBinaryString(file);
+    } else {
+      console.error("No file selected");
+    }
+  };
 
   useEffect(() => {
     const checkSession = async () => {
@@ -114,9 +159,24 @@ const Adresses: React.FC = () => {
           <div className="bg-white p-5 shadow-md rounded-md">
             <div className="flex flex-row justify-between mb-4">
               <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-              <Button colorScheme="blue" className="text-white" onClick={onOpen} leftIcon={<FaPlus />}>
-                Ajouter
-              </Button>
+              <div className="flex space-x-2">
+                <Button colorScheme="blue" className="text-white" onClick={onOpen} leftIcon={<FaPlus />}>
+                  Ajouter
+                </Button>
+                <Button as="label" htmlFor="file-upload" colorScheme="green" className="text-white" leftIcon={<FaFileImport />}>
+                  {loadingExcel ? "Telechargement..." : "Importer Excel"}
+                </Button>
+                <Input
+                  type="file"
+                  id="file-upload"
+                  accept=".xlsx, .xls"
+                  hidden
+                  onChange={handleFileChange}
+                />
+                {/* <button onClick={saveData} disabled={loading}>
+                  {loading ? 'Loading...' : 'Upload'}
+                </button> */}
+              </div>
             </div>
             <AdresseTable
               adresse={adresse}
