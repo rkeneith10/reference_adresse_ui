@@ -89,7 +89,7 @@ const Adresses: React.FC = () => {
 
     if (file) {
       setLoadingExcel(true);
-      console.log("File selected:", file); // Log the selected file
+      console.log("File selected:", file);
       const reader = new FileReader();
       reader.onload = async (e) => {
         const data = e.target?.result;
@@ -97,16 +97,16 @@ const Adresses: React.FC = () => {
         if (data) {
           try {
             const workbook = XLSX.read(data, { type: 'binary' });
-            console.log("Workbook:", workbook); // Log the workbook
+            console.log("Workbook:", workbook);
             const sheetName = workbook.SheetNames[0];
             const workSheet = workbook.Sheets[sheetName];
             const json = XLSX.utils.sheet_to_json(workSheet);
-            console.log("Converted JSON:", json); // Log the JSON data
+            console.log("Converted JSON:", json);
 
             try {
-              await axios.post('/api/adresseCtrl/importExcel', json); // Envoi les données JSON au serveur
+              await axios.post('/api/adresseCtrl/importExcel', json);
               console.log("Data successfully imported");
-              fetchAdresse(); // Rafraîchit les adresses après import
+              fetchAdresse();
             } catch (error) {
               console.error("Error importing data:", error);
             }
@@ -131,7 +131,7 @@ const Adresses: React.FC = () => {
       const session = await getSession();
 
       if (!session) {
-        router.push('/'); // Redirection vers la page d'accueil si la session n'est pas active
+        router.push('/');
       }
     };
 
@@ -159,12 +159,19 @@ const Adresses: React.FC = () => {
           <div className="bg-white p-5 shadow-md rounded-md">
             <div className="flex flex-row justify-between mb-4">
               <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
               <div className="flex space-x-2">
                 <Button colorScheme="blue" className="text-white" onClick={onOpen} leftIcon={<FaPlus />}>
                   Ajouter
                 </Button>
-                <Button as="label" htmlFor="file-upload" colorScheme="green" className="text-white" leftIcon={<FaFileImport />}>
-                  {loadingExcel ? "Telechargement..." : "Importer Excel"}
+                <Button
+                  as="label"
+                  htmlFor="file-upload"
+                  colorScheme="green"
+                  className="text-white"
+                  leftIcon={loadingExcel ? undefined : <FaFileImport />}
+                >
+                  {loadingExcel ? "Téléchargement..." : "Importer Excel"}
                 </Button>
                 <Input
                   type="file"
@@ -173,9 +180,7 @@ const Adresses: React.FC = () => {
                   hidden
                   onChange={handleFileChange}
                 />
-                {/* <button onClick={saveData} disabled={loading}>
-                  {loading ? 'Loading...' : 'Upload'}
-                </button> */}
+
               </div>
             </div>
             <AdresseTable

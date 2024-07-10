@@ -47,7 +47,7 @@ Adresse.init(
     statut: {
       type: DataTypes.STRING(20),
       allowNull: false,
-      defaultValue: 'Valide', // assuming default status
+      defaultValue: 'En creation', // assuming default status
     },
     id_sectioncommune: {
       type: DataTypes.INTEGER.UNSIGNED,

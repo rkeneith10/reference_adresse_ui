@@ -14,11 +14,11 @@ export async function updateAdresse(
   try {
     const response = await axios.post('/api/adresseCtrl/updateadresse', {
       id_adresses,
-      libelle,
       numero_rue,
-      id_sectioncommune,
+      libelle,
       cle_unicite,
-      statut
+      statut,
+      id_sectioncommune,
     });
 
     if (response.status !== 200) {
@@ -31,6 +31,7 @@ export async function updateAdresse(
     throw error;
   }
 }
+
 export async function importExcel(adresses: AdresseAttributes[]) {
   try {
     const newAdresses = adresses.map(adresse => ({

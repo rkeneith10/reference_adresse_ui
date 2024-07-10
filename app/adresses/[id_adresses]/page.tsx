@@ -77,11 +77,12 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
     try {
       const updatedAdresse = await updateAdresse(
         adresse.id_adresses,
-        formData.libelle,
         formData.numero_rue,
-        formData.id_sectioncommune,
+        formData.libelle,
         formData.cle_unicite,
-        formData.statut
+        formData.statut,
+        formData.id_sectioncommune,
+
       );
       setAdresse(updatedAdresse);
       setConfirmation(true);
