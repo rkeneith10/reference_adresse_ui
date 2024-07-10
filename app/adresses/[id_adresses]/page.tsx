@@ -1,5 +1,4 @@
 "use client";
-import { updateAdresse } from '@/app/actions/actionAdresse';
 import ConfirmationModal from '@/components/ConfirmationModal';
 import RootLayout from '@/components/rootLayout';
 import { Spinner, useDisclosure } from '@chakra-ui/react';
@@ -72,23 +71,26 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
     setUpdating(true);
 
     try {
-      const updatedAdresse = await updateAdresse(
-        adresse.id_adresses,
-        formData.numero_rue,
-        formData.libelle,
-        formData.cle_unicite,
-        formData.statut,
-        formData.id_sectioncommune,
+      const response = await axios.post('/api/adresseCtrl/updateadresse', {
+        id_adresses: adresse.id_adresses,
+        numero_rue: formData.numero_rue,
+        libelle: formData.libelle,
+        id_sectioncommune: formData.id_sectioncommune,
+        statut: formData.statut,
+      });
 
-      );
-      setAdresse(updatedAdresse);
+      if (response.status !== 200) {
+        throw new Error(response.data.message || 'Something went wrong');
+      }
+
+      setAdresse(response.data.data);
       setConfirmation(true);
       setModalMessage("L'adresse a été modifiée avec succès");
       onConfirmationOpen();
       setUpdating(false);
-    } catch (error) {
+    } catch (error: any) {
       setUpdating(false);
-      setModalMessage(`Erreur lors de la modification de l'adresse ${error}`);
+      setModalMessage(`Erreur lors de la modification de l'adresse: ${error.message}`);
       onConfirmationOpen();
       console.error("Update error:", error);
     }
