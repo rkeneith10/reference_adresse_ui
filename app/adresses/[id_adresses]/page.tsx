@@ -14,11 +14,8 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
   const [adresse, setAdresse] = useState<any>(null);
   const [sections, setSections] = useState<any[]>([]);
   const [formData, setFormData] = useState<any>({
-    libelle: "",
-    numero_rue: "",
-    id_sectioncommune: "",
-    cle_unicite: "",
-    statut: ""
+    numero_rue: "", libelle: "", cle_unicite: "", statut: "", id_sectioncommune: "",
+
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [updating, setUpdating] = useState<boolean>(false);
@@ -91,7 +88,7 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
       setUpdating(false);
     } catch (error) {
       setUpdating(false);
-      setModalMessage("Erreur lors de la modification de l'adresse");
+      setModalMessage(`Erreur lors de la modification de l'adresse ${error}`);
       onConfirmationOpen();
       console.error("Update error:", error);
     }

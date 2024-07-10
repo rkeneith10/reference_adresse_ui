@@ -15,30 +15,33 @@ export async function POST(req: NextRequest) {
       console.error("Adresse not found:", id_adresses);
       return NextResponse.json({ message: "Adresse not found" }, { status: 404 });
     }
+    console.log(adr)
 
     const sectionCommunale = await SectionCommunale.findOne({ where: { id_sectioncommune } });
     if (!sectionCommunale) {
       console.error("Section Communale not found:", id_sectioncommune);
       return NextResponse.json({ message: "Section Communale not found." }, { status: 404 });
     }
-
+    console.log(sectionCommunale)
     const commune = await Commune.findOne({ where: { id_commune: sectionCommunale.id_commune } });
     if (!commune) {
       console.error("Commune not found for Section Communale:", id_sectioncommune);
       return NextResponse.json({ message: "Commune not found." }, { status: 404 });
     }
-
+    console.log(commune)
     const departement = await Departement.findOne({ where: { id_departement: commune.id_departement } });
     if (!departement) {
       console.error("Departement not found for Commune:", commune.id_commune);
       return NextResponse.json({ message: "Departement not found." }, { status: 404 });
     }
-
+    console.log(departement)
     const pays = await Pays.findOne({ where: { id_pays: departement.id_pays } });
     if (!pays) {
       console.error("Pays not found for Departement:", departement.id_departement);
       return NextResponse.json({ message: "Pays not found." }, { status: 404 });
     }
+
+    console.log(pays)
 
     // Generate unicité key
     const cle_unicite_base = `${pays.code_pays}${departement.code_departement}${commune.code_postal}${numero_rue || 'X'}${libelle.charAt(0).toUpperCase()}${libelle.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
@@ -61,11 +64,12 @@ export async function POST(req: NextRequest) {
     const cle_unicite = `${cle_unicite_base}${sequence}`;
 
     await adr.update({
-      libelle,
       numero_rue,
-      id_sectioncommune,
+      libelle,
       cle_unicite,
-      statut
+      statut,
+      id_sectioncommune,
+
     });
 
     return NextResponse.json({ success: true, data: adr.toJSON() }, { status: 200 });
