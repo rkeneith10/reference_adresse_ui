@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Op } from 'sequelize';
 import Adresse from '../../models/adresseModel';
 import Commune from '../../models/communeModel';
 import Departement from '../../models/departementModel';
