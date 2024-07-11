@@ -9,8 +9,7 @@ export interface CountryAttributes {
   indicatif_tel: string;
   fuseau_horaire: string;
 
-  // creationdateheureinit: string;
-  // modificationdateheureinit: string;
+
 }
 
 interface CountryCreationAttributes
@@ -64,14 +63,6 @@ Country.init(
       allowNull: false,
     },
 
-    // creationdateheureinit: {
-    //   type: DataTypes.STRING(100),
-    //   allowNull: false,
-    // },
-    // modificationdateheureinit: {
-    //   type: DataTypes.STRING(100),
-    //   allowNull: false,
-    // },
   },
   {
     sequelize,

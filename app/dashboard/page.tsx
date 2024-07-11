@@ -125,6 +125,7 @@ const Home: React.FC = () => {
             </div>
             <div className="">
               <Chart />
+              {/* <Subdivision /> */}
             </div>
           </>
         )}
