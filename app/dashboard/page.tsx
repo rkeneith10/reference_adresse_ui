@@ -1,5 +1,6 @@
 "use client";
 import Chart from "@/components/barchart";
+import BarChartAdresse from "@/components/BarchatAdresse";
 import RootLayout from "@/components/rootLayout";
 import Subdivision from "@/components/Subdivision";
 import { Button, Grid, GridItem, Spinner } from "@chakra-ui/react";
@@ -138,10 +139,21 @@ const Home: React.FC = () => {
             </div>
             <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={6} p={4}>
               <GridItem>
-                <Chart />
+
+                <BarChartAdresse />
               </GridItem>
               <GridItem>
+                <Chart />
+              </GridItem>
+            </Grid>
+
+            <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={6} p={4}>
+              <GridItem>
+
                 <Subdivision data={dataSubdivision} />
+              </GridItem>
+              <GridItem>
+                {/* <Subdivision data={dataSubdivision} /> */}
               </GridItem>
             </Grid>
           </>
