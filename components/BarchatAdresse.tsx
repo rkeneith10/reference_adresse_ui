@@ -9,7 +9,7 @@ import Chart from "react-google-charts";
 
 export const options = {
   chart: {
-    title: "Nombre de sections et adresses par commune",
+    title: "Nombre de sections communales et adresses par commune",
   },
 };
 
@@ -17,7 +17,7 @@ const BarChartAdresse: React.FC = () => {
   const [sections, setSections] = useState<SectionCommuneAttributes[]>([]);
   const [addresses, setAddresses] = useState<AdresseAttributes[]>([]);
   const [communes, setCommunes] = useState<CommuneAttributes[]>([]);
-  const [loading, setLoading] = useState<Boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +45,7 @@ const BarChartAdresse: React.FC = () => {
     }
   }, [loading, sections, addresses, communes]);
 
-  // Count the number of sections and addresses in each commune
+
   const dataByCommune = communes.map((commune) => {
     const sectionCount = sections.filter(section => section.id_commune === commune.id_commune).length;
     const addressCount = sections.reduce((acc, section) => {
@@ -57,7 +57,7 @@ const BarChartAdresse: React.FC = () => {
     return [commune.libelle, sectionCount, addressCount];
   });
 
-  // Add column headers to the chart data
+
   const chartData = [
     ["Communes", "Nombre de sections", "Nombre d'adresses"],
     ...dataByCommune,

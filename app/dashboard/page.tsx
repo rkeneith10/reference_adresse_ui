@@ -19,7 +19,7 @@ const Home: React.FC = () => {
   const [countries, setCountries] = useState<CountryAttributes[]>([]);
   const [commune, setCommune] = useState<CommuneAttributes[]>([])
   const [adresse, setAdresse] = useState<AdresseAttributes[]>([])
-  const [loading, setLoading] = useState<Boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [dataSubdivision, setDataSubdivision] = useState([])
   const router = useRouter();
 
