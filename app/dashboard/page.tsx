@@ -1,7 +1,8 @@
 "use client";
 import Chart from "@/components/barchart";
 import RootLayout from "@/components/rootLayout";
-import { Button, Spinner } from "@chakra-ui/react";
+import Subdivision from "@/components/Subdivision";
+import { Button, Grid, GridItem, Spinner } from "@chakra-ui/react";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import Link from "next/link";
@@ -18,6 +19,7 @@ const Home: React.FC = () => {
   const [commune, setCommune] = useState<CommuneAttributes[]>([])
   const [adresse, setAdresse] = useState<AdresseAttributes[]>([])
   const [loading, setLoading] = useState<Boolean>(true);
+  const [dataSubdivision, setDataSubdivision] = useState([])
   const router = useRouter();
 
 
@@ -38,7 +40,18 @@ const Home: React.FC = () => {
         console.error("Error fetching products:", error);
       }
     };
+    const fetchDataSubdivision = async () => {
+      try {
+        const response = await axios.get("/api/subdivision")
+        setDataSubdivision(response.data)
+
+      } catch (error) {
+
+      }
+    }
+    fetchDataSubdivision();
     fetchData();
+
   }, []);
 
 
@@ -47,7 +60,7 @@ const Home: React.FC = () => {
       const session = await getSession();
 
       if (!session) {
-        router.push('/'); // Redirection vers la page d'accueil si la session n'est pas active
+        router.push('/');
       }
     };
 
@@ -123,10 +136,14 @@ const Home: React.FC = () => {
               </div>
 
             </div>
-            <div className="">
-              <Chart />
-              {/* <Subdivision /> */}
-            </div>
+            <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={6} p={4}>
+              <GridItem>
+                <Chart />
+              </GridItem>
+              <GridItem>
+                <Subdivision data={dataSubdivision} />
+              </GridItem>
+            </Grid>
           </>
         )}
       </>
