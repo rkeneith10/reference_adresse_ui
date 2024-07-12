@@ -101,7 +101,7 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
       <ModalContent>
         <>
           <ModalHeader className="flex flex-col gap-1">
-            Ajouter une commune
+            Ajouter une section communale
           </ModalHeader>
           <ModalBody>
             <div className="mb-1">
