@@ -13,7 +13,7 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { FaFileImport, FaPlus } from "react-icons/fa";
+import { FaFileExcel, FaFileImport, FaPlus } from "react-icons/fa";
 import * as XLSX from "xlsx";
 import { AdresseAttributes } from "../api/models/adresseModel";
 import { SectionCommuneAttributes } from "../api/models/sectionCommunalModel";
