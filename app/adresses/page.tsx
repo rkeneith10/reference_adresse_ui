@@ -161,9 +161,19 @@ const Adresses: React.FC = () => {
               <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
               <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-                <Button colorScheme="blue" className="text-white" onClick={onOpen} leftIcon={<FaPlus />}>
-                  Ajouter
-                </Button>
+                <div className="flex items-center">
+                  <Button colorScheme="blue" className="text-white" onClick={onOpen} leftIcon={<FaPlus />}>
+                    Ajouter
+                  </Button>
+                  <Input
+                    type="file"
+                    id="file-upload"
+                    accept=".xlsx, .xls"
+                    className="ml-2" // Ajoute un espace à gauche
+                    hidden
+                    onChange={handleFileChange}
+                  />
+                </div>
                 <Button
                   as="label"
                   htmlFor="file-upload"
@@ -173,13 +183,6 @@ const Adresses: React.FC = () => {
                 >
                   {loadingExcel ? "Téléchargement..." : "Importer Excel"}
                 </Button>
-                <Input
-                  type="file"
-                  id="file-upload"
-                  accept=".xlsx, .xls"
-                  hidden
-                  onChange={handleFileChange}
-                />
               </div>
             </div>
             <AdresseTable
@@ -195,6 +198,7 @@ const Adresses: React.FC = () => {
               getSectionNameById={getSectionNameById}
             />
           </div>
+
 
         )}
       </div>
