@@ -6,7 +6,8 @@ import DeleteConfirmationModal from "@/components/DeleteConfirmationModal";
 import RootLayout from "@/components/rootLayout";
 import SearchInput from "@/components/SearchInput";
 import {
-  Button, Input, Spinner, useDisclosure
+  Button, Input, Spinner, useDisclosure,
+  useMediaQuery
 } from "@chakra-ui/react";
 import axios from "axios";
 import { getSession } from "next-auth/react";
@@ -31,6 +32,7 @@ const Adresses: React.FC = () => {
   const [itemsPerPage] = useState(10); // Fixed items per page
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
   const [saveLoading, setSaveLoading] = useState<boolean>(false);
+  const [isSmallScreen] = useMediaQuery("(max-width: 768px)");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
@@ -169,9 +171,9 @@ const Adresses: React.FC = () => {
                   htmlFor="file-upload"
                   colorScheme="green"
                   className="text-white"
-                  leftIcon={loadingExcel ? undefined : <FaFileImport />}
+                  leftIcon={loadingExcel ? undefined : (isSmallScreen ? <FaFileExcel /> : <FaFileImport />)}
                 >
-                  {loadingExcel ? "Téléchargement..." : "Importer Excel"}
+                  {loadingExcel ? "Téléchargement..." : (isSmallScreen ? "" : "Importer Excel")}
                 </Button>
                 <Input
                   type="file"
@@ -180,7 +182,6 @@ const Adresses: React.FC = () => {
                   hidden
                   onChange={handleFileChange}
                 />
-
               </div>
             </div>
             <AdresseTable
