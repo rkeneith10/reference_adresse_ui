@@ -157,10 +157,10 @@ const Adresses: React.FC = () => {
           </div>
         ) : (
           <div className="bg-white p-5 shadow-md rounded-md">
-            <div className="flex flex-row justify-between mb-4">
+            <div className="flex flex-col md:flex-row justify-between mb-4">
               <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-              <div className="flex space-x-2">
+              <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
                 <Button colorScheme="blue" className="text-white" onClick={onOpen} leftIcon={<FaPlus />}>
                   Ajouter
                 </Button>
@@ -180,7 +180,6 @@ const Adresses: React.FC = () => {
                   hidden
                   onChange={handleFileChange}
                 />
-
               </div>
             </div>
             <AdresseTable
@@ -196,6 +195,7 @@ const Adresses: React.FC = () => {
               getSectionNameById={getSectionNameById}
             />
           </div>
+
         )}
       </div>
       <AdresseFormModal
