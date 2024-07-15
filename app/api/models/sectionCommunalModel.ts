@@ -36,6 +36,7 @@ SectionCommune.init(
         model: Commune,
         key: 'id_commune',
       },
+      onDelete: "CASCADE"
     },
     libelle: {
       type: DataTypes.STRING(255),
@@ -52,7 +53,7 @@ SectionCommune.init(
 );
 
 // Define association
-Commune.hasMany(SectionCommune, { foreignKey: 'id_commune' });
+Commune.hasMany(SectionCommune, { foreignKey: 'id_commune', onDelete: "CASCADE" });
 SectionCommune.belongsTo(Commune, { foreignKey: 'id_commune' });
 
 export default SectionCommune;

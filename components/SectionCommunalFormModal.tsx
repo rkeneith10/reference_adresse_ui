@@ -7,11 +7,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select
 } from '@chakra-ui/react';
-
 import axios from 'axios';
 import React, { useState } from "react";
+import Select from "react-select";
 
 interface SectionCommunalFormModal {
   isOpen: boolean;
@@ -34,7 +33,15 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
 
   });
 
+  const communeOption = communes.map((com) => ({
+    value: com.id_commune,
+    label: com.libelle
+  }))
 
+  const handleSelectChange = (selectedOption: any) => {
+    setSectioncommunale({ ...sectioncommunale, id_commune: selectedOption.value });
+    setErrors({ ...errors, id_commune: "" });
+  };
 
   const handleinputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -114,16 +121,12 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
               <Select
                 placeholder="Choisir une commune"
                 name="id_commune"
-                onChange={handleinputChange}
-                value={sectioncommunale.id_commune}
-                width="100%" // Utilisation de la propriété width de Chakra UI
-              >
-                {communes.map(co => (
-                  <option key={co.id_commune} value={co.id_commune}>
-                    {co.libelle}
-                  </option>
-                ))}
-              </Select>
+                onChange={handleSelectChange}
+                options={communeOption}
+                className='w-full'
+
+              />
+
               {errors.id_commune && <span className="text-red-500 text-sm">{errors.id_commune}</span>}
             </div>
             <div className="mb-1">

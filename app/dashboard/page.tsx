@@ -149,7 +149,7 @@ const Home: React.FC = () => {
 
             <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={6} p={4}>
               <GridItem>
-
+                <h3 className="font-semibold text-lg">Subdivision Geographique des pays</h3>
                 <Subdivision data={dataSubdivision} />
               </GridItem>
               <GridItem>

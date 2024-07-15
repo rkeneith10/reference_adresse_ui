@@ -7,11 +7,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
   Spinner
 } from '@chakra-ui/react';
 import axios from "axios";
 import React, { useState } from "react";
+import Select from 'react-select';
 
 interface DepartementFormModal {
   isOpen: boolean;
@@ -37,12 +37,17 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
     id_pays: "",
   });
 
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setDepartement({ ...departement, [name]: value });
     setErrors({ ...errors, [name]: "" });
   };
+
+  const handleSelectChange = (selectedOption: any) => {
+    setDepartement({ ...departement, id_pays: selectedOption.value });
+    setErrors({ ...errors, id_pays: "" });
+  };
+
   const validateForm = () => {
     let valid = true;
     const newErrors = { libelle: "", code_departement: "", chef_lieux: "", id_pays: "" };
@@ -67,6 +72,7 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
     setErrors(newErrors);
     return valid;
   };
+
   const addDepartement = async () => {
     if (!validateForm()) {
       return;
@@ -85,19 +91,20 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
         });
         onClose();
         onSuccess();
-        // setMessageModal("Le département a été enregistré avec succès.")
-        // setIsConfirmationOpen(true); // Ouvrir le modal de confirmation
-        // fetchData();
       }
     } catch (error) {
-      // setMessageModal("Ce département est déjà existé")
-      // setIsConfirmationOpen(true);
       onFailed();
       console.error("Échec de l'ajout du département", error);
     } finally {
       setAdding(false);
     }
   };
+
+  const countryOptions = countries.map((country) => ({
+    value: country.id_pays,
+    label: country.libelle,
+  }));
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
       <ModalOverlay
@@ -117,18 +124,11 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
 
               <Select
                 placeholder="Choisir un pays"
-                className="w-full" // Chakra UI utilise souvent des classes utilitaires comme "width" ou "w"
+                className="w-full"
                 name="id_pays"
-                onChange={handleInputChange}
-              >
-                {countries
-                  .sort((a, b) => a.libelle.localeCompare(b.libelle))
-                  .map((country) => (
-                    <option key={country.id_pays} value={country.id_pays}>
-                      {country.libelle}
-                    </option>
-                  ))}
-              </Select>
+                options={countryOptions}
+                onChange={handleSelectChange}
+              />
 
               {errors.id_pays && (
                 <span className="text-red-500 text-sm">{errors.id_pays}</span>
@@ -200,7 +200,7 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
         </>
       </ModalContent>
     </Modal>
-  )
-}
+  );
+};
 
-export default DepartementFormModal
+export default DepartementFormModal;

@@ -48,6 +48,7 @@ Commune.init(
         model: Departement,
         key: 'id_departement',
       },
+      onDelete: "CASCADE"
     },
     libelle: {
       type: DataTypes.STRING(255),
@@ -80,7 +81,7 @@ Commune.init(
 );
 
 // Define association
-Departement.hasMany(Commune, { foreignKey: 'id_departement' });
+Departement.hasMany(Commune, { foreignKey: 'id_departement', onDelete: "CASCADE" });
 Commune.belongsTo(Departement, { foreignKey: 'id_departement' });
 
 export default Commune;

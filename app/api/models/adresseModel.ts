@@ -56,6 +56,7 @@ Adresse.init(
         model: SectionCommunale,
         key: 'id_sectioncommune',
       },
+      onDelete: "CASCADE"
     },
 
   },
@@ -68,7 +69,7 @@ Adresse.init(
 );
 
 // Define associations
-SectionCommunale.hasMany(Adresse, { foreignKey: 'id_sectioncommune' });
+SectionCommunale.hasMany(Adresse, { foreignKey: 'id_sectioncommune', onDelete: "CASCADE" });
 Adresse.belongsTo(SectionCommunale, { foreignKey: 'id_sectioncommune' });
 
 

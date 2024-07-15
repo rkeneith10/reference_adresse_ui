@@ -7,11 +7,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select
 } from '@chakra-ui/react';
-
 import axios from 'axios';
 import React, { useState } from "react";
+import Select from 'react-select';
 
 interface AdresseFormModalProps {
   isOpen: boolean;
@@ -95,6 +94,15 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
     }
 
   }
+  const handleSelectChange = (selectedOption: any) => {
+    setAdresse({ ...adresse, id_sectioncommune: selectedOption.value });
+    setErrors({ ...errors, id_sectioncommune: "" });
+  };
+
+  const adresseOption = sectioncommunales.map((section) => ({
+    value: section.id_sectioncommune,
+    label: section.libelle
+  }))
 
   return (
     <Modal
@@ -122,16 +130,11 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
               <Select
                 placeholder="Choisir une section communale"
                 name="id_sectioncommune"
-                onChange={handleinputChange}
-                value={adresse.id_sectioncommune}
-                width="100%"
-              >
-                {sectioncommunales.map(section => (
-                  <option key={section.id_sectioncommune} value={section.id_sectioncommune}>
-                    {section.libelle}
-                  </option>
-                ))}
-              </Select>
+                onChange={handleSelectChange}
+                options={adresseOption}
+                className='w-full'
+              />
+
               {errors.id_sectioncommune && <span className="text-red-500 text-sm">{errors.id_sectioncommune}</span>}
             </div>
             <div className="mb-1">

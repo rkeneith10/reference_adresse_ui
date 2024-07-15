@@ -7,11 +7,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select
 } from '@chakra-ui/react';
-
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from "react";
+import Select from 'react-select';
 
 interface CommuneFormModalProps {
   isOpen: boolean;
@@ -108,6 +107,17 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
     }
   };
 
+  const DepartementOption = departements.map((dept) => (
+    {
+      value: dept.id_departement,
+      label: dept.libelle
+    }
+  ))
+  const handleSelectChange = (selectedOption: any) => {
+    setCommune({ ...commune, id_departement: selectedOption.value });
+    setErrors({ ...errors, id_departement: "" });
+  };
+
   const fetchLocation = useCallback(() => {
     if (searchTerm) {
       axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${searchTerm}`)
@@ -161,16 +171,12 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
               <Select
                 placeholder="Choisir un département"
                 name="id_departement"
-                onChange={handleinputChange}
-                value={commune.id_departement}
-                width="100%" // Utilisation de la propriété width de Chakra UI
-              >
-                {departements.map(dept => (
-                  <option key={dept.id_departement} value={dept.id_departement}>
-                    {dept.libelle}
-                  </option>
-                ))}
-              </Select>
+                onChange={handleSelectChange}
+                options={DepartementOption}
+                className='w-full'
+
+              />
+
               {errors.id_departement && <span className="text-red-500 text-sm">{errors.id_departement}</span>}
             </div>
             <div className="mb-1">

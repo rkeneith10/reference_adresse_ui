@@ -5,7 +5,7 @@ const Immeubles: React.FC = () => {
   return (
     <RootLayout isAuthenticated={true}>
       <Suspense fallback={<div>Loading...</div>}>
-      <div>Commune</div>
+        <div>Immeubles</div>
       </Suspense>
     </RootLayout>
   );

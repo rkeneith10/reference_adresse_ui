@@ -54,6 +54,7 @@ Departement.init(
         model: Country,
         key: 'id_pays',
       },
+      onDelete: "CASCADE"
     },
   },
   {
@@ -65,7 +66,7 @@ Departement.init(
 );
 
 // Define association
-Country.hasMany(Departement, { foreignKey: 'id_pays' });
+Country.hasMany(Departement, { foreignKey: 'id_pays', onDelete: "CASCADE" });
 Departement.belongsTo(Country, { foreignKey: 'id_pays' });
 
 export default Departement;
