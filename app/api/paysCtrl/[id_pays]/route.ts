@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import Departement from '../../models/departementModel';
 import Country from "../../models/paysModel";
 
 // Handler for GET request
@@ -57,7 +56,7 @@ export async function DELETE(
         { status: 404 }
       );
     }
-    await Departement.destroy({ where: { id_pays } })
+
     await Country.destroy({ where: { id_pays } });
     return NextResponse.json(
       { message: "Le pays a été supprimé avec succès." },

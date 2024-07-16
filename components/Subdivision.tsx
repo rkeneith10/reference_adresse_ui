@@ -1,168 +1,175 @@
-import { Box, Select, VStack } from "@chakra-ui/react";
-import React, { useState } from 'react';
+import { Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { FaMinus, FaPlus } from 'react-icons/fa';
 
 interface Adresse {
-  id_adresses: number,
-  numero_rue: string,
-  libelle: string,
-  cle_unicite: string,
-  statut: string,
-  id_sectioncommune: number
+  id_adresses: number;
+  numero_rue: string;
+  libelle: string;
+  cle_unicite: string;
+  statut: string;
+  id_sectioncommune: number;
 }
 
 interface SectionCommune {
-  id_sectioncommune: number,
-  id_commune: number,
-  libelle: string,
-  Adresses: Adresse[]
+  id_sectioncommune: number;
+  id_commune: number;
+  libelle: string;
+  Adresses: Adresse[];
 }
 
 interface Commune {
-  id_commune: number,
-  id_departement: number,
-  libelle: string,
-  code_postal: string,
-  longitude: string,
-  lattitude: string,
-  SectionCommunes: SectionCommune[]
+  id_commune: number;
+  id_departement: number;
+  libelle: string;
+  code_postal: string;
+  longitude: string;
+  lattitude: string;
+  SectionCommunes: SectionCommune[];
 }
 
 interface Departement {
-  id_departement: number,
-  libelle: string,
-  code_departement: string,
-  chef_lieux: string,
-  id_pays: number,
-  Communes: Commune[]
+  id_departement: number;
+  libelle: string;
+  code_departement: string;
+  chef_lieux: string;
+  id_pays: number;
+  Communes: Commune[];
 }
 
 interface Pays {
-  id_pays: number,
-  libelle: string,
-  code_pays: string,
-  continent: string,
-  indicatif_tel: string,
-  fuseau_horaire: string,
-  Departements: Departement[]
+  id_pays: number;
+  libelle: string;
+  code_pays: string;
+  continent: string;
+  indicatif_tel: string;
+  fuseau_horaire: string;
+  Departements: Departement[];
 }
 
 interface Props {
-  data: Pays[]
+  data: Pays[];
 }
 
 const Subdivision: React.FC<Props> = ({ data }) => {
-  const [selectedCountry, setSelectedCountry] = useState<Pays | null>(null);
-  const [selectedDepartement, setSelectedDepartement] = useState<Departement | null>(null);
-  const [selectedCommune, setSelectedCommune] = useState<Commune | null>(null);
-  const [selectedSection, setSelectedSection] = useState<SectionCommune | null>(null);
-  const [selectedAdresse, setSelectedAdresee] = useState<Adresse | null>(null);
+  const [state, setState] = useState<any>({});
+  const [stateDept, setStateDept] = useState<any>({});
+  const [stateCommune, setStateCommune] = useState<any>({});
+  const [stateSection, setStateSection] = useState<any>({});
+  const [stateAdresse, setStateAdresse] = useState<any>({});
 
-  const handleChangeCountry = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const countryId = parseInt(e.target.value);
-    const country = data.find(p => p.id_pays === countryId) || null;
-    setSelectedCountry(country);
-    setSelectedDepartement(null);
-    setSelectedCommune(null);
-    setSelectedSection(null);
+  useEffect(() => {
+    data.forEach((pays: Pays) => {
+      setState({ ...state, [`${pays.libelle}-${pays.id_pays}`]: false })
+
+      pays.Departements.forEach((dept: Departement) => {
+        setStateDept({ ...stateDept, [`${dept.libelle}-${dept.id_departement}`]: false })
+
+        dept.Communes.forEach((com: Commune) => {
+          setStateCommune({ ...stateCommune, [`${com.libelle}-${com.id_commune}`]: false })
+
+          com.SectionCommunes.forEach((section: SectionCommune) => {
+            setStateSection({ ...stateSection, [`${section.libelle}-${section.id_sectioncommune}`]: false })
+
+            section.Adresses.forEach((adr: Adresse) => {
+              setStateAdresse({ ...stateAdresse, [`${adr.libelle}-${adr.id_adresses}`]: false })
+            })
+          })
+        })
+      })
+    })
+  }, [])
+
+  const toggleState = (key: string, stateSetter: React.Dispatch<React.SetStateAction<any>>) => {
+    stateSetter((prevState: any) => ({ ...prevState, [key]: !prevState[key] }));
   };
 
-  const handleChangeDepartement = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (!selectedCountry) return;
-    const departementId = parseInt(e.target.value);
-    const departement = selectedCountry?.Departements.find(dept => dept.id_departement === departementId) || null;
-    setSelectedDepartement(departement);
-    setSelectedCommune(null);
-    setSelectedSection(null);
-  };
-
-  const handleChangeCommune = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (!selectedDepartement) return;
-    const communeId = parseInt(e.target.value);
-    const commune = selectedDepartement?.Communes.find(com => com.id_commune === communeId) || null;
-    setSelectedCommune(commune);
-    setSelectedSection(null);
-  };
-
-  const handleChangeSection = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (!selectedCommune) return;
-    const sectionId = parseInt(e.target.value);
-    const section = selectedCommune?.SectionCommunes.find(sect => sect.id_sectioncommune === sectionId) || null;
-    setSelectedSection(section);
-    setSelectedAdresee(null);
-  };
-
-  const handleChangeAdresse = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (!selectedSection) return;
-    const adresseId = parseInt(e.target.value);
-    const adresse = selectedSection?.Adresses.find(adr => adr.id_adresses === adresseId) || null;
-    setSelectedAdresee(adresse);
-  };
+  const renderIcon = (isOpen: boolean) => (isOpen ? <FaMinus /> : <FaPlus />);
 
   return (
-    <VStack spacing={4}>
-      <Box w="100%">
-        <Select placeholder="Sélectionner un pays" onChange={handleChangeCountry}>
-          {data.map(country => (
-            <option key={country.id_pays} value={country.id_pays}>{country.libelle}</option>
-          ))}
-        </Select>
-      </Box>
+    <VStack align="start">
+      {data.map(({ id_pays, libelle, Departements }: Pays) => (
+        <Box key={id_pays} w="100%">
+          <HStack onClick={() => toggleState(`${libelle}-${id_pays}`, setState)}>
+            <IconButton
+              icon={renderIcon(state[`${libelle}-${id_pays}`])}
 
-      {selectedCountry && (
-        <Box w="100%">
-          <Select placeholder="Sélectionner un département" onChange={handleChangeDepartement}>
-            {selectedCountry.Departements.length > 0 ? (
-              selectedCountry.Departements.map(dept => (
-                <option key={dept.id_departement} value={dept.id_departement}>{dept.libelle}</option>
-              ))
-            ) : (
-              <option>Aucun département disponible pour ce pays</option>
-            )}
-          </Select>
-        </Box>
-      )}
+              aria-label="Toggle"
+              variant="ghost"
+            />
+            <Text className='cursor-pointer'><span className='font-bold'>Pays:</span>{libelle}</Text>
+          </HStack>
 
-      {selectedDepartement && (
-        <Box w="100%">
-          <Select placeholder="Sélectionner une commune" onChange={handleChangeCommune}>
-            {selectedDepartement.Communes.length > 0 ? (
-              selectedDepartement.Communes.map(com => (
-                <option key={com.id_commune} value={com.id_commune}>{com.libelle}</option>
-              ))
-            ) : (
-              <option>Aucune commune disponible pour ce département</option>
-            )}
-          </Select>
-        </Box>
-      )}
+          {state[`${libelle}-${id_pays}`] && (
+            <VStack align="start" pl={8}>
+              {Departements.map(({ id_departement, libelle: deptLibelle, Communes }: Departement) => (
+                <Box key={id_departement} w="100%">
+                  <HStack onClick={() => toggleState(`${deptLibelle}-${id_departement}`, setStateDept)}>
+                    <IconButton
+                      icon={renderIcon(stateDept[`${deptLibelle}-${id_departement}`])}
 
-      {selectedCommune && (
-        <Box w="100%">
-          <Select placeholder="Sélectionner une section communale" onChange={handleChangeSection}>
-            {selectedCommune.SectionCommunes.length > 0 ? (
-              selectedCommune.SectionCommunes.map(sect => (
-                <option key={sect.id_sectioncommune} value={sect.id_sectioncommune}>{sect.libelle}</option>
-              ))
-            ) : (
-              <option>Aucune section communale disponible pour cette commune</option>
-            )}
-          </Select>
-        </Box>
-      )}
+                      aria-label="Toggle"
+                      variant="ghost"
+                    />
+                    <Text className='cursor-pointer'> <span className='font-bold'>Departement: </span>{deptLibelle}</Text>
+                  </HStack>
+                  {stateDept[`${deptLibelle}-${id_departement}`] && (
+                    <VStack align="start" pl={8}>
+                      {Communes.map(({ id_commune, libelle: comLibelle, SectionCommunes }: Commune) => (
+                        <Box key={id_commune} w="100%">
+                          <HStack onClick={() => toggleState(`${comLibelle}-${id_commune}`, setStateCommune)}>
+                            <IconButton
+                              icon={renderIcon(stateCommune[`${comLibelle}-${id_commune}`])}
 
-      {selectedSection && (
-        <Box w="100%">
-          <Select placeholder="Sélectionner une adresse" onChange={handleChangeAdresse}>
-            {selectedSection.Adresses.length > 0 ? (
-              selectedSection.Adresses.map(adr => (
-                <option key={adr.id_adresses} value={adr.id_adresses}>{adr.libelle}</option>
-              ))
-            ) : (
-              <option>Aucune adresse disponible pour cette section communale</option>
-            )}
-          </Select>
+                              aria-label="Toggle"
+                              variant="ghost"
+                            />
+                            <Text className='cursor-pointer'><span className='font-bold'>Commune: </span>{comLibelle}</Text>
+                          </HStack>
+                          {stateCommune[`${comLibelle}-${id_commune}`] && (
+                            <VStack align="start" pl={8}>
+                              {SectionCommunes.map(({ id_sectioncommune, libelle: secLibelle, Adresses }: SectionCommune) => (
+                                <Box key={id_sectioncommune} w="100%">
+                                  <HStack onClick={() => toggleState(`${secLibelle}-${id_sectioncommune}`, setStateSection)}>
+                                    <IconButton
+                                      icon={renderIcon(stateSection[`${secLibelle}-${id_sectioncommune}`])}
+
+                                      aria-label="Toggle"
+                                      variant="ghost"
+                                    />
+                                    <Text className='cursor-pointer'> <span className='font-bold'>Section Communale: </span>{secLibelle}</Text>
+                                  </HStack>
+                                  {stateSection[`${secLibelle}-${id_sectioncommune}`] && (
+                                    <VStack align="start" pl={8}>
+                                      {Adresses.map(({ id_adresses, libelle: adrLibelle }: Adresse) => (
+                                        <Box key={id_adresses} w="100%">
+                                          <HStack onClick={() => toggleState(`${adrLibelle}-${id_adresses}`, setStateAdresse)}>
+                                            <IconButton
+                                              icon={renderIcon(stateAdresse[`${adrLibelle}-${id_adresses}`])}
+                                              onClick={() => toggleState(`${adrLibelle}-${id_adresses}`, setStateAdresse)}
+                                              aria-label="Toggle"
+                                              variant="ghost"
+                                            />
+                                            <Text className='cursor-pointer'> <span className='font-bold'>Adresse:</span> {adrLibelle}</Text>
+                                          </HStack>
+                                        </Box>
+                                      ))}
+                                    </VStack>
+                                  )}
+                                </Box>
+                              ))}
+                            </VStack>
+                          )}
+                        </Box>
+                      ))}
+                    </VStack>
+                  )}
+                </Box>
+              ))}
+            </VStack>
+          )}
         </Box>
-      )}
+      ))}
     </VStack>
   );
 };
