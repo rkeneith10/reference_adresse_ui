@@ -1,4 +1,4 @@
-import { FaCity, FaHome, FaMapMarkerAlt, FaRegFlag } from "react-icons/fa";
+import { FaCity, FaHome, FaMapMarkerAlt, FaMapSigns, FaRegFlag } from "react-icons/fa";
 import { FaTreeCity } from "react-icons/fa6";
 
 import { MdListAlt } from "react-icons/md";
@@ -12,6 +12,11 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     title: "Tableau de bord",
     path: "/dashboard",
     icon: <FaHome size={20} />,
+  },
+  {
+    title: "Subdivision Geographique",
+    path: "/subdivision",
+    icon: <FaMapSigns size={20} />,
   },
   {
     title: "Pays",

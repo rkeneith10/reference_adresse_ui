@@ -2,7 +2,6 @@
 import Chart from "@/components/barchart";
 import BarChartAdresse from "@/components/BarchatAdresse";
 import RootLayout from "@/components/rootLayout";
-import Subdivision from "@/components/Subdivision";
 import { Button, Grid, GridItem, Spinner } from "@chakra-ui/react";
 import axios from "axios";
 import { getSession } from "next-auth/react";
@@ -149,8 +148,7 @@ const Home: React.FC = () => {
 
             <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={6} p={4}>
               <GridItem>
-                <h3 className="font-semibold text-lg">Subdivision Geographique des pays</h3>
-                <Subdivision data={dataSubdivision} />
+                {/*---------*/}
               </GridItem>
               <GridItem>
                 {/* <Subdivision data={dataSubdivision} /> */}

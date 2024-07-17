@@ -51,7 +51,7 @@ interface Props {
   data: Pays[];
 }
 
-const Subdivision: React.FC<Props> = ({ data }) => {
+const SubdivisionGeographique: React.FC<Props> = ({ data }) => {
   const [state, setState] = useState<any>({});
   const [stateDept, setStateDept] = useState<any>({});
   const [stateCommune, setStateCommune] = useState<any>({});
@@ -93,11 +93,11 @@ const Subdivision: React.FC<Props> = ({ data }) => {
           <HStack onClick={() => toggleState(`${libelle}-${id_pays}`, setState)}>
             <IconButton
               icon={renderIcon(state[`${libelle}-${id_pays}`])}
-
+              className='border border-gray-500'
               aria-label="Toggle"
-              variant="ghost"
+
             />
-            <Text className='cursor-pointer'><span className='font-bold'>Pays:</span>{libelle}</Text>
+            <Text className='cursor-pointer'><span className='font-bold text-blue-500'>Pays:</span>{libelle}</Text>
           </HStack>
 
           {state[`${libelle}-${id_pays}`] && (
@@ -107,11 +107,11 @@ const Subdivision: React.FC<Props> = ({ data }) => {
                   <HStack onClick={() => toggleState(`${deptLibelle}-${id_departement}`, setStateDept)}>
                     <IconButton
                       icon={renderIcon(stateDept[`${deptLibelle}-${id_departement}`])}
-
+                      className='border border-gray-500'
                       aria-label="Toggle"
                       variant="ghost"
                     />
-                    <Text className='cursor-pointer'> <span className='font-bold'>Departement: </span>{deptLibelle}</Text>
+                    <Text className='cursor-pointer'> <span className='font-bold text-blue-500'>Departement: </span>{deptLibelle}</Text>
                   </HStack>
                   {stateDept[`${deptLibelle}-${id_departement}`] && (
                     <VStack align="start" pl={8}>
@@ -120,11 +120,11 @@ const Subdivision: React.FC<Props> = ({ data }) => {
                           <HStack onClick={() => toggleState(`${comLibelle}-${id_commune}`, setStateCommune)}>
                             <IconButton
                               icon={renderIcon(stateCommune[`${comLibelle}-${id_commune}`])}
-
+                              className='border border-gray-500'
                               aria-label="Toggle"
                               variant="ghost"
                             />
-                            <Text className='cursor-pointer'><span className='font-bold'>Commune: </span>{comLibelle}</Text>
+                            <Text className='cursor-pointer'><span className='font-bold text-blue-500'  >Commune: </span>{comLibelle}</Text>
                           </HStack>
                           {stateCommune[`${comLibelle}-${id_commune}`] && (
                             <VStack align="start" pl={8}>
@@ -133,24 +133,25 @@ const Subdivision: React.FC<Props> = ({ data }) => {
                                   <HStack onClick={() => toggleState(`${secLibelle}-${id_sectioncommune}`, setStateSection)}>
                                     <IconButton
                                       icon={renderIcon(stateSection[`${secLibelle}-${id_sectioncommune}`])}
-
+                                      className='border border-gray-500'
                                       aria-label="Toggle"
                                       variant="ghost"
                                     />
-                                    <Text className='cursor-pointer'> <span className='font-bold'>Section Communale: </span>{secLibelle}</Text>
+                                    <Text className='cursor-pointer'> <span className='font-bold text-blue-500'>Section Communale: </span>{secLibelle}</Text>
                                   </HStack>
                                   {stateSection[`${secLibelle}-${id_sectioncommune}`] && (
                                     <VStack align="start" pl={8}>
-                                      {Adresses.map(({ id_adresses, libelle: adrLibelle }: Adresse) => (
+                                      {Adresses.map(({ id_adresses, numero_rue, libelle: adrLibelle }: Adresse) => (
                                         <Box key={id_adresses} w="100%">
                                           <HStack onClick={() => toggleState(`${adrLibelle}-${id_adresses}`, setStateAdresse)}>
                                             <IconButton
                                               icon={renderIcon(stateAdresse[`${adrLibelle}-${id_adresses}`])}
-                                              onClick={() => toggleState(`${adrLibelle}-${id_adresses}`, setStateAdresse)}
+
                                               aria-label="Toggle"
+                                              className='border border-gray-500'
                                               variant="ghost"
                                             />
-                                            <Text className='cursor-pointer'> <span className='font-bold'>Adresse:</span> {adrLibelle}</Text>
+                                            <Text className='cursor-pointer'> <span className='font-bold text-blue-500'>Adresse:</span> {`${numero_rue}, ${adrLibelle} `}</Text>
                                           </HStack>
                                         </Box>
                                       ))}
@@ -174,4 +175,4 @@ const Subdivision: React.FC<Props> = ({ data }) => {
   );
 };
 
-export default Subdivision;
+export default SubdivisionGeographique;
