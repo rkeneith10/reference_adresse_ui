@@ -5,7 +5,6 @@ import Commune from "../api/models/communeModel";
 export async function updateCommune(
   id_commune: number,
   libelle: string,
-  code_postal: string,
   id_departement: number
 ) {
   const com = await Commune.findOne({ where: { id_commune } });
@@ -14,7 +13,7 @@ export async function updateCommune(
   }
   await com.update({
     libelle,
-    code_postal,
+
     id_departement
   });
   return com.toJSON();
