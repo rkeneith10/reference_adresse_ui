@@ -9,6 +9,7 @@ export interface AdresseAttributes {
   libelle: string;
   cle_unicite: string;
   statut: string;
+  code_postal: string,
   id_sectioncommune: number;
 
 }
@@ -21,10 +22,10 @@ class Adresse extends Model<AdresseAttributes, AdresseCreationAttributes> implem
   public libelle!: string;
   public cle_unicite!: string;
   public statut!: string;
+  public code_postal!: string;
   public id_sectioncommune!: number;
 
 }
-
 Adresse.init(
   {
     id_adresses: {
@@ -48,6 +49,11 @@ Adresse.init(
       type: DataTypes.STRING(20),
       allowNull: false,
       defaultValue: 'En creation', // assuming default status
+    },
+    code_postal: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+
     },
     id_sectioncommune: {
       type: DataTypes.INTEGER.UNSIGNED,

@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import React, { useState } from "react";
 
+
 interface CountryFormModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -108,8 +109,8 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">Ajouter un pays</ModalHeader>
         <ModalBody className="overflow-auto max-h-[50vh]">
-          <div className="mb-1">
-            <label htmlFor="libelle" className="block text-medium font-normal">
+          <div className="mb-4">
+            <label htmlFor="libelle" className="block text-medium font-normal mb-2">
               Nom du pays
             </label>
             <input
@@ -122,8 +123,8 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
             />
             {errors.libelle && <span className="text-red-500 text-sm">{errors.libelle}</span>}
           </div>
-          <div className="mb-1">
-            <label htmlFor="code_pays" className="block text-medium font-normal">
+          <div className="mb-4">
+            <label htmlFor="code_pays" className="block text-medium font-normal mb-2">
               Code du pays
             </label>
             <input
@@ -136,8 +137,8 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
             />
             {errors.code_pays && <span className="text-red-500 text-sm">{errors.code_pays}</span>}
           </div>
-          <div className="mb-1">
-            <label htmlFor="continent" className="block text-medium font-normal">
+          <div className="mb-4">
+            <label htmlFor="continent" className="block text-medium font-normal mb-2">
               Continent
             </label>
             <input
@@ -150,8 +151,8 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
             />
             {errors.continent && <span className="text-red-500 text-sm">{errors.continent}</span>}
           </div>
-          <div className="mb-1">
-            <label htmlFor="indicatif_tel" className="block text-medium font-normal">
+          <div className="mb-4">
+            <label htmlFor="indicatif_tel" className="block text-medium font-normal mb-2">
               Indicatif Téléphonique
             </label>
             <input
@@ -164,8 +165,8 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
             />
             {errors.indicatif_tel && <span className="text-red-500 text-sm">{errors.indicatif_tel}</span>}
           </div>
-          <div className="mb-1">
-            <label htmlFor="fuseau_horaire" className="block text-medium font-normal">
+          <div className="mb-4">
+            <label htmlFor="fuseau_horaire" className="block text-medium font-normal mb-2">
               Fuseau Horaire
             </label>
             <input

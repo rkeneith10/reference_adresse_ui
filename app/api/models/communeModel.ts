@@ -6,11 +6,6 @@ export interface CommuneAttributes {
   id_commune: number;
   id_departement: number;
   libelle: string;
-  longitude: string;
-  lattitude: string;
-  code_postal: string;
-
-
 }
 
 interface CommuneCreationAttributes
@@ -22,9 +17,7 @@ class Commune
   public id_commune!: number;
   public id_departement!: number;
   public libelle!: string;
-  public code_postal!: string;
-  public longitude!: string;
-  public lattitude!: string;
+
 
 
 
@@ -54,20 +47,7 @@ Commune.init(
       type: DataTypes.STRING(255),
       allowNull: false,
     },
-    code_postal: {
-      type: DataTypes.STRING(20),
-      allowNull: true,
-      defaultValue: "XXX",
-    },
 
-    longitude: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    lattitude: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
 
 
 

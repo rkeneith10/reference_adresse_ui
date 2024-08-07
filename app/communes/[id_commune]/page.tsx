@@ -141,47 +141,9 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="flex flex-col">
-                <label htmlFor="libelle" className="mb-2 font-medium">
-                  Code postal
-                </label>
-                <input
-                  type="text"
-                  id="code_postal"
-                  name="code_postal"
-                  value={formData.code_postal}
-                  className="border border-gray-300 p-2 rounded-md"
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="code_departement" className="mb-2 font-medium">
-                  Longitude
-                </label>
-                <input
-                  type="text"
-                  id="longitude"
-                  name="longitude"
-                  value={formData.longitude}
-                  className="border border-gray-300 p-2 rounded-md"
-                  onChange={handleInputChange}
-                  readOnly
-                />
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="chef_lieux" className="mb-2 font-medium">
-                  Lattitude
-                </label>
-                <input
-                  type="text"
-                  id="lattitude"
-                  name="lattitude"
-                  value={formData.lattitude}
-                  className="border border-gray-300 p-2 rounded-md"
-                  onChange={handleInputChange}
-                  readOnly
-                />
-              </div>
+
+
+
               <div className="flex flex-col">
                 <label htmlFor="id_pays" className="mb-2 font-medium">
                   Departement

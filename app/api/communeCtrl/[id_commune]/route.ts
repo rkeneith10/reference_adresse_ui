@@ -15,12 +15,8 @@ export async function GET(req: NextRequest, { params }: { params: { id_commune: 
       id_commune: detailCommune.id_commune,
       id_departement: detailCommune?.id_departement,
       libelle: detailCommune.libelle,
-      longitude: detailCommune.longitude,
-      latitude: detailCommune.lattitude,
-      code_postal: detailCommune.code_postal
-
-
     }
+
     return NextResponse.json(responseData, { status: 200 });
   } catch (error: any) {
     console.error(error);

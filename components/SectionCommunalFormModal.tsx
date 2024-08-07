@@ -1,4 +1,4 @@
-import { CommuneAttributes } from '@/app/api/models/communeModel';
+import { VilleAttributes } from '@/app/api/models/villeModel';
 import {
   Button,
   Modal,
@@ -17,30 +17,30 @@ interface SectionCommunalFormModal {
   onClose: () => void;
   onSuccess: () => void;
   onFailed: () => void;
-  communes: CommuneAttributes[];
+  villes: VilleAttributes[];
 }
-const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, onClose, onSuccess, onFailed, communes }) => {
+const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, onClose, onSuccess, onFailed, villes }) => {
   const [adding, setAdding] = useState<boolean>(false);
   const [sectioncommunale, setSectioncommunale] = useState({
-    id_commune: "",
+    id_ville: "",
     libelle: "",
 
   });
 
   const [errors, setErrors] = useState({
-    id_commune: "",
+    id_ville: "",
     libelle: "",
 
   });
 
-  const communeOption = communes.map((com) => ({
-    value: com.id_commune,
-    label: com.libelle
+  const villeOption = villes.map((vil) => ({
+    value: vil.id_ville,
+    label: vil.libelle
   }))
 
   const handleSelectChange = (selectedOption: any) => {
-    setSectioncommunale({ ...sectioncommunale, id_commune: selectedOption.value });
-    setErrors({ ...errors, id_commune: "" });
+    setSectioncommunale({ ...sectioncommunale, id_ville: selectedOption.value });
+    setErrors({ ...errors, id_ville: "" });
   };
 
   const handleinputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -52,9 +52,9 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = { libelle: "", id_commune: "" };
-    if (!sectioncommunale.id_commune) {
-      newErrors.id_commune = "La commune de reference est requis";
+    const newErrors = { libelle: "", id_ville: "" };
+    if (!sectioncommunale.id_ville) {
+      newErrors.id_ville = "La ville de reference est requise";
       valid = false;
     }
     if (!sectioncommunale.libelle) {
@@ -79,7 +79,7 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
       });
       if (response.status === 200) {
         setSectioncommunale({
-          id_commune: "",
+          id_ville: "",
           libelle: "",
 
         });
@@ -111,28 +111,28 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
             Ajouter une section communale
           </ModalHeader>
           <ModalBody>
-            <div className="mb-1">
+            <div className="mb-4">
               <label
                 htmlFor="id_departement"
-                className="block text-sm font-normal"
+                className="block text-sm font-normal mb-2"
               >
-                Choisir une commune
+                Choisir une ville
               </label>
               <Select
-                placeholder="Choisir une commune"
-                name="id_commune"
+                placeholder="Choisir une ville"
+                name="id_ville"
                 onChange={handleSelectChange}
-                options={communeOption}
+                options={villeOption}
                 className='w-full'
 
               />
 
-              {errors.id_commune && <span className="text-red-500 text-sm">{errors.id_commune}</span>}
+              {errors.id_ville && <span className="text-red-500 text-sm">{errors.id_ville}</span>}
             </div>
-            <div className="mb-1">
+            <div className="mb-4">
               <label
                 htmlFor="libelle"
-                className="block text-sm font-normal"
+                className="block text-sm font-normal mb-2"
               >
                 Section Communale
               </label>

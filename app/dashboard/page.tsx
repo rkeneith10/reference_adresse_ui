@@ -11,12 +11,12 @@ import React, { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaRegFlag, FaTreeCity } from "react-icons/fa6";
 import { AdresseAttributes } from "../api/models/adresseModel";
-import { CommuneAttributes } from "../api/models/communeModel";
 import { CountryAttributes } from "../api/models/paysModel";
+import { VilleAttributes } from "../api/models/villeModel";
 
 const Home: React.FC = () => {
   const [countries, setCountries] = useState<CountryAttributes[]>([]);
-  const [commune, setCommune] = useState<CommuneAttributes[]>([])
+  const [ville, setVille] = useState<VilleAttributes[]>([])
   const [adresse, setAdresse] = useState<AdresseAttributes[]>([])
   const [loading, setLoading] = useState<boolean>(true);
   const [dataSubdivision, setDataSubdivision] = useState([])
@@ -31,10 +31,10 @@ const Home: React.FC = () => {
       try {
         const response = await axios.get("/api/paysCtrl");
         const responseadresse = await axios.get("/api/adresseCtrl")
-        const responseCommune = await axios.get("/api/communeCtrl")
+        const responseVille = await axios.get("/api/villeCtrl")
         setCountries(response.data.data);
         setAdresse(responseadresse.data.data)
-        setCommune(responseCommune.data.data)
+        setVille(responseVille.data.data)
         setLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -105,13 +105,13 @@ const Home: React.FC = () => {
                         <FaTreeCity size={20} className="text-blue-500" />
                       </span>
                     </div>
-                    <Link href="../communes">
+                    <Link href="../villes">
                       <Button colorScheme='blue' variant='outline'>
                         Voir tous
                       </Button>
                     </Link>
                   </div>
-                  <p className="font-bold text-2xl text-blue-500">{commune.length}</p>
+                  <p className="font-bold text-2xl text-blue-500">{ville.length}</p>
                 </div>
               </div>
 

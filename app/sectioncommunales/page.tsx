@@ -16,13 +16,13 @@ import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { CommuneAttributes } from "../api/models/communeModel";
 import { SectionCommuneAttributes } from "../api/models/sectionCommunalModel";
+import { VilleAttributes } from "../api/models/villeModel";
 
 const SectionCommunales: React.FC = () => {
   const router = useRouter()
   const [sectioncommunal, setSectioncommunal] = useState<SectionCommuneAttributes[]>([])
-  const [commune, setCommune] = useState<CommuneAttributes[]>([])
+  const [ville, setVille] = useState<VilleAttributes[]>([])
   const [searchTerm, setSearchTerm] = useState("");
   const [modalMessage, setModalMessage] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -49,13 +49,13 @@ const SectionCommunales: React.FC = () => {
   useEffect(() => {
     document.title = "Section Communale";
     fetchsection();
-    fetchCommune();
+    fetchVille();
   }, []);
-  const fetchCommune = async () => {
+  const fetchVille = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("/api/communeCtrl");
-      setCommune(response.data.data);
+      const response = await axios.get("/api/villeCtrl");
+      setVille(response.data.data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching departments:", error);
@@ -96,7 +96,7 @@ const SectionCommunales: React.FC = () => {
   };
 
   const getCommuneNameById = (id: number) => {
-    const comm = commune.find((c) => c.id_commune === id);
+    const comm = ville.find((c) => c.id_commune === id);
     return comm ? comm.libelle : "Commune Inconnue";
   };
   return (
@@ -137,7 +137,7 @@ const SectionCommunales: React.FC = () => {
 
       </div>
       <SectionCommunalFormModal
-        communes={commune}
+        villes={ville}
         isOpen={isOpen}
         onClose={onClose}
         onSuccess={handleAddCommuneuccess}

@@ -19,7 +19,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
-    const { numero_rue, libelle, statut, id_sectioncommune } = await req.json();
+    const { numero_rue, libelle, statut, id_sectioncommune, code_postal } = await req.json();
 
     const sectionCommunale = await SectionCommune.findOne({ where: { id_sectioncommune } });
     if (!sectionCommunale) {
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
 
     // Generate unicité key
-    const cle_unicite_base = `${pays.code_pays}${departement.code_departement}${commune.code_postal}${numero_rue || 'X'}${libelle.charAt(0).toUpperCase()}${libelle.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
+    const cle_unicite_base = `${pays.code_pays}${departement.code_departement}${code_postal}${numero_rue || 'X'}${libelle.charAt(0).toUpperCase()}${libelle.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
 
     // Find the highest sequence number with similar cle_unicite
     const similarKeys = await Adresse.findAll({
@@ -79,6 +79,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       libelle,
       cle_unicite,
       statut,
+      code_postal,
       id_sectioncommune,
 
     });

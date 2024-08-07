@@ -15,7 +15,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
 
   try {
-    const { libelle, id_commune } = await req.json();
+    const { libelle, id_ville } = await req.json();
 
     const existingCSectionommunal = await SectionCommunale.findOne({ where: { libelle } })
 
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       );
     }
     const newSectionCommunale = await SectionCommunale.create({
-      id_commune,
+      id_ville,
       libelle
 
 

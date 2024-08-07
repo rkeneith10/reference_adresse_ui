@@ -75,7 +75,7 @@ const Commune: React.FC = () => {
     try {
       await axios.delete(`/api/communeCtrl/${id}`);
       setCommune(commune.filter((com) => com.id_commune !== id));
-      setModalMessage("La ville a été supprimée avec succès");
+      setModalMessage("La commune a été supprimée avec succès");
       onConfirmationOpen();
     } catch (error) {
       console.error("Failed to delete coomune:", error);

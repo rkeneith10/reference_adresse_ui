@@ -117,8 +117,8 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
             Ajouter un d&eacute;partement
           </ModalHeader>
           <ModalBody>
-            <div className="mb-1">
-              <label htmlFor="codepays" className="block text-medium font-normal">
+            <div className="mb-4">
+              <label htmlFor="codepays" className="block text-medium font-normal mb-2">
                 Choisir un pays
               </label>
 
@@ -134,8 +134,8 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
                 <span className="text-red-500 text-sm">{errors.id_pays}</span>
               )}
             </div>
-            <div className="mb-1">
-              <label htmlFor="libelle" className="block text-medium font-normal">
+            <div className="mb-2">
+              <label htmlFor="libelle" className="block text-medium font-normal mb-2">
                 Nom du departement
               </label>
               <input
@@ -150,8 +150,8 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
                 <span className="text-red-500 text-sm">{errors.libelle}</span>
               )}
             </div>
-            <div className="mb-1">
-              <label htmlFor="code_departement" className="block text-medium font-normal">
+            <div className="mb-4">
+              <label htmlFor="code_departement" className="block text-medium font-normal mb-2">
                 Code du departement
               </label>
               <input
@@ -166,8 +166,8 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
                 <span className="text-red-500 text-sm">{errors.code_departement}</span>
               )}
             </div>
-            <div className="mb-1">
-              <label htmlFor="chef_lieux" className="block text-medium font-normal">
+            <div className="mb-4">
+              <label htmlFor="chef_lieux" className="block text-medium font-normal mb-2">
                 Chef Lieux
               </label>
               <input

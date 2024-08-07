@@ -2,32 +2,31 @@ import { Button } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
 import { FaChevronLeft, FaChevronRight, FaRegEye, FaRegTrashAlt } from "react-icons/fa";
-import { AdresseAttributes } from "../app/api/models/adresseModel";
+import { VilleAttributes } from "../app/api/models/villeModel";
 
-
-interface AdresseTableProps {
-  adresse: AdresseAttributes[];
+interface VilleTableProps {
+  vil: VilleAttributes[];
   searchTerm: string;
   currentPage: number;
   itemsPerPage: number;
   setCurrentPage: (page: number) => void;
   onDelete: (id: number) => void;
-  getSectionNameById: (id: number) => string,
+  getCommuneNameById: (id: number) => string,
 }
 
-const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
+const VilleTable: React.FC<VilleTableProps> = ({ vil,
   searchTerm,
   currentPage,
   itemsPerPage,
   setCurrentPage,
   onDelete,
-  getSectionNameById }) => {
-  const filteredAdresse = adresse.filter((adr) =>
-    adr.libelle.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  getCommuneNameById }) => {
 
+  const filteredVille = vil.filter((v) =>
+    v.libelle.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   const startIndex = currentPage * itemsPerPage;
-  const endIndex = Math.min((currentPage + 1) * itemsPerPage, filteredAdresse.length);
+  const endIndex = Math.min((currentPage + 1) * itemsPerPage, filteredVille.length);
 
   return (
     <div>
@@ -39,22 +38,17 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                 #
               </th>
               <th scope="col" className="px-6 py-3">
-                Libelle
+                Ville
+              </th>
+
+              <th scope="col" className="px-6 py-3">
+                Longitude
               </th>
               <th scope="col" className="px-6 py-3">
-                Numero rue
+                Lattitude
               </th>
               <th scope="col" className="px-6 py-3">
-                Code postal
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Cle unicite
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Statut
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Section Communale Reference
+                Commune
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -62,51 +56,46 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
             </tr>
           </thead>
           <tbody>
-            {filteredAdresse.length === 0 ? (
+            {filteredVille.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-center py-4">
-                  Aucune adresse trouv&eacute;e
+                  Aucune ville trouv&eacute;e
                 </td>
               </tr>
             ) : (
-              filteredAdresse.slice(startIndex, endIndex).map((adr, index) => (
-                <tr key={adr.id_adresses}>
+              filteredVille.slice(startIndex, endIndex).map((v, index) => (
+                <tr key={v.id_ville}>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     {index + 1}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.libelle}
+                    {v.libelle}
+                  </td>
+
+                  <td className="text-left py-3 px-4 border-b border-gray-200">
+                    {v.longitude}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.numero_rue}
+                    {v.lattitude}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.code_postal}
-                  </td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.cle_unicite}
-                  </td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.statut}
-                  </td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {getSectionNameById(adr.id_sectioncommune)}
+                    {getCommuneNameById(v.id_commune)}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     <div className="flex space-x-2">
                       <Button
                         size="sm"
                         colorScheme="red"
+                        mr={2}
                         variant="ghost"
-                        onClick={() => onDelete(adr.id_adresses)}
+                        onClick={() => onDelete(v.id_ville)}
                         p={0}
                         minWidth="auto"
-                        mr={2}
                       >
                         <FaRegTrashAlt className="text-lg" />
                       </Button>
 
-                      <Link href={`/adresses/${adr.id_adresses}`}>
+                      <Link href={`/communes/${v.id_ville}`}>
                         <Button
                           size="sm"
                           colorScheme="blue"
@@ -117,6 +106,7 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                           <FaRegEye className="text-lg" />
                         </Button>
                       </Link>
+
                     </div>
                   </td>
                 </tr>
@@ -133,7 +123,7 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
         >
           <FaChevronLeft className="text-gray-500 h-2 w-2" />
         </button>
-        {[...Array(Math.ceil(filteredAdresse.length / itemsPerPage))].map((_, index) => (
+        {[...Array(Math.ceil(filteredVille.length / itemsPerPage))].map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentPage(index)}
@@ -144,7 +134,7 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
         ))}
         <button
           onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={currentPage === Math.ceil(filteredAdresse.length / itemsPerPage) - 1}
+          disabled={currentPage === Math.ceil(filteredVille.length / itemsPerPage) - 1}
           className="mx-1 py-1 px-3 rounded-full hover:bg-gray-300"
         >
           <FaChevronRight className="text-gray-500 h-2 w-2" />
@@ -154,4 +144,4 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
   )
 }
 
-export default AdresseTable
+export default VilleTable;

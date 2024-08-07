@@ -1,12 +1,11 @@
 import sequelize from "@/lib/sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
-import Commune from "./communeModel";
+import Ville from "./villeModel";
 
 export interface SectionCommuneAttributes {
   id_sectioncommune: number;
-  id_commune: number;
+  id_ville: number;
   libelle: string;
-
 }
 
 interface SectionCommuneCreationAttributes
@@ -16,7 +15,7 @@ class SectionCommune
   extends Model<SectionCommuneAttributes, SectionCommuneCreationAttributes>
   implements SectionCommuneAttributes {
   public id_sectioncommune!: number;
-  public id_commune!: number;
+  public id_ville!: number;
   public libelle!: string;
   public creationdateheureinit!: string;
   public modificationdateheureinit!: string;
@@ -29,12 +28,12 @@ SectionCommune.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    id_commune: {
+    id_ville: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
-        model: Commune,
-        key: 'id_commune',
+        model: Ville,
+        key: 'id_ville',
       },
       onDelete: "CASCADE"
     },
@@ -53,7 +52,7 @@ SectionCommune.init(
 );
 
 // Define association
-Commune.hasMany(SectionCommune, { foreignKey: 'id_commune', onDelete: "CASCADE" });
-SectionCommune.belongsTo(Commune, { foreignKey: 'id_commune' });
+Ville.hasMany(SectionCommune, { foreignKey: 'id_ville', onDelete: "CASCADE" });
+SectionCommune.belongsTo(Ville, { foreignKey: 'id_ville' });
 
 export default SectionCommune;

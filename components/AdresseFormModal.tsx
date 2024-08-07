@@ -27,13 +27,15 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
     numero_rue: "",
     libelle: "",
     statut: "En creation",
+    code_postal: ""
 
   });
 
   const [errors, setErrors] = useState({
     numero_rue: "",
     libelle: "",
-    id_sectioncommune: ""
+    id_sectioncommune: "",
+    code_postal: ""
   });
 
   const handleinputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -45,7 +47,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = { libelle: "", numero_rue: "", id_sectioncommune: "" };
+    const newErrors = { libelle: "", numero_rue: "", id_sectioncommune: "", code_postal: "" };
     if (!adresse.id_sectioncommune) {
       newErrors.id_sectioncommune = "La section communale de reference est requise";
       valid = false;
@@ -57,6 +59,11 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
 
     if (!adresse.numero_rue) {
       newErrors.numero_rue = "Le numero de la rue est requis";
+      valid = false;
+    }
+
+    if (!adresse.code_postal) {
+      newErrors.code_postal = "Le code postal est requis";
       valid = false;
     }
 
@@ -81,6 +88,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
           numero_rue: "",
           libelle: "",
           statut: "En creation",
+          code_postal: ""
 
         });
         onClose();
@@ -120,10 +128,10 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
             Ajouter une adresse
           </ModalHeader>
           <ModalBody>
-            <div className="mb-1">
+            <div className="mb-4">
               <label
                 htmlFor="id_departement"
-                className="block text-sm font-normal"
+                className="block text-sm font-normal mb-2"
               >
                 Choisir une section communale
               </label>
@@ -137,10 +145,10 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
 
               {errors.id_sectioncommune && <span className="text-red-500 text-sm">{errors.id_sectioncommune}</span>}
             </div>
-            <div className="mb-1">
+            <div className="mb-4">
               <label
                 htmlFor="libelle"
-                className="block text-sm font-normal"
+                className="block text-sm font-normal mb-2"
               >
                 Libelle
               </label>
@@ -156,10 +164,10 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
               {errors.libelle && <span className="text-red-500 text-sm">{errors.libelle}</span>}
             </div>
 
-            <div className="mb-1">
+            <div className="mb-4">
               <label
                 htmlFor="libelle"
-                className="block text-sm font-normal"
+                className="block text-sm font-normal mb-2"
               >
                 Numero de rue
               </label>
@@ -173,6 +181,25 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
                 className="border rounded-md w-full p-2 text-sm"
               />
               {errors.numero_rue && <span className="text-red-500 text-sm">{errors.numero_rue}</span>}
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="code_postal"
+                className="block text-sm font-normal mb-2"
+              >
+                Code postal
+              </label>
+              <input
+                type="text"
+                placeholder="Entrer le code postal"
+                id="code_postal"
+                name="code_postal"
+                onChange={handleinputChange}
+                value={adresse.code_postal}
+                className="border rounded-md w-full p-2 text-sm"
+              />
+              {errors.code_postal && <span className="text-red-500 text-sm">{errors.code_postal}</span>}
             </div>
 
 

@@ -1,7 +1,7 @@
 import { FaCity, FaHome, FaMapMarkerAlt, FaMapSigns, FaRegFlag } from "react-icons/fa";
 import { FaTreeCity } from "react-icons/fa6";
 
-import { MdListAlt } from "react-icons/md";
+import { MdListAlt, MdStreetview } from "react-icons/md";
 
 import { RiBuilding2Line } from "react-icons/ri";
 
@@ -28,15 +28,16 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     path: "/departements",
     icon: <MdListAlt size={20} />,
   },
-  // {
-  //   title: "Arrondissements",
-  //   path: "/arrondissements",
-  //   icon: <BiMapPin size={20} />,
-  // },
+
   {
     title: "Communes",
     path: "/communes",
     icon: <FaTreeCity size={20} />,
+  },
+  {
+    title: "Villes",
+    path: "/villes",
+    icon: <FaCity size={20} />,
   },
   {
     title: "Sections Communales",
@@ -51,7 +52,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
   {
     title: "Quartiers",
     path: "/quartiers",
-    icon: <FaCity size={20} />,
+    icon: <MdStreetview size={20} />,
   },
   {
     title: "Immeubles",

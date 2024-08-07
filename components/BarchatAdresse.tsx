@@ -1,7 +1,7 @@
 "use client";
 import { AdresseAttributes } from "@/app/api/models/adresseModel";
-import { CommuneAttributes } from "@/app/api/models/communeModel";
 import { SectionCommuneAttributes } from "@/app/api/models/sectionCommunalModel";
+import { VilleAttributes } from "@/app/api/models/villeModel";
 import { Spinner } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -9,14 +9,14 @@ import Chart from "react-google-charts";
 
 export const options = {
   chart: {
-    title: "Nombre de sections communales et adresses par commune",
+    title: "Nombre de sections communales et adresses par ville",
   },
 };
 
 const BarChartAdresse: React.FC = () => {
   const [sections, setSections] = useState<SectionCommuneAttributes[]>([]);
   const [addresses, setAddresses] = useState<AdresseAttributes[]>([]);
-  const [communes, setCommunes] = useState<CommuneAttributes[]>([]);
+  const [villes, setVilles] = useState<VilleAttributes[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -24,10 +24,10 @@ const BarChartAdresse: React.FC = () => {
       try {
         const sectionResponse = await axios.get('/api/sectionCommunalCtrl');
         const addressesResponse = await axios.get('/api/adresseCtrl')
-        const communesResponse = await axios.get('/api/communeCtrl')
+        const communesResponse = await axios.get('/api/villeCtrl')
         setSections(sectionResponse.data.data);
         setAddresses(addressesResponse.data.data);
-        setCommunes(communesResponse.data.data);
+        setVilles(communesResponse.data.data);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -37,15 +37,15 @@ const BarChartAdresse: React.FC = () => {
     fetchData();
   }, []);
 
-  const dataByCommune = communes.map((commune) => {
-    const sectionCount = sections.filter(section => section.id_commune === commune.id_commune).length;
+  const dataByCommune = villes.map((ville) => {
+    const sectionCount = sections.filter(section => section.id_ville === ville.id_commune).length;
     const addressCount = sections.reduce((acc, section) => {
-      if (section.id_commune === commune.id_commune) {
+      if (section.id_ville === ville.id_ville) {
         return acc + addresses.filter(address => address.id_sectioncommune === section.id_sectioncommune).length;
       }
       return acc;
     }, 0);
-    return [commune.libelle, sectionCount, addressCount];
+    return [ville.libelle, sectionCount, addressCount];
   });
 
 

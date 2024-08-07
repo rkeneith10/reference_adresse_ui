@@ -41,15 +41,7 @@ const CommuneTable: React.FC<CommuneTableProps> = ({
               <th scope="col" className="px-6 py-3">
                 Commune
               </th>
-              <th scope="col" className="px-6 py-3">
-                Code postal
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Longitude
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Lattitude
-              </th>
+
               <th scope="col" className="px-6 py-3">
                 Departement
               </th>
@@ -74,15 +66,7 @@ const CommuneTable: React.FC<CommuneTableProps> = ({
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     {co.libelle}
                   </td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {co.code_postal}
-                  </td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {co.longitude}
-                  </td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {co.lattitude}
-                  </td>
+
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     {getDepartementNameById(co.id_departement)}
                   </td>

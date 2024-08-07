@@ -4,6 +4,7 @@ import Commune from "../models/communeModel";
 import Departement from "../models/departementModel";
 import Country from '../models/paysModel';
 import SectionCommune from "../models/sectionCommunalModel";
+import Ville from "../models/villeModel";
 
 export async function GET(req: NextRequest) {
   try {
@@ -13,10 +14,14 @@ export async function GET(req: NextRequest) {
         include: [{
           model: Commune,
           include: [{
-            model: SectionCommune,
+            model: Ville,
             include: [{
-              model: Adresse
+              model: SectionCommune,
+              include: [{
+                model: Adresse
+              }]
             }]
+
           }]
 
         }]
@@ -25,7 +30,7 @@ export async function GET(req: NextRequest) {
     })
     return NextResponse.json(pays, { status: 200 })
   } catch (error) {
-    return NextResponse.json({ error: "Erreur lors de la recuperation des donnees" })
+    return NextResponse.json({ error: "Erreur lors de la recuperation des donnees" }, { status: 400 })
   }
 
 }
