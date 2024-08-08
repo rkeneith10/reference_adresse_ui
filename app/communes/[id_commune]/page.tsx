@@ -91,8 +91,6 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
       const updatedCommune = await updateCommune(
         commune.id_commune,
         formData.libelle,
-        formData.code_postal,
-
         formData.id_departement, // Pass the country reference ID
       );
       setCommune(updatedCommune);
