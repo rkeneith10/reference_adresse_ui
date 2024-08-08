@@ -43,7 +43,7 @@ const SectionCommunaleTable: React.FC<SectionCommunaleTableProps> = ({
               </th>
 
               <th scope="col" className="px-6 py-3">
-                Commune
+                Ville Reference
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
