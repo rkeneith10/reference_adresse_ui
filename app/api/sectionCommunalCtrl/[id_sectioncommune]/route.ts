@@ -13,7 +13,7 @@ export async function GET(req: NextRequest, { params }: { params: { id_sectionco
     }
     const responseData = {
       id_sectioncommune: detailSectionCommunale.id_sectioncommune,
-      id_commune: detailSectionCommunale?.id_commune,
+      id_ville: detailSectionCommunale?.id_ville,
       libelle: detailSectionCommunale.libelle,
 
 

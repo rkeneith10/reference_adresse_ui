@@ -13,7 +13,7 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
   const [adresse, setAdresse] = useState<any>(null);
   const [sections, setSections] = useState<any[]>([]);
   const [formData, setFormData] = useState<any>({
-    numero_rue: "", libelle: "", cle_unicite: "", statut: "", id_sectioncommune: "",
+    numero_rue: "", libelle: "", code_postal: "", cle_unicite: "", statut: "", id_sectioncommune: "",
 
   });
   const [loading, setLoading] = useState<boolean>(true);
@@ -75,6 +75,7 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
         id_adresses: adresse.id_adresses,
         numero_rue: formData.numero_rue,
         libelle: formData.libelle,
+        code_postal: formData.code_postal,
         id_sectioncommune: formData.id_sectioncommune,
         statut: formData.statut,
       });
@@ -173,6 +174,20 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
                     </option>
                   ))}
                 </select>
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="code_postal" className="mb-2 font-medium">
+                  Code Postal
+                </label>
+                <input
+                  type="text"
+                  id="code_postal"
+                  name="code_postal"
+                  value={formData.code_postal}
+                  className="border border-gray-300 p-2 rounded-md"
+                  onChange={handleInputChange}
+
+                />
               </div>
               <div className="flex flex-col">
                 <label htmlFor="cle_unicite" className="mb-2 font-medium">

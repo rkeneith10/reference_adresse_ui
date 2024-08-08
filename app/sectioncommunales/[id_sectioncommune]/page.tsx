@@ -12,10 +12,10 @@ const page = ({ params }: { params: { id_sectioncommune: number } }) => {
   const { id_sectioncommune } = params;
   const router = useRouter();
   const [sectionCommunal, setSectionCommunal] = useState<any>(null);
-  const [commune, setCommune] = useState<any[]>([]);
+  const [ville, setVille] = useState<any[]>([]);
   const [formData, setFormData] = useState<any>({
     libelle: "",
-    id_commune: "",
+    id_ville: "",
 
   });
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,7 +40,7 @@ const page = ({ params }: { params: { id_sectioncommune: number } }) => {
         setSectionCommunal(response.data);
         setFormData({
           libelle: response.data.libelle,
-          id_commune: response.data.id_commune
+          id_ville: response.data.id_ville
         });
         setLoading(false);
       } catch (error) {
@@ -53,16 +53,16 @@ const page = ({ params }: { params: { id_sectioncommune: number } }) => {
       }
     };
 
-    const fetchCommune = async () => {
+    const fetchVille = async () => {
       try {
-        const response = await axios.get('/api/communeCtrl'); // Adjust the endpoint as needed
-        setCommune(response.data.data);
+        const response = await axios.get('/api/villeCtrl'); // Adjust the endpoint as needed
+        setVille(response.data.data);
       } catch (error) {
-        console.error("Error fetching countries:", error);
+        console.error("Error fetching ville:", error);
       }
     };
 
-    fetchCommune();
+    fetchVille();
     fetchSection();
   }, [id_sectioncommune]);
 
@@ -121,7 +121,7 @@ const page = ({ params }: { params: { id_sectioncommune: number } }) => {
           <Spinner size="lg" color="primary" />
           <div className="loader">Chargement en cours...</div>
         </div>
-      ) : commune ? (
+      ) : ville ? (
         <div className="h-auto bg-white rounded-md shadow-md p-10 justify-center items-center mt-10">
           <form onSubmit={handleUpdateSection}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -141,20 +141,20 @@ const page = ({ params }: { params: { id_sectioncommune: number } }) => {
 
 
               <div className="flex flex-col">
-                <label htmlFor="id_pays" className="mb-2 font-medium">
-                  Commune
+                <label htmlFor="id_ville" className="mb-2 font-medium">
+                  Ville
                 </label>
                 <select
-                  id="id_commune"
-                  name="id_commune"
-                  value={formData.id_commune}
+                  id="id_ville"
+                  name="id_ville"
+                  value={formData.id_ville}
                   className="border border-gray-300 p-2 rounded-md"
                   onChange={handleInputChange}
                 >
-                  <option value="">Sélectionnez une commune</option>
-                  {commune.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((co) => (
-                    <option key={co.id_commune} value={co.id_commune}>
-                      {co.libelle}
+                  <option value="">Sélectionnez une ville</option>
+                  {ville.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((v) => (
+                    <option key={v.id_ville} value={v.id_ville}>
+                      {v.libelle}
                     </option>
                   ))}
                 </select>

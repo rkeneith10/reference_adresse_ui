@@ -28,6 +28,7 @@ export async function GET(
       id_adresses: detailAdresse.id_adresses,
       libelle: detailAdresse.libelle,
       numero_rue: detailAdresse.numero_rue,
+      code_postal: detailAdresse.code_postal,
       cle_unicite: detailAdresse.cle_unicite,
       statut: detailAdresse.statut,
       id_sectioncommune: detailAdresse.id_sectioncommune,
@@ -86,7 +87,7 @@ export async function DELETE(
 
 export async function POST(req: NextRequest) {
   try {
-    const { id_adresses, libelle, numero_rue, id_sectioncommune, statut } = await req.json();
+    const { id_adresses, libelle, numero_rue, code_postal, id_sectioncommune, statut } = await req.json();
 
     const adr = await Adresse.findOne({ where: { id_adresses } });
     if (!adr) {
@@ -98,7 +99,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Section Communale not found." }, { status: 404 });
     }
 
-    const commune = await Commune.findOne({ where: { id_commune: sectionCommunale.id_commune } });
+    const commune = await Commune.findOne({ where: { id_commune: sectionCommunale.id_ville } });
     if (!commune) {
       return NextResponse.json({ message: "Commune not found." }, { status: 404 });
     }
@@ -114,7 +115,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Generate unicité key
-    const cle_unicite_base = `${pays.code_pays}${departement.code_departement}${commune.code_postal}${numero_rue || 'X'}${libelle.charAt(0).toUpperCase()}${libelle.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
+    const cle_unicite_base = `${pays.code_pays}${departement.code_departement}${code_postal}${numero_rue || 'X'}${libelle.charAt(0).toUpperCase()}${libelle.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
 
     // Find the highest sequence number with similar cle_unicite
     const similarKeys = await Adresse.findAll({
@@ -136,6 +137,7 @@ export async function POST(req: NextRequest) {
     await adr.update({
       libelle,
       numero_rue,
+      code_postal,
       id_sectioncommune,
       cle_unicite,
       statut
