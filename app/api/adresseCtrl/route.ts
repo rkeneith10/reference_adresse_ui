@@ -29,7 +29,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       );
     }
 
-    const commune = await Commune.findOne({ where: { id_commune: sectionCommunale.id_commune } });
+    const commune = await Commune.findOne({ where: { id_commune: sectionCommunale.id_ville } });
     if (!commune) {
       return NextResponse.json(
         { message: "Commune not found." },

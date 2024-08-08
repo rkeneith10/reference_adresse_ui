@@ -8,7 +8,7 @@ import SectionCommunale from '../../models/sectionCommunalModel';
 
 export async function POST(req: NextRequest) {
   try {
-    const { id_adresses, libelle, numero_rue, id_sectioncommune, statut } = await req.json();
+    const { id_adresses, libelle, numero_rue, id_sectioncommune, code_postal, statut } = await req.json();
 
     const adr = await Adresse.findOne({ where: { id_adresses } });
     if (!adr) {
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Section Communale not found." }, { status: 404 });
     }
     console.log(sectionCommunale)
-    const commune = await Commune.findOne({ where: { id_commune: sectionCommunale.id_commune } });
+    const commune = await Commune.findOne({ where: { id_commune: sectionCommunale.id_ville } });
     if (!commune) {
       console.error("Commune not found for Section Communale:", id_sectioncommune);
       return NextResponse.json({ message: "Commune not found." }, { status: 404 });
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     console.log(pays)
 
     // Generate unicité key
-    const cle_unicite_base = `${pays.code_pays}${departement.code_departement}${commune.code_postal}${numero_rue || 'X'}${libelle.charAt(0).toUpperCase()}${libelle.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
+    const cle_unicite_base = `${pays.code_pays}${departement.code_departement}${code_postal}${numero_rue || 'X'}${libelle.charAt(0).toUpperCase()}${libelle.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
 
     // Find the highest sequence number with similar cle_unicite
     const similarKeys = await Adresse.findAll({
