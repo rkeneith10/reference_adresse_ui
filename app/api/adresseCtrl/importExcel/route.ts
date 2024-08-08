@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
       const createdAdresses = await Adresse.create({
         numero_rue: adr.numero_rue,
         libelle: adr.libelle,
+        code_postal: adr.code_postal,
         cle_unicite: adr.cle_unicite,
         statut: adr.statut,
         id_sectioncommune: adr.id_sectioncommune
