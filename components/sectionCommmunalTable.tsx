@@ -11,7 +11,7 @@ interface SectionCommunaleTableProps {
   itemsPerPage: number;
   setCurrentPage: (page: number) => void;
   onDelete: (id: number) => void;
-  getCommuneNameById: (id: number) => string,
+  getVilleNameById: (id: number) => string,
 }
 
 const SectionCommunaleTable: React.FC<SectionCommunaleTableProps> = ({
@@ -21,7 +21,7 @@ const SectionCommunaleTable: React.FC<SectionCommunaleTableProps> = ({
   itemsPerPage,
   setCurrentPage,
   onDelete,
-  getCommuneNameById
+  getVilleNameById
 }) => {
   const filteredSection = comm.filter((c) =>
     c.libelle.toLowerCase().includes(searchTerm.toLowerCase())
@@ -68,7 +68,7 @@ const SectionCommunaleTable: React.FC<SectionCommunaleTableProps> = ({
                   </td>
 
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {getCommuneNameById(co.id_commune)}
+                    {getVilleNameById(co.id_ville)}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     <div className="flex space-x-2">

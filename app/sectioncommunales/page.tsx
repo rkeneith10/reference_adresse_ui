@@ -95,9 +95,9 @@ const SectionCommunales: React.FC = () => {
     onConfirmationOpen();
   };
 
-  const getCommuneNameById = (id: number) => {
-    const comm = ville.find((c) => c.id_commune === id);
-    return comm ? comm.libelle : "Commune Inconnue";
+  const getVilleNameById = (id: number) => {
+    const vil = ville.find((c) => c.id_ville === id);
+    return vil ? vil.libelle : "Ville Inconnue";
   };
   return (
     <RootLayout isAuthenticated={true}>
@@ -122,7 +122,7 @@ const SectionCommunales: React.FC = () => {
             </div>
             <SectionCommunalTable
               comm={sectioncommunal}
-              getCommuneNameById={getCommuneNameById}
+              getVilleNameById={getVilleNameById}
               searchTerm={searchTerm}
               currentPage={currentPage}
               itemsPerPage={itemsPerPage}
