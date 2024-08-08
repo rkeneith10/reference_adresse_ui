@@ -181,12 +181,12 @@ const SubdivisionGeographique: React.FC<Props> = ({ data }) => {
                                               {Adresses.map(({ id_adresses, numero_rue, code_postal, libelle: adrLibelle }: Adresse) => (
                                                 <Box key={id_adresses} w="100%">
                                                   <HStack onClick={() => toggleState(`${adrLibelle}-${id_adresses}`, setStateAdresse)}>
-                                                    <IconButton
+                                                    {/* <IconButton
                                                       icon={renderIcon(stateAdresse[`${adrLibelle}-${id_adresses}`])}
                                                       aria-label="Toggle"
                                                       className='border border-gray-500'
                                                       variant="ghost"
-                                                    />
+                                                    /> */}
                                                     <Text className='cursor-pointer'>
                                                       <span className='font-bold text-blue-500'>Adresse:</span> {`${code_postal},${numero_rue}, ${adrLibelle}`}
                                                     </Text>
