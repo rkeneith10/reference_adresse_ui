@@ -32,7 +32,7 @@ interface Commune {
   id_commune: number;
   id_departement: number;
   libelle: string;
-  Ville: Ville[];
+  Villes: Ville[];
 }
 
 interface Departement {
@@ -76,7 +76,7 @@ const SubdivisionGeographique: React.FC<Props> = ({ data }) => {
         dept.Communes.forEach((com: Commune) => {
           setStateCommune({ ...stateCommune, [`${com.libelle}-${com.id_commune}`]: false });
 
-          com.Ville.forEach((vil: Ville) => {
+          com.Villes.forEach((vil: Ville) => {
             setStateVille({ ...stateVille, [`${vil.libelle}-${vil.id_ville}`]: false });
 
             vil.SectionCommunes.forEach((section: SectionCommune) => {
@@ -130,7 +130,7 @@ const SubdivisionGeographique: React.FC<Props> = ({ data }) => {
 
                   {stateDept[`${deptLibelle}-${id_departement}`] && (
                     <VStack align="start" pl={8}>
-                      {Communes.map(({ id_commune, libelle: comLibelle, Ville }: Commune) => (
+                      {Communes.map(({ id_commune, libelle: comLibelle, Villes }: Commune) => (
                         <Box key={id_commune} w="100%">
                           <HStack onClick={() => toggleState(`${comLibelle}-${id_commune}`, setStateCommune)}>
                             <IconButton
@@ -146,7 +146,7 @@ const SubdivisionGeographique: React.FC<Props> = ({ data }) => {
 
                           {stateCommune[`${comLibelle}-${id_commune}`] && (
                             <VStack align="start" pl={8}>
-                              {Ville.map(({ id_ville, libelle: vilLibelle, SectionCommunes }: Ville) => (
+                              {Villes.map(({ id_ville, libelle: vilLibelle, SectionCommunes }: Ville) => (
                                 <Box key={id_ville} w="100%">
                                   <HStack onClick={() => toggleState(`${vilLibelle}-${id_ville}`, setStateVille)}>
                                     <IconButton
