@@ -5,7 +5,7 @@ import SectionCommunale from "../api/models/sectionCommunalModel";
 export async function updateSectionCommunale(
   id_sectioncommune: number,
   libelle: string,
-  id_commune: number
+  id_ville: number
 
 ) {
   const com = await SectionCommunale.findOne({ where: { id_sectioncommune } });
@@ -14,7 +14,7 @@ export async function updateSectionCommunale(
   }
   await com.update({
     libelle,
-    id_commune
+    id_ville
 
   });
   return com.toJSON();
