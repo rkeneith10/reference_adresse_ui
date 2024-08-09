@@ -15,10 +15,10 @@ export async function POST(req: NextRequest) {
 
     for (let adr of adresses) {
 
-      const sectionCommuneExists = await SectionCommune.findByPk(adr.id_sectioncommune);
+      const sectionCommuneExists = await SectionCommune.findByPk(adr.id_sectioncommunale);
 
       if (!sectionCommuneExists) {
-        console.error(`SectionCommune avec id ${adr.id_sectioncommune} non trouvée.`);
+        console.error(`SectionCommune avec id ${adr.id_sectioncommunale} non trouvée.`);
         continue;
       }
 
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
         code_postal: adr.code_postal,
         cle_unicite: adr.cle_unicite,
         statut: adr.statut,
-        id_sectioncommune: adr.id_sectioncommune
+        id_sectioncommunale: adr.id_sectioncommunale
       });
 
       console.log("Created addresses:", createdAdresses);

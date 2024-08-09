@@ -16,13 +16,13 @@ import React, { useEffect, useState } from "react";
 import { FaFileExcel, FaFileImport, FaPlus } from "react-icons/fa";
 import * as XLSX from "xlsx";
 import { AdresseAttributes } from "../api/models/adresseModel";
-import { SectionCommuneAttributes } from "../api/models/sectionCommunalModel";
+import { SectionCommunaleAttributes } from "../api/models/sectionCommunalModel";
 
 const Adresses: React.FC = () => {
   const router = useRouter();
   const [adresse, setAdresse] = useState<AdresseAttributes[]>([]);
   const [file, setFile] = useState<File | null>(null)
-  const [section, setSection] = useState<SectionCommuneAttributes[]>([]);
+  const [section, setSection] = useState<SectionCommunaleAttributes[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingExcel, setLoadingExcel] = useState<boolean>(false);
@@ -48,7 +48,7 @@ const Adresses: React.FC = () => {
 
   };
   const getSectionNameById = (id: number) => {
-    const sect = section.find((c) => c.id_sectioncommune === id);
+    const sect = section.find((c) => c.id_sectioncommunale === id);
     return sect ? sect.libelle : " Inconnu";
   };
 

@@ -1,6 +1,6 @@
 "use client";
 import { AdresseAttributes } from "@/app/api/models/adresseModel";
-import { SectionCommuneAttributes } from "@/app/api/models/sectionCommunalModel";
+import { SectionCommunaleAttributes } from "@/app/api/models/sectionCommunalModel";
 import { VilleAttributes } from "@/app/api/models/villeModel";
 import { Spinner } from "@chakra-ui/react";
 import axios from "axios";
@@ -14,7 +14,7 @@ export const options = {
 };
 
 const BarChartAdresse: React.FC = () => {
-  const [sections, setSections] = useState<SectionCommuneAttributes[]>([]);
+  const [sections, setSections] = useState<SectionCommunaleAttributes[]>([]);
   const [addresses, setAddresses] = useState<AdresseAttributes[]>([]);
   const [villes, setVilles] = useState<VilleAttributes[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -41,7 +41,7 @@ const BarChartAdresse: React.FC = () => {
     const sectionCount = sections.filter(section => section.id_ville === ville.id_commune).length;
     const addressCount = sections.reduce((acc, section) => {
       if (section.id_ville === ville.id_ville) {
-        return acc + addresses.filter(address => address.id_sectioncommune === section.id_sectioncommune).length;
+        return acc + addresses.filter(address => address.id_sectioncommunale === section.id_sectioncommunale).length;
       }
       return acc;
     }, 0);

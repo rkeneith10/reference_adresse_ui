@@ -16,12 +16,12 @@ import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { SectionCommuneAttributes } from "../api/models/sectionCommunalModel";
+import { SectionCommunaleAttributes } from "../api/models/sectionCommunalModel";
 import { VilleAttributes } from "../api/models/villeModel";
 
 const SectionCommunales: React.FC = () => {
   const router = useRouter()
-  const [sectioncommunal, setSectioncommunal] = useState<SectionCommuneAttributes[]>([])
+  const [sectioncommunal, setSectioncommunal] = useState<SectionCommunaleAttributes[]>([])
   const [ville, setVille] = useState<VilleAttributes[]>([])
   const [searchTerm, setSearchTerm] = useState("");
   const [modalMessage, setModalMessage] = useState("");
@@ -73,7 +73,7 @@ const SectionCommunales: React.FC = () => {
     setDeleteLoading(true);
     try {
       await axios.delete(`/api/sectionCommunalCtrl/${id}`);
-      setSectioncommunal(sectioncommunal.filter((com) => com.id_sectioncommune !== id));
+      setSectioncommunal(sectioncommunal.filter((com) => com.id_sectioncommunale !== id));
       setModalMessage("La section communale a été supprimée avec succès");
       onConfirmationOpen();
     } catch (error) {
