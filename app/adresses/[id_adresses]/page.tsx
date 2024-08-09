@@ -13,7 +13,7 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
   const [adresse, setAdresse] = useState<any>(null);
   const [sections, setSections] = useState<any[]>([]);
   const [formData, setFormData] = useState<any>({
-    numero_rue: "", libelle: "", code_postal: "", cle_unicite: "", statut: "", id_sectioncommune: "",
+    numero_rue: "", libelle: "", code_postal: "", cle_unicite: "", statut: "", id_sectioncommunale: "",
 
   });
   const [loading, setLoading] = useState<boolean>(true);
@@ -38,7 +38,8 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
         setFormData({
           libelle: response.data.libelle,
           numero_rue: response.data.numero_rue,
-          id_sectioncommune: response.data.id_sectioncommune,
+          id_sectioncommunale: response.data.id_sectioncommunale,
+          code_postal: response.data.code_postal,
           cle_unicite: response.data.cle_unicite,
           statut: response.data.statut
         });
@@ -75,9 +76,11 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
         id_adresses: adresse.id_adresses,
         numero_rue: formData.numero_rue,
         libelle: formData.libelle,
-        code_postal: formData.code_postal,
-        id_sectioncommune: formData.id_sectioncommune,
+        cle_unicite: formData.cle_unicite,
         statut: formData.statut,
+        code_postal: formData.code_postal,
+        id_sectioncommunale: formData.id_sectioncommunale,
+
       });
 
       if (response.status !== 200) {
@@ -163,13 +166,13 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
                 <select
                   id="id_sectioncommune"
                   name="id_sectioncommune"
-                  value={formData.id_sectioncommune}
+                  value={formData.id_sectioncommunale}
                   className="border border-gray-300 p-2 rounded-md"
                   onChange={handleInputChange}
                 >
-                  <option value="">Sélectionnez une section</option>
+                  <option value="">Sélectionnez une section communale</option>
                   {sections.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((section) => (
-                    <option key={section.id_sectioncommune} value={section.id_sectioncommune}>
+                    <option key={section.id_sectioncommunale} value={section.id_sectioncommunale}>
                       {section.libelle}
                     </option>
                   ))}

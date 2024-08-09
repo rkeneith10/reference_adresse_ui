@@ -2,28 +2,28 @@ import sequelize from "@/lib/sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
 import Ville from "./villeModel";
 
-export interface SectionCommuneAttributes {
-  id_sectioncommune: number;
+export interface SectionCommunaleAttributes {
+  id_sectioncommunale: number;
   id_ville: number;
   libelle: string;
 }
 
-interface SectionCommuneCreationAttributes
-  extends Optional<SectionCommuneAttributes, "id_sectioncommune"> { }
+interface SectionCommunaleCreationAttributes
+  extends Optional<SectionCommunaleAttributes, "id_sectioncommunale"> { }
 
-class SectionCommune
-  extends Model<SectionCommuneAttributes, SectionCommuneCreationAttributes>
-  implements SectionCommuneAttributes {
-  public id_sectioncommune!: number;
+class SectionCommunale
+  extends Model<SectionCommunaleAttributes, SectionCommunaleCreationAttributes>
+  implements SectionCommunaleAttributes {
+  public id_sectioncommunale!: number;
   public id_ville!: number;
   public libelle!: string;
   public creationdateheureinit!: string;
   public modificationdateheureinit!: string;
 }
 
-SectionCommune.init(
+SectionCommunale.init(
   {
-    id_sectioncommune: {
+    id_sectioncommunale: {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
@@ -45,14 +45,14 @@ SectionCommune.init(
   },
   {
     sequelize,
-    modelName: "SectionCommune",
-    tableName: "sectioncommunes",
+    modelName: "SectionCommunale",
+    tableName: "sectioncommunale",
     timestamps: false, // Disable Sequelize's automatic timestamps
   }
 );
 
 // Define association
-Ville.hasMany(SectionCommune, { foreignKey: 'id_ville', onDelete: "CASCADE" });
-SectionCommune.belongsTo(Ville, { foreignKey: 'id_ville' });
+Ville.hasMany(SectionCommunale, { foreignKey: 'id_ville', onDelete: "CASCADE" });
+SectionCommunale.belongsTo(Ville, { foreignKey: 'id_ville' });
 
-export default SectionCommune;
+export default SectionCommunale;

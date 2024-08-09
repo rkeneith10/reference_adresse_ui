@@ -31,7 +31,7 @@ export async function GET(
       code_postal: detailAdresse.code_postal,
       cle_unicite: detailAdresse.cle_unicite,
       statut: detailAdresse.statut,
-      id_sectioncommune: detailAdresse.id_sectioncommune,
+      id_sectioncommunale: detailAdresse.id_sectioncommunale,
 
     };
 
@@ -87,14 +87,14 @@ export async function DELETE(
 
 export async function POST(req: NextRequest) {
   try {
-    const { id_adresses, libelle, numero_rue, code_postal, id_sectioncommune, statut } = await req.json();
+    const { id_adresses, libelle, numero_rue, code_postal, id_sectioncommunale, statut } = await req.json();
 
     const adr = await Adresse.findOne({ where: { id_adresses } });
     if (!adr) {
       return NextResponse.json({ message: "Adresse not found" }, { status: 404 });
     }
 
-    const sectionCommunale = await SectionCommunale.findOne({ where: { id_sectioncommune } });
+    const sectionCommunale = await SectionCommunale.findOne({ where: { id_sectioncommunale } });
     if (!sectionCommunale) {
       return NextResponse.json({ message: "Section Communale not found." }, { status: 404 });
     }
@@ -138,7 +138,7 @@ export async function POST(req: NextRequest) {
       libelle,
       numero_rue,
       code_postal,
-      id_sectioncommune,
+      id_sectioncommunale,
       cle_unicite,
       statut
     });

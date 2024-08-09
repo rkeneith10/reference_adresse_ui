@@ -8,8 +8,8 @@ import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-const page = ({ params }: { params: { id_sectioncommune: number } }) => {
-  const { id_sectioncommune } = params;
+const page = ({ params }: { params: { id_sectioncommunale: number } }) => {
+  const { id_sectioncommunale } = params;
   const router = useRouter();
   const [sectionCommunal, setSectionCommunal] = useState<any>(null);
   const [ville, setVille] = useState<any[]>([]);
@@ -36,7 +36,7 @@ const page = ({ params }: { params: { id_sectioncommune: number } }) => {
     const fetchSection = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`/api/sectionCommunalCtrl/${id_sectioncommune}`);
+        const response = await axios.get(`/api/sectionCommunalCtrl/${id_sectioncommunale}`);
         setSectionCommunal(response.data);
         setFormData({
           libelle: response.data.libelle,
@@ -64,7 +64,7 @@ const page = ({ params }: { params: { id_sectioncommune: number } }) => {
 
     fetchVille();
     fetchSection();
-  }, [id_sectioncommune]);
+  }, [id_sectioncommunale]);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -84,7 +84,7 @@ const page = ({ params }: { params: { id_sectioncommune: number } }) => {
 
     try {
       const updatedSection = await updateSectionCommunale(
-        sectionCommunal.id_sectioncommune,
+        sectionCommunal.id_sectioncommunale,
         formData.libelle,
         formData.id_commune
 

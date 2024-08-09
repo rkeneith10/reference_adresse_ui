@@ -17,9 +17,9 @@ export async function POST(req: NextRequest) {
   try {
     const { libelle, id_ville } = await req.json();
 
-    const existingCSectionommunal = await SectionCommunale.findOne({ where: { libelle } })
+    const existingSectionommunal = await SectionCommunale.findOne({ where: { libelle } })
 
-    if (existingCSectionommunal) {
+    if (existingSectionommunal) {
       return NextResponse.json(
         { message: "Cette section communale existe déjà." },
         { status: 400 }
@@ -28,9 +28,6 @@ export async function POST(req: NextRequest) {
     const newSectionCommunale = await SectionCommunale.create({
       id_ville,
       libelle
-
-
-
     })
     return NextResponse.json(
       {

@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import SectionCommunale from "../../models/sectionCommunalModel";
 
-export async function GET(req: NextRequest, { params }: { params: { id_sectioncommune: number } }) {
+export async function GET(req: NextRequest, { params }: { params: { id_sectioncommunale: number } }) {
   try {
-    const { id_sectioncommune } = params;
-    if (!id_sectioncommune) {
+    const { id_sectioncommunale } = params;
+    if (!id_sectioncommunale) {
       return NextResponse.json({ error: "Invalid Id" }, { status: 400 });
     }
-    const detailSectionCommunale = await SectionCommunale.findOne({ where: { id_sectioncommune } })
+    const detailSectionCommunale = await SectionCommunale.findOne({ where: { id_sectioncommunale } })
     if (!detailSectionCommunale) {
       return NextResponse.json({ error: "Commune introuvable" }, { status: 400 })
     }
     const responseData = {
-      id_sectioncommune: detailSectionCommunale.id_sectioncommune,
+      id_sectioncommunale: detailSectionCommunale.id_sectioncommunale,
       id_ville: detailSectionCommunale?.id_ville,
       libelle: detailSectionCommunale.libelle,
 
@@ -29,15 +29,15 @@ export async function GET(req: NextRequest, { params }: { params: { id_sectionco
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id_sectioncommune: number } }) {
+export async function DELETE(req: NextRequest, { params }: { params: { id_sectioncommunale: number } }) {
   try {
-    const { id_sectioncommune } = params;
+    const { id_sectioncommunale } = params;
 
-    if (!id_sectioncommune) {
+    if (!id_sectioncommunale) {
       return NextResponse.json({ error: "Invalid Id" }, { status: 400 });
     }
 
-    const comm = await SectionCommunale.findOne({ where: { id_sectioncommune } });
+    const comm = await SectionCommunale.findOne({ where: { id_sectioncommunale } });
     if (!comm) {
       return NextResponse.json(
         { message: "La commune n'existe pas." },
@@ -45,7 +45,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id_sectio
       );
     }
 
-    await SectionCommunale.destroy({ where: { id_sectioncommune } });
+    await SectionCommunale.destroy({ where: { id_sectioncommunale } });
     return NextResponse.json(
       { message: "La section communale a été supprimée avec succès." },
       { status: 200 }
@@ -64,17 +64,17 @@ export async function DELETE(req: NextRequest, { params }: { params: { id_sectio
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id_sectioncommune: number } }
+  { params }: { params: { id_sectioncommunale: number } }
 ) {
   try {
-    const { id_sectioncommune } = params;
+    const { id_sectioncommunale } = params;
     const body = await req.json();
 
-    if (!id_sectioncommune) {
+    if (!id_sectioncommunale) {
       return NextResponse.json({ error: "Invalid Id" }, { status: 400 });
     }
 
-    const comm = await SectionCommunale.findOne({ where: { id_sectioncommune } });
+    const comm = await SectionCommunale.findOne({ where: { id_sectioncommunale } });
     if (!comm) {
       return NextResponse.json(
         { message: "La section communale  n'existe pas." },

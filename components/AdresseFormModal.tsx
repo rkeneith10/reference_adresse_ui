@@ -1,4 +1,4 @@
-import { SectionCommuneAttributes } from '@/app/api/models/sectionCommunalModel';
+import { SectionCommunaleAttributes } from '@/app/api/models/sectionCommunalModel';
 import {
   Button,
   Modal,
@@ -17,13 +17,13 @@ interface AdresseFormModalProps {
   onClose: () => void;
   onSuccess: () => void;
   onFailed: () => void;
-  sectioncommunales: SectionCommuneAttributes[];
+  sectioncommunales: SectionCommunaleAttributes[];
 }
 
 const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, onSuccess, onFailed, sectioncommunales }) => {
   const [adding, setAdding] = useState(false);
   const [adresse, setAdresse] = useState({
-    id_sectioncommune: "",
+    id_sectioncommunale: "",
     numero_rue: "",
     libelle: "",
     statut: "En creation",
@@ -34,7 +34,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
   const [errors, setErrors] = useState({
     numero_rue: "",
     libelle: "",
-    id_sectioncommune: "",
+    id_sectioncommunale: "",
     code_postal: ""
   });
 
@@ -47,9 +47,9 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = { libelle: "", numero_rue: "", id_sectioncommune: "", code_postal: "" };
-    if (!adresse.id_sectioncommune) {
-      newErrors.id_sectioncommune = "La section communale de reference est requise";
+    const newErrors = { libelle: "", numero_rue: "", id_sectioncommunale: "", code_postal: "" };
+    if (!adresse.id_sectioncommunale) {
+      newErrors.id_sectioncommunale = "La section communale de reference est requise";
       valid = false;
     }
     if (!adresse.libelle) {
@@ -84,7 +84,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
       });
       if (response.status === 200) {
         setAdresse({
-          id_sectioncommune: "",
+          id_sectioncommunale: "",
           numero_rue: "",
           libelle: "",
           statut: "En creation",
@@ -103,12 +103,12 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
 
   }
   const handleSelectChange = (selectedOption: any) => {
-    setAdresse({ ...adresse, id_sectioncommune: selectedOption.value });
-    setErrors({ ...errors, id_sectioncommune: "" });
+    setAdresse({ ...adresse, id_sectioncommunale: selectedOption.value });
+    setErrors({ ...errors, id_sectioncommunale: "" });
   };
 
   const adresseOption = sectioncommunales.map((section) => ({
-    value: section.id_sectioncommune,
+    value: section.id_sectioncommunale,
     label: section.libelle
   }))
 
@@ -143,7 +143,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
                 className='w-full'
               />
 
-              {errors.id_sectioncommune && <span className="text-red-500 text-sm">{errors.id_sectioncommune}</span>}
+              {errors.id_sectioncommunale && <span className="text-red-500 text-sm">{errors.id_sectioncommunale}</span>}
             </div>
             <div className="mb-4">
               <label

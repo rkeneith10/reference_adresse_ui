@@ -2,10 +2,10 @@ import { Button } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
 import { FaChevronLeft, FaChevronRight, FaRegEye, FaRegTrashAlt } from "react-icons/fa";
-import { SectionCommuneAttributes } from "../app/api/models/sectionCommunalModel";
+import { SectionCommunaleAttributes } from "../app/api/models/sectionCommunalModel";
 
 interface SectionCommunaleTableProps {
-  comm: SectionCommuneAttributes[];
+  comm: SectionCommunaleAttributes[];
   searchTerm: string;
   currentPage: number;
   itemsPerPage: number;
@@ -59,7 +59,7 @@ const SectionCommunaleTable: React.FC<SectionCommunaleTableProps> = ({
               </tr>
             ) : (
               filteredSection.slice(startIndex, endIndex).map((co, index) => (
-                <tr key={co.id_sectioncommune}>
+                <tr key={co.id_sectioncommunale}>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     {index + 1}
                   </td>
@@ -77,14 +77,14 @@ const SectionCommunaleTable: React.FC<SectionCommunaleTableProps> = ({
                         colorScheme="red"
                         mr={2}
                         variant="ghost"
-                        onClick={() => onDelete(co.id_sectioncommune)}
+                        onClick={() => onDelete(co.id_sectioncommunale)}
                         p={0}
                         minWidth="auto"
                       >
                         <FaRegTrashAlt className="text-lg" />
                       </Button>
 
-                      <Link href={`/sectioncommunales/${co.id_sectioncommune}`}>
+                      <Link href={`/sectioncommunales/${co.id_sectioncommunale}`}>
                         <Button
                           size="sm"
                           colorScheme="blue"

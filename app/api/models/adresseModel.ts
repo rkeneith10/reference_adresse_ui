@@ -10,7 +10,7 @@ export interface AdresseAttributes {
   cle_unicite: string;
   statut: string;
   code_postal: string,
-  id_sectioncommune: number;
+  id_sectioncommunale: number;
 
 }
 
@@ -23,7 +23,7 @@ class Adresse extends Model<AdresseAttributes, AdresseCreationAttributes> implem
   public cle_unicite!: string;
   public statut!: string;
   public code_postal!: string;
-  public id_sectioncommune!: number;
+  public id_sectioncommunale!: number;
 
 }
 Adresse.init(
@@ -55,12 +55,12 @@ Adresse.init(
       allowNull: false,
 
     },
-    id_sectioncommune: {
+    id_sectioncommunale: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
         model: SectionCommunale,
-        key: 'id_sectioncommune',
+        key: 'id_sectioncommunale',
       },
       onDelete: "CASCADE"
     },
@@ -75,8 +75,8 @@ Adresse.init(
 );
 
 // Define associations
-SectionCommunale.hasMany(Adresse, { foreignKey: 'id_sectioncommune', onDelete: "CASCADE" });
-Adresse.belongsTo(SectionCommunale, { foreignKey: 'id_sectioncommune' });
+SectionCommunale.hasMany(Adresse, { foreignKey: 'id_sectioncommunale', onDelete: "CASCADE" });
+Adresse.belongsTo(SectionCommunale, { foreignKey: 'id_sectioncommunale' });
 
 
 

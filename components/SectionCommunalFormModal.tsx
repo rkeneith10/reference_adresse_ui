@@ -88,7 +88,7 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
       }
     } catch (error) {
       onFailed();
-      console.error("Échec de l'ajout de la commune", error);
+      console.error("Échec de l'ajout de la section communale", error);
     } finally {
       setAdding(false);
     }
@@ -113,7 +113,7 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
           <ModalBody>
             <div className="mb-4">
               <label
-                htmlFor="id_departement"
+                htmlFor="id_ville"
                 className="block text-sm font-normal mb-2"
               >
                 Choisir une ville

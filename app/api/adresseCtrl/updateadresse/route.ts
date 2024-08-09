@@ -5,10 +5,11 @@ import Commune from '../../models/communeModel';
 import Departement from '../../models/departementModel';
 import Pays from '../../models/paysModel';
 import SectionCommunale from '../../models/sectionCommunalModel';
+import Ville from "../../models/villeModel";
 
 export async function POST(req: NextRequest) {
   try {
-    const { id_adresses, libelle, numero_rue, id_sectioncommune, code_postal, statut } = await req.json();
+    const { id_adresses, libelle, numero_rue, id_sectioncommunale, code_postal, statut } = await req.json();
 
     const adr = await Adresse.findOne({ where: { id_adresses } });
     if (!adr) {
@@ -17,15 +18,21 @@ export async function POST(req: NextRequest) {
     }
     console.log(adr)
 
-    const sectionCommunale = await SectionCommunale.findOne({ where: { id_sectioncommune } });
+    const sectionCommunale = await SectionCommunale.findOne({ where: { id_sectioncommunale } });
     if (!sectionCommunale) {
-      console.error("Section Communale not found:", id_sectioncommune);
+      console.error("Section Communale not found:", id_sectioncommunale);
       return NextResponse.json({ message: "Section Communale not found." }, { status: 404 });
     }
     console.log(sectionCommunale)
-    const commune = await Commune.findOne({ where: { id_commune: sectionCommunale.id_ville } });
+
+    const ville = await Ville.findOne({ where: { id_ville: sectionCommunale.id_ville } })
+    if (!ville) {
+      console.error("Ville not found for Section Communale:", id_sectioncommunale);
+      return NextResponse.json({ message: "Ville not found." }, { status: 404 });
+    }
+    const commune = await Commune.findOne({ where: { id_commune: ville.id_commune } });
     if (!commune) {
-      console.error("Commune not found for Section Communale:", id_sectioncommune);
+      console.error("Commune not found for ville:", ville.id_ville);
       return NextResponse.json({ message: "Commune not found." }, { status: 404 });
     }
     console.log(commune)
@@ -68,7 +75,8 @@ export async function POST(req: NextRequest) {
       libelle,
       cle_unicite,
       statut,
-      id_sectioncommune,
+      code_postal,
+      id_sectioncommunale,
 
     });
 

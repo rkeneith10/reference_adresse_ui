@@ -5,6 +5,7 @@ import Commune from "../models/communeModel";
 import Departement from "../models/departementModel";
 import Pays from "../models/paysModel";
 import SectionCommune from "../models/sectionCommunalModel";
+import Ville from "../models/villeModel";
 
 export async function GET() {
   try {
@@ -19,9 +20,9 @@ export async function GET() {
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
-    const { numero_rue, libelle, statut, id_sectioncommune, code_postal } = await req.json();
+    const { numero_rue, libelle, statut, id_sectioncommunale, code_postal } = await req.json();
 
-    const sectionCommunale = await SectionCommune.findOne({ where: { id_sectioncommune } });
+    const sectionCommunale = await SectionCommune.findOne({ where: { id_sectioncommunale } });
     if (!sectionCommunale) {
       return NextResponse.json(
         { message: "Section Communale not found." },
@@ -29,7 +30,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
       );
     }
 
-    const commune = await Commune.findOne({ where: { id_commune: sectionCommunale.id_ville } });
+    const ville = await Ville.findOne({ where: { id_ville: sectionCommunale.id_ville } });
+    if (!ville) {
+      return NextResponse.json({ message: "Ville not found" }, { status: 400 })
+    }
+
+    const commune = await Commune.findOne({ where: { id_commune: ville.id_commune } });
     if (!commune) {
       return NextResponse.json(
         { message: "Commune not found." },
@@ -80,7 +86,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       cle_unicite,
       statut,
       code_postal,
-      id_sectioncommune,
+      id_sectioncommunale,
 
     });
 
