@@ -95,7 +95,7 @@ const VilleTable: React.FC<VilleTableProps> = ({ vil,
                         <FaRegTrashAlt className="text-lg" />
                       </Button>
 
-                      <Link href={`/communes/${v.id_ville}`}>
+                      <Link href={`/villes/${v.id_ville}`}>
                         <Button
                           size="sm"
                           colorScheme="blue"

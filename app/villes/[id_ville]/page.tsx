@@ -1,5 +1,5 @@
 "use client";
-import { updateCommune } from '@/app/actions/actionCommune';
+import { updateVille } from '@/app/actions/actionVille';
 import ConfirmationModal from '@/components/ConfirmationModal';
 import RootLayout from '@/components/rootLayout';
 import { Spinner, useDisclosure } from '@chakra-ui/react';
@@ -8,14 +8,18 @@ import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
-  const { id_commune } = params;
+
+const DetailVille = ({ params }: { params: { id_ville: number } }) => {
+  const { id_ville } = params;
   const router = useRouter();
-  const [commune, setCommune] = useState<any>(null);
-  const [departement, setDepartement] = useState<any[]>([]);
+  const [ville, setVille] = useState<any>(null);
+  const [deleteLoading, setDeleteLoading] = useState()
+  const [commune, setCommune] = useState<any[]>([]);
   const [formData, setFormData] = useState<any>({
     libelle: "",
-    id_departement: "",
+    id_commune: "",
+    longitude: "",
+    lattitude: ""
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [updating, setUpdating] = useState<boolean>(false);
@@ -25,21 +29,23 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
   const { isOpen: isConfirmationOpen, onOpen: onConfirmationOpen, onClose: onConfirmationClose } = useDisclosure();
 
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-
   useEffect(() => {
-    const fetchCommune = async () => {
+    const fetchVille = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`/api/communeCtrl/${id_commune}`);
-        setCommune(response.data);
+        const response = await axios.get(`/api/villeCtrl/${id_ville}`);
+        setVille(response.data);
         setFormData({
           libelle: response.data.libelle,
-          id_departement: response.data.id_departement
+          id_commune: response.data.id_commune,
+          longitude: response.data.longitude,
+          lattitude: response.data.lattitude
         });
         setLoading(false);
       } catch (error) {
@@ -52,18 +58,18 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
       }
     };
 
-    const fetchDept = async () => {
+    const fetchCommune = async () => {
       try {
-        const response = await axios.get('/api/departementCtrl'); // Adjust the endpoint as needed
-        setDepartement(response.data.data);
+        const response = await axios.get('/api/communeCtrl'); // Adjust the endpoint as needed
+        setCommune(response.data.data);
       } catch (error) {
         console.error("Error fetching countries:", error);
       }
     };
 
     fetchCommune();
-    fetchDept();
-  }, [id_commune]);
+    fetchVille();
+  }, [id_ville])
 
   useEffect(() => {
     const checkSession = async () => {
@@ -76,33 +82,36 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
 
     checkSession();
   }, [router]);
+  const handleModalClose = () => {
+    onConfirmationClose();
+    router.push('../../villes');
+  };
 
-  const handleUpdateCommune = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdateVille = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUpdating(true);
 
     try {
-      const updatedCommune = await updateCommune(
-        commune.id_commune,
+      const updatedVille = await updateVille(
+        ville.id_ville,
         formData.libelle,
-        formData.id_departement, // Pass the country reference ID
+        formData.id_commune, // Pass the country reference ID
       );
-      setCommune(updatedCommune);
+      setVille(updatedVille);
       setConfirmation(true);
-      setModalMessage("La commune a été modifiée avec succès");
+      setModalMessage("La ville a été modifiée avec succès");
       onConfirmationOpen();
       setUpdating(false);
     } catch (error) {
       setUpdating(false);
-      setModalMessage("Erreur lors de la modification de la commune");
+      setModalMessage("Erreur lors de la modification de la ville");
       onConfirmationOpen();
       console.error("Update error:", error);
     }
   }
-  const handleModalClose = () => {
-    onConfirmationClose();
-    router.push('../../communes');
-  };
+
+
+
 
   return (
     <RootLayout isAuthenticated={true}>
@@ -116,9 +125,9 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
           <Spinner size="lg" color="primary" />
           <div className="loader">Chargement en cours...</div>
         </div>
-      ) : departement ? (
+      ) : commune ? (
         <div className="h-auto bg-white rounded-md shadow-md p-10 justify-center items-center mt-10">
-          <form onSubmit={handleUpdateCommune}>
+          <form onSubmit={handleUpdateVille}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col">
                 <label htmlFor="libelle" className="mb-2 font-medium">
@@ -133,28 +142,58 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
                   onChange={handleInputChange}
                 />
               </div>
+              <div className="flex flex-col">
+                <label htmlFor="libelle" className="mb-2 font-medium">
+                  Longitude
+                </label>
+                <input
+                  type="text"
+                  id="longitude"
+                  name="longitude"
+                  value={formData.longitude}
+                  className="border border-gray-300 p-2 rounded-md"
+                  onChange={handleInputChange}
+                  readOnly
+                />
+              </div>
+
+              <div className="flex flex-col">
+                <label htmlFor="libelle" className="mb-2 font-medium">
+                  Lattitude
+                </label>
+                <input
+                  type="text"
+                  id="lattitude"
+                  name="lattitude"
+                  value={formData.lattitude}
+                  className="border border-gray-300 p-2 rounded-md"
+                  onChange={handleInputChange}
+                  readOnly
+                />
+              </div>
 
 
 
               <div className="flex flex-col">
                 <label htmlFor="id_pays" className="mb-2 font-medium">
-                  Departement
+                  Commune
                 </label>
                 <select
-                  id="id_departement"
-                  name="id_departement"
-                  value={formData.id_departement}
+                  id="id_commune"
+                  name="id_commune"
+                  value={formData.id_commune}
                   className="border border-gray-300 p-2 rounded-md"
                   onChange={handleInputChange}
                 >
-                  <option value="">Sélectionnez un departement</option>
-                  {departement.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((dept) => (
-                    <option key={dept.id_departement} value={dept.id_departement}>
-                      {dept.libelle}
+                  <option value="">Sélectionnez une commune</option>
+                  {commune.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((com) => (
+                    <option key={com.id_commune} value={com.id_commune}>
+                      {com.libelle}
                     </option>
                   ))}
                 </select>
               </div>
+
             </div>
             <button
               type="submit"
@@ -176,4 +215,4 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
   )
 }
 
-export default DetailCommune
+export default DetailVille

@@ -37,7 +37,7 @@ const BarChartAdresse: React.FC = () => {
     fetchData();
   }, []);
 
-  const dataByCommune = villes.map((ville) => {
+  const dataByVille = villes.map((ville) => {
     const sectionCount = sections.filter(section => section.id_ville === ville.id_commune).length;
     const addressCount = sections.reduce((acc, section) => {
       if (section.id_ville === ville.id_ville) {
@@ -51,7 +51,7 @@ const BarChartAdresse: React.FC = () => {
 
   const chartData = [
     ["Communes", "Nombre de sections", "Nombre d'adresses"],
-    ...dataByCommune,
+    ...dataByVille,
   ];
 
   return (
