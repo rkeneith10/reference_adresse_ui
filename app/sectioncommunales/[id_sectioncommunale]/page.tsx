@@ -14,7 +14,7 @@ const page = ({ params }: { params: { id_sectioncommunale: number } }) => {
   const [sectionCommunal, setSectionCommunal] = useState<any>(null);
   const [ville, setVille] = useState<any[]>([]);
   const [formData, setFormData] = useState<any>({
-    libelle: "",
+    libelle_sectioncommunale: "",
     id_ville: "",
 
   });
@@ -39,7 +39,7 @@ const page = ({ params }: { params: { id_sectioncommunale: number } }) => {
         const response = await axios.get(`/api/sectionCommunalCtrl/${id_sectioncommunale}`);
         setSectionCommunal(response.data);
         setFormData({
-          libelle: response.data.libelle,
+          libelle_sectioncommunale: response.data.libelle_sectioncommunale,
           id_ville: response.data.id_ville
         });
         setLoading(false);
@@ -85,7 +85,7 @@ const page = ({ params }: { params: { id_sectioncommunale: number } }) => {
     try {
       const updatedSection = await updateSectionCommunale(
         sectionCommunal.id_sectioncommunale,
-        formData.libelle,
+        formData.libelle_sectioncommunale,
         formData.id_commune
 
 
@@ -131,9 +131,9 @@ const page = ({ params }: { params: { id_sectioncommunale: number } }) => {
                 </label>
                 <input
                   type="text"
-                  id="libelle"
-                  name="libelle"
-                  value={formData.libelle}
+                  id="libelle_sectioncommunale"
+                  name="libelle_sectioncommunale"
+                  value={formData.libelle_sectioncommunale}
                   className="border border-gray-300 p-2 rounded-md"
                   onChange={handleInputChange}
                 />

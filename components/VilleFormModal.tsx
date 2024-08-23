@@ -26,7 +26,7 @@ const VilleFormModal: React.FC<VilleFormModalProps> = ({ isOpen, onClose, onSucc
   const [adding, setAdding] = useState<boolean>(false)
   const [ville, setVille] = useState({
     id_commune: "",
-    libelle: "",
+    libelle_ville: "",
     longitude: "",
     lattitude: ""
   })
@@ -34,7 +34,7 @@ const VilleFormModal: React.FC<VilleFormModalProps> = ({ isOpen, onClose, onSucc
   const [errors, setErrors] = useState({
 
     id_commune: "",
-    libelle: "",
+    libelle_ville: "",
     longitude: "",
     lattitude: ""
 
@@ -53,13 +53,13 @@ const VilleFormModal: React.FC<VilleFormModalProps> = ({ isOpen, onClose, onSucc
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = { libelle: "", id_commune: "", longitude: "", lattitude: "" };
+    const newErrors = { libelle_ville: "", id_commune: "", longitude: "", lattitude: "" };
     if (!ville.id_commune) {
       newErrors.id_commune = "La commune de reference est requis";
       valid = false;
     }
-    if (!ville.libelle) {
-      newErrors.libelle = "Nom de la ville est requis";
+    if (!ville.libelle_ville) {
+      newErrors.libelle_ville = "Nom de la ville est requis";
       valid = false;
     }
     if (!ville.longitude) {
@@ -88,7 +88,7 @@ const VilleFormModal: React.FC<VilleFormModalProps> = ({ isOpen, onClose, onSucc
       if (response.status === 200) {
         setVille({
           id_commune: "",
-          libelle: "",
+          libelle_ville: "",
           longitude: "",
           lattitude: ""
 
@@ -106,7 +106,7 @@ const VilleFormModal: React.FC<VilleFormModalProps> = ({ isOpen, onClose, onSucc
   const CommuneOption = communes.map((com) => (
     {
       value: com.id_commune,
-      label: com.libelle
+      label: com.libelle_commune
     }
   ))
 
@@ -187,13 +187,13 @@ const VilleFormModal: React.FC<VilleFormModalProps> = ({ isOpen, onClose, onSucc
               <input
                 type="text"
                 placeholder="Entrer la ville"
-                id="libelle"
-                name="libelle"
+                id="libelle_vile"
+                name="libelle_ville"
                 onChange={handleinputChange}
-                value={ville.libelle}
+                value={ville.libelle_ville}
                 className="border rounded-md w-full p-2 text-sm"
               />
-              {errors.libelle && <span className="text-red-500 text-sm">{errors.libelle}</span>}
+              {errors.libelle_ville && <span className="text-red-500 text-sm">{errors.libelle_ville}</span>}
             </div>
 
             {ville.lattitude !== "" && ville.longitude != "" && (

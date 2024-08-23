@@ -3,7 +3,7 @@
 import Departement from "../api/models/departementModel";
 export async function updateDepartement(
   id_departement: number,
-  libelle: string,
+  libelle_departement: string,
   code_departement: string,
   chef_lieux: string,
   id_pays: number
@@ -15,7 +15,7 @@ export async function updateDepartement(
     throw new Error("Country not found");
   }
   await departement.update({
-    libelle,
+    libelle_departement,
     code_departement,
     chef_lieux,
     id_pays

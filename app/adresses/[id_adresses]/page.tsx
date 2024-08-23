@@ -13,7 +13,7 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
   const [adresse, setAdresse] = useState<any>(null);
   const [sections, setSections] = useState<any[]>([]);
   const [formData, setFormData] = useState<any>({
-    numero_rue: "", libelle: "", code_postal: "", cle_unicite: "", statut: "", id_sectioncommunale: "",
+    numero_rue: "", libelle_adresse: "", code_postal: "", cle_unicite: "", statut: "", id_sectioncommunale: "",
 
   });
   const [loading, setLoading] = useState<boolean>(true);
@@ -36,7 +36,7 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
         const response = await axios.get(`/api/adresseCtrl/${id_adresses}`);
         setAdresse(response.data);
         setFormData({
-          libelle: response.data.libelle,
+          libelle_adresse: response.data.libelle_adresse,
           numero_rue: response.data.numero_rue,
           id_sectioncommunale: response.data.id_sectioncommunale,
           code_postal: response.data.code_postal,
@@ -75,7 +75,7 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
       const response = await axios.post('/api/adresseCtrl/updateadresse', {
         id_adresses: adresse.id_adresses,
         numero_rue: formData.numero_rue,
-        libelle: formData.libelle,
+        libelle_adresse: formData.libelle_adresse,
         cle_unicite: formData.cle_unicite,
         statut: formData.statut,
         code_postal: formData.code_postal,
@@ -139,9 +139,9 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
                 </label>
                 <input
                   type="text"
-                  id="libelle"
-                  name="libelle"
-                  value={formData.libelle}
+                  id="libelle_adresse"
+                  name="libelle_adresse"
+                  value={formData.libelle_adresse}
                   className="border border-gray-300 p-2 rounded-md"
                   onChange={handleInputChange}
                 />

@@ -5,7 +5,7 @@ import Ville from "./villeModel";
 export interface SectionCommunaleAttributes {
   id_sectioncommunale: number;
   id_ville: number;
-  libelle: string;
+  libelle_sectioncommunale: string;
 }
 
 interface SectionCommunaleCreationAttributes
@@ -16,7 +16,7 @@ class SectionCommunale
   implements SectionCommunaleAttributes {
   public id_sectioncommunale!: number;
   public id_ville!: number;
-  public libelle!: string;
+  public libelle_sectioncommunale!: string;
   public creationdateheureinit!: string;
   public modificationdateheureinit!: string;
 }
@@ -37,7 +37,7 @@ SectionCommunale.init(
       },
       onDelete: "CASCADE"
     },
-    libelle: {
+    libelle_sectioncommunale: {
       type: DataTypes.STRING(255),
       allowNull: false,
     },

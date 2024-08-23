@@ -24,7 +24,7 @@ const DepartementTable: React.FC<DepartementTableProps> = ({
   getCountryNameById
 }) => {
   const filteredDepartements = dept.filter((dp) =>
-    dp.libelle.toLowerCase().includes(searchTerm.toLowerCase())
+    dp.libelle_departement.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const startIndex = currentPage * itemsPerPage;
@@ -69,7 +69,7 @@ const DepartementTable: React.FC<DepartementTableProps> = ({
                     {index + 1}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {dp.libelle}
+                    {dp.libelle_departement}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     {dp.code_departement}

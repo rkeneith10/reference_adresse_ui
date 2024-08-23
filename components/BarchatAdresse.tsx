@@ -45,7 +45,7 @@ const BarChartAdresse: React.FC = () => {
       }
       return acc;
     }, 0);
-    return [ville.libelle, sectionCount, addressCount];
+    return [ville.libelle_ville, sectionCount, addressCount];
   });
 
 

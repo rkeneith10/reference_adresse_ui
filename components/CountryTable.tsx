@@ -23,7 +23,7 @@ const CountryTable: React.FC<CountryTableProps> = ({
   onDelete,
 }) => {
   const filteredCountries = countries.filter((country) =>
-    country.libelle.toLowerCase().includes(searchTerm.toLowerCase())
+    country.libelle_pays.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const startIndex = currentPage * itemsPerPage;
@@ -55,7 +55,7 @@ const CountryTable: React.FC<CountryTableProps> = ({
               filteredCountries.slice(startIndex, endIndex).map((country, index) => (
                 <tr key={country.indicatif_tel} className="bg-white hover:bg-gray-50">
                   <td className="text-left py-3 px-4 border-b border-gray-200">{index + 1}</td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">{country.libelle}</td>
+                  <td className="text-left py-3 px-4 border-b border-gray-200">{country.libelle_pays}</td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">{country.code_pays}</td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">{country.continent}</td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">{country.indicatif_tel}</td>

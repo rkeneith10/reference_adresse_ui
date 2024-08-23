@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import axios from "axios";
 import React, { useState } from "react";
+import { FaQuestionCircle } from 'react-icons/fa';
 
 
 interface CountryFormModalProps {
@@ -22,14 +23,14 @@ interface CountryFormModalProps {
 
 const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, onSuccess, onFailed }) => {
   const [pays, setPays] = useState({
-    libelle: "",
+    libelle_pays: "",
     code_pays: "",
     continent: "",
     indicatif_tel: "",
     fuseau_horaire: "",
   });
   const [errors, setErrors] = useState({
-    libelle: "",
+    libelle_pays: "",
     code_pays: "",
     continent: "",
     indicatif_tel: "",
@@ -45,10 +46,10 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = { libelle: "", code_pays: "", continent: "", indicatif_tel: "", fuseau_horaire: "" };
+    const newErrors = { libelle_pays: "", code_pays: "", continent: "", indicatif_tel: "", fuseau_horaire: "" };
 
-    if (!pays.libelle) {
-      newErrors.libelle = "Nom du pays est requis";
+    if (!pays.libelle_pays) {
+      newErrors.libelle_pays = "Nom du pays est requis";
       valid = false;
     }
     if (!pays.code_pays) {
@@ -84,7 +85,7 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
       if (response.status === 200) {
         setAdding(false);
         setPays({
-          libelle: "",
+          libelle_pays: "",
           code_pays: "",
           continent: "",
           indicatif_tel: "",
@@ -112,16 +113,22 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
           <div className="mb-4">
             <label htmlFor="libelle" className="block text-medium font-normal mb-2">
               Nom du pays
+              <div
+                className="ml-2 inline-block cursor-pointer"
+                title="Sélectionnez la section communale appropriée pour cette adresse."
+              >
+                <FaQuestionCircle className="text-gray-500" />
+              </div>
             </label>
             <input
               type="text"
-              value={pays.libelle}
+              value={pays.libelle_pays}
               onChange={handleInputChange}
               placeholder="Entrer le nom du pays"
               name="libelle"
               className="border rounded-md w-full p-2"
             />
-            {errors.libelle && <span className="text-red-500 text-sm">{errors.libelle}</span>}
+            {errors.libelle_pays && <span className="text-red-500 text-sm">{errors.libelle_pays}</span>}
           </div>
           <div className="mb-4">
             <label htmlFor="code_pays" className="block text-medium font-normal mb-2">

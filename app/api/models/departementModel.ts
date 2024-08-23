@@ -5,7 +5,7 @@ import Country from "./paysModel";
 
 export interface DepartementAttributes {
   id_departement: number;
-  libelle: string;
+  libelle_departement: string;
   code_departement: string;
   chef_lieux: string;
   id_pays: number;
@@ -18,7 +18,7 @@ class Departement
   extends Model<DepartementAttributes, DepartementCreationAttributes>
   implements DepartementAttributes {
   public id_departement!: number;
-  public libelle!: string;
+  public libelle_departement!: string;
   public code_departement!: string;
   public chef_lieux!: string;
   public id_pays!: number;
@@ -35,7 +35,7 @@ Departement.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    libelle: {
+    libelle_departement: {
       type: DataTypes.STRING(255),
       allowNull: false,
     },

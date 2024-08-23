@@ -4,7 +4,7 @@ import Commune from "../api/models/communeModel";
 
 export async function updateCommune(
   id_commune: number,
-  libelle: string,
+  libelle_commune: string,
   id_departement: number
 ) {
   const com = await Commune.findOne({ where: { id_commune } });
@@ -12,7 +12,7 @@ export async function updateCommune(
     throw new Error("Commune not found");
   }
   await com.update({
-    libelle,
+    libelle_commune,
 
     id_departement
   });

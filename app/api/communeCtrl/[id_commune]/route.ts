@@ -14,7 +14,7 @@ export async function GET(req: NextRequest, { params }: { params: { id_commune: 
     const responseData = {
       id_commune: detailCommune.id_commune,
       id_departement: detailCommune?.id_departement,
-      libelle: detailCommune.libelle,
+      libelle_commune: detailCommune.libelle_commune,
     }
 
     return NextResponse.json(responseData, { status: 200 });

@@ -16,7 +16,7 @@ export async function GET(req: NextRequest, { params }: { params: { id_ville: nu
     const responseData = {
       id_ville: detailVille?.id_ville,
       id_commune: detailVille?.id_commune,
-      libelle: detailVille?.libelle,
+      libelle_ville: detailVille?.libelle_ville,
       longitude: detailVille?.longitude,
       lattitude: detailVille?.lattitude
     }

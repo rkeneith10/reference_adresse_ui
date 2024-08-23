@@ -102,7 +102,7 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
 
   const countryOptions = countries.map((country) => ({
     value: country.id_pays,
-    label: country.libelle,
+    label: country.libelle_pays,
   }));
 
   return (

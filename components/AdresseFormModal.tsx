@@ -1,4 +1,5 @@
 import { SectionCommunaleAttributes } from '@/app/api/models/sectionCommunalModel';
+import { TooltipAttributes } from '@/app/api/models/tooltipModel';
 import {
   Button,
   Modal,
@@ -9,8 +10,10 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import axios from 'axios';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { FaQuestionCircle } from 'react-icons/fa';
 import Select from 'react-select';
+
 
 interface AdresseFormModalProps {
   isOpen: boolean;
@@ -22,10 +25,13 @@ interface AdresseFormModalProps {
 
 const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, onSuccess, onFailed, sectioncommunales }) => {
   const [adding, setAdding] = useState(false);
+
+  const [visibleTooltip, setVisibleTooltip] = useState<string | null>(null);
+
   const [adresse, setAdresse] = useState({
     id_sectioncommunale: "",
     numero_rue: "",
-    libelle: "",
+    libelle_adresse: "",
     statut: "En creation",
     code_postal: ""
 
@@ -33,10 +39,21 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
 
   const [errors, setErrors] = useState({
     numero_rue: "",
-    libelle: "",
+    libelle_adresse: "",
     id_sectioncommunale: "",
     code_postal: ""
   });
+
+  const [tooltips, setTooltips] = useState<Record<string, string>>({});
+
+
+  // const handleTooltipToggle = (field: keyof typeof tooltips) => {
+  //   setTooltips((prevState) => ({
+  //     ...prevState,
+  //     [field]: !prevState[field],
+  //   }));
+  // };
+
 
   const handleinputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -45,15 +62,40 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
 
   };
 
+
+  useEffect(() => {
+    const fetchTooltips = async () => {
+      try {
+
+        const nom_application = "Adresse";
+
+        const response = await axios.get(`/api/tooltipCtrl?nom_application=${encodeURIComponent(nom_application)}`);
+
+        const tooltipMap: Record<string, string> = {};
+        const tooltips = response.data.tooltip;
+
+        tooltips.forEach((tooltip: TooltipAttributes) => {
+          tooltipMap[tooltip.nom_champ] = tooltip.message_tooltip;
+        });
+
+        setTooltips(tooltipMap);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des tooltips:', error);
+      }
+    };
+
+    fetchTooltips();
+  }, []);
+
   const validateForm = () => {
     let valid = true;
-    const newErrors = { libelle: "", numero_rue: "", id_sectioncommunale: "", code_postal: "" };
+    const newErrors = { libelle_adresse: "", numero_rue: "", id_sectioncommunale: "", code_postal: "" };
     if (!adresse.id_sectioncommunale) {
       newErrors.id_sectioncommunale = "La section communale de reference est requise";
       valid = false;
     }
-    if (!adresse.libelle) {
-      newErrors.libelle = "L'adresse est requise";
+    if (!adresse.libelle_adresse) {
+      newErrors.libelle_adresse = "L'adresse est requise";
       valid = false;
     }
 
@@ -86,7 +128,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
         setAdresse({
           id_sectioncommunale: "",
           numero_rue: "",
-          libelle: "",
+          libelle_adresse: "",
           statut: "En creation",
           code_postal: ""
 
@@ -109,8 +151,16 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
 
   const adresseOption = sectioncommunales.map((section) => ({
     value: section.id_sectioncommunale,
-    label: section.libelle
+    label: section.libelle_sectioncommunale
   }))
+
+  const handleTooltipToggle = (field: string) => {
+    setVisibleTooltip(field);
+  };
+
+  const handleTooltipHide = () => {
+    setVisibleTooltip(null);
+  };
 
   return (
     <Modal
@@ -128,67 +178,122 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
             Ajouter une adresse
           </ModalHeader>
           <ModalBody>
-            <div className="mb-4">
-              <label
-                htmlFor="id_departement"
-                className="block text-sm font-normal mb-2"
-              >
+            <div className="mb-4 relative">
+              <label htmlFor="id_departement" className="block text-sm font-normal mb-2">
                 Choisir une section communale
+                <div
+                  className="ml-2 inline-block cursor-pointer relative"
+                  onMouseEnter={() => handleTooltipToggle('id_sectioncommunale')}
+                  onMouseLeave={handleTooltipHide}
+                >
+                  <FaQuestionCircle className="text-gray-500" size={15} />
+                  {visibleTooltip === 'id_sectioncommunale' && (
+                    <div className="absolute z-10 bg-gray-900 text-white text-xs rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
+                      {tooltips['id_sectioncommunale']}
+                      <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
+                    </div>
+                  )}
+                </div>
               </label>
               <Select
                 placeholder="Choisir une section communale"
-                name="id_sectioncommune"
+                name="id_sectioncommunale"
                 onChange={handleSelectChange}
                 options={adresseOption}
                 className='w-full'
               />
-
-              {errors.id_sectioncommunale && <span className="text-red-500 text-sm">{errors.id_sectioncommunale}</span>}
+              {errors.id_sectioncommunale && (
+                <span className="text-red-500 text-sm">{errors.id_sectioncommunale}</span>
+              )}
             </div>
-            <div className="mb-4">
+
+            <div className="mb-4 relative">
               <label
                 htmlFor="libelle"
                 className="block text-sm font-normal mb-2"
               >
                 Libelle
+                <div
+                  className="ml-2 inline-block cursor-pointer relative"
+                  onMouseEnter={() => handleTooltipToggle('libelle')}
+                  onMouseLeave={handleTooltipHide}
+                >
+                  <FaQuestionCircle className="text-gray-500" size={15} />
+                  {visibleTooltip === 'libelle_adresse' && (
+                    <div className="absolute z-10 bg-gray-900 text-white text-xs rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
+                      {tooltips['libelle_adresse']}
+                      <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
+                    </div>
+                  )}
+                </div>
               </label>
               <input
                 type="text"
                 placeholder="Entrer l'adresse"
-                id="libelle"
-                name="libelle"
+                id="libelle_adresse"
+                name="libelle_adresse"
                 onChange={handleinputChange}
-                value={adresse.libelle}
+                value={adresse.libelle_adresse}
                 className="border rounded-md w-full p-2 text-sm"
               />
-              {errors.libelle && <span className="text-red-500 text-sm">{errors.libelle}</span>}
+              {errors.libelle_adresse && (
+                <span className="text-red-500 text-sm">{errors.libelle_adresse}</span>
+              )}
             </div>
 
-            <div className="mb-4">
+            {/*  <div className="mb-4 relative">
               <label
-                htmlFor="libelle"
+                htmlFor="numero_rue"
                 className="block text-sm font-normal mb-2"
               >
                 Numero de rue
+                <div
+                  className="ml-2 inline-block cursor-pointer relative"
+                  onMouseEnter={() => handleTooltipToggle('numeroRue')}
+                  onMouseLeave={() => handleTooltipToggle('numeroRue')}
+                >
+                  <FaQuestionCircle className="text-gray-500" size={15} />
+                  {tooltip.numeroRue && (
+                    <div className="absolute z-10 bg-gray-900 text-white text-xs rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
+                      Entrez le numéro de rue.
+                      <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
+                    </div>
+                  )}
+                </div>
               </label>
               <input
                 type="text"
-                placeholder="Entrer le numero de rue"
+                placeholder="Entrer le numéro de rue"
                 id="numero_rue"
                 name="numero_rue"
                 onChange={handleinputChange}
                 value={adresse.numero_rue}
                 className="border rounded-md w-full p-2 text-sm"
               />
-              {errors.numero_rue && <span className="text-red-500 text-sm">{errors.numero_rue}</span>}
+              {errors.numero_rue && (
+                <span className="text-red-500 text-sm">{errors.numero_rue}</span>
+              )}
             </div>
 
-            <div className="mb-4">
+            <div className="mb-4 relative">
               <label
                 htmlFor="code_postal"
                 className="block text-sm font-normal mb-2"
               >
                 Code postal
+                <div
+                  className="ml-2 inline-block cursor-pointer relative"
+                  onMouseEnter={() => handleTooltipToggle('codePostal')}
+                  onMouseLeave={() => handleTooltipToggle('codePostal')}
+                >
+                  <FaQuestionCircle className="text-gray-500" size={15} />
+                  {tooltip.codePostal && (
+                    <div className="absolute z-10 bg-gray-900 text-white text-xs rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
+                      Entrez le code postal de l'adresse.
+                      <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
+                    </div>
+                  )}
+                </div>
               </label>
               <input
                 type="text"
@@ -199,9 +304,10 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
                 value={adresse.code_postal}
                 className="border rounded-md w-full p-2 text-sm"
               />
-              {errors.code_postal && <span className="text-red-500 text-sm">{errors.code_postal}</span>}
-            </div>
-
+              {errors.code_postal && (
+                <span className="text-red-500 text-sm">{errors.code_postal}</span>
+              )}
+            </div> */}
 
           </ModalBody>
           <ModalFooter>

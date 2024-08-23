@@ -97,7 +97,7 @@ const SectionCommunales: React.FC = () => {
 
   const getVilleNameById = (id: number) => {
     const vil = ville.find((c) => c.id_ville === id);
-    return vil ? vil.libelle : "Ville Inconnue";
+    return vil ? vil.libelle_ville : "Ville Inconnue";
   };
   return (
     <RootLayout isAuthenticated={true}>

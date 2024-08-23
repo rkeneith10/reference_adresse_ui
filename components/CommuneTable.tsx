@@ -24,7 +24,7 @@ const CommuneTable: React.FC<CommuneTableProps> = ({
   getDepartementNameById
 }) => {
   const filteredCommune = comm.filter((c) =>
-    c.libelle.toLowerCase().includes(searchTerm.toLowerCase())
+    c.libelle_commune.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const startIndex = currentPage * itemsPerPage;
@@ -64,7 +64,7 @@ const CommuneTable: React.FC<CommuneTableProps> = ({
                     {index + 1}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {co.libelle}
+                    {co.libelle_commune}
                   </td>
 
                   <td className="text-left py-3 px-4 border-b border-gray-200">

@@ -102,7 +102,7 @@ const Ville: React.FC = () => {
 
   const getCommuneNameById = (id: number) => {
     const com = commune.find((c) => c.id_commune === id);
-    return com ? com.libelle : "Commune Inconnu";
+    return com ? com.libelle_commune : "Commune Inconnu";
   };
 
   return (

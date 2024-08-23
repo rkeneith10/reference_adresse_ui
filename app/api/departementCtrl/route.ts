@@ -14,9 +14,9 @@ export async function GET() {
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
-    const { libelle, code_departement, chef_lieux, id_pays } = await req.json();
+    const { libelle_departement, code_departement, chef_lieux, id_pays } = await req.json();
 
-    const existingDepartement = await Departement.findOne({ where: { libelle } });
+    const existingDepartement = await Departement.findOne({ where: { libelle_departement } });
     if (existingDepartement) {
       return NextResponse.json(
         { message: "Le departement existe déjà." },
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       );
     }
     const departement = await Departement.create({
-      libelle,
+      libelle_departement,
       code_departement,
       chef_lieux,
       id_pays

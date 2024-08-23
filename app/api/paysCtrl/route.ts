@@ -15,10 +15,10 @@ export async function GET() {
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
-    const { libelle, code_pays, indicatif_tel, continent, fuseau_horaire } =
+    const { libelle_pays, code_pays, indicatif_tel, continent, fuseau_horaire } =
       await req.json();
 
-    const existingCountry = await Country.findOne({ where: { libelle } });
+    const existingCountry = await Country.findOne({ where: { libelle_pays } });
     if (existingCountry) {
       return NextResponse.json(
         { message: "Le pays existe déjà." },
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
 
     const country = await Country.create({
-      libelle,
+      libelle_pays,
       code_pays,
       continent,
       indicatif_tel,

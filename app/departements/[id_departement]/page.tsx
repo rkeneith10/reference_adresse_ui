@@ -14,7 +14,7 @@ const DetailsDepartement = ({ params }: { params: { id_departement: string } }) 
   const [departement, setDepartement] = useState<any>(null);
   const [countries, setCountries] = useState<any[]>([]);
   const [formData, setFormData] = useState<any>({
-    libelle: "",
+    libelle_departement: "",
     code_departement: "",
     chef_lieux: "",
     id_pays: "", // Add country reference ID to formData
@@ -39,7 +39,7 @@ const DetailsDepartement = ({ params }: { params: { id_departement: string } }) 
         const response = await axios.get(`/api/departementCtrl/${id_departement}`);
         setDepartement(response.data);
         setFormData({
-          libelle: response.data.libelle,
+          libelle_departement: response.data.libelle_departement,
           code_departement: response.data.code_departement,
           chef_lieux: response.data.chef_lieux,
           id_pays: response.data.id_pays, // Set country reference ID
@@ -75,7 +75,7 @@ const DetailsDepartement = ({ params }: { params: { id_departement: string } }) 
     try {
       const updatedDepartement = await updateDepartement(
         departement.id_departement,
-        formData.libelle,
+        formData.libelle_departement,
         formData.code_departement,
         formData.chef_lieux,
         formData.id_pays, // Pass the country reference ID
@@ -134,7 +134,7 @@ const DetailsDepartement = ({ params }: { params: { id_departement: string } }) 
                   type="text"
                   id="libelle"
                   name="libelle"
-                  value={formData.libelle}
+                  value={formData.libelle_departement}
                   className="border border-gray-300 p-2 rounded-md"
                   onChange={handleInputChange}
                 />
@@ -179,7 +179,7 @@ const DetailsDepartement = ({ params }: { params: { id_departement: string } }) 
                   <option value="">Sélectionnez un pays</option>
                   {countries.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((country) => (
                     <option key={country.id_pays} value={country.id_pays}>
-                      {country.libelle}
+                      {country.libelle_departement}
                     </option>
                   ))}
                 </select>

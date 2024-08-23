@@ -14,7 +14,7 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
   const [commune, setCommune] = useState<any>(null);
   const [departement, setDepartement] = useState<any[]>([]);
   const [formData, setFormData] = useState<any>({
-    libelle: "",
+    libelle_commune: "",
     id_departement: "",
   });
   const [loading, setLoading] = useState<boolean>(true);
@@ -38,7 +38,7 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
         const response = await axios.get(`/api/communeCtrl/${id_commune}`);
         setCommune(response.data);
         setFormData({
-          libelle: response.data.libelle,
+          libelle_commune: response.data.libelle_commune,
           id_departement: response.data.id_departement
         });
         setLoading(false);
@@ -84,7 +84,7 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
     try {
       const updatedCommune = await updateCommune(
         commune.id_commune,
-        formData.libelle,
+        formData.libelle_departement,
         formData.id_departement, // Pass the country reference ID
       );
       setCommune(updatedCommune);
@@ -126,9 +126,9 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
                 </label>
                 <input
                   type="text"
-                  id="libelle"
-                  name="libelle"
-                  value={formData.libelle}
+                  id="libelle_commune"
+                  name="libelle_commune"
+                  value={formData.libelle_commune}
                   className="border border-gray-300 p-2 rounded-md"
                   onChange={handleInputChange}
                 />
@@ -150,7 +150,7 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
                   <option value="">Sélectionnez un departement</option>
                   {departement.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((dept) => (
                     <option key={dept.id_departement} value={dept.id_departement}>
-                      {dept.libelle}
+                      {dept.libelle_commune}
                     </option>
                   ))}
                 </select>

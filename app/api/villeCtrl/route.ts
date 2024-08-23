@@ -15,9 +15,9 @@ export async function GET() {
 export async function POST(req: NextRequest) {
 
   try {
-    const { libelle, id_commune, longitude, lattitude, } = await req.json();
+    const { libelle_ville, id_commune, longitude, lattitude, } = await req.json();
 
-    const existingVille = await Ville.findOne({ where: { libelle } })
+    const existingVille = await Ville.findOne({ where: { libelle_ville } })
 
     if (existingVille) {
       return NextResponse.json(
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     }
     const newVille = await Ville.create({
       id_commune,
-      libelle,
+      libelle_ville,
       longitude,
       lattitude
 

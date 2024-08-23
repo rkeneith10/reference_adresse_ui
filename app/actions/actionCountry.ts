@@ -4,7 +4,7 @@ import Country from "../api/models/paysModel";
 
 export async function updateCountry(
   id_pays: number,
-  libelle: string,
+  libelle_pays: string,
   code_pays: string,
   continent: string,
   indicatif_tel: string,
@@ -15,7 +15,7 @@ export async function updateCountry(
     throw new Error("Country not found");
   }
   await country.update({
-    libelle,
+    libelle_pays,
     code_pays,
     continent,
     indicatif_tel,

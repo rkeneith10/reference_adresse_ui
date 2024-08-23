@@ -23,7 +23,7 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
   const [adding, setAdding] = useState<boolean>(false);
   const [sectioncommunale, setSectioncommunale] = useState({
     id_ville: "",
-    libelle: "",
+    libelle_sectioncommunale: "",
 
   });
 
@@ -35,7 +35,7 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
 
   const villeOption = villes.map((vil) => ({
     value: vil.id_ville,
-    label: vil.libelle
+    label: vil.libelle_ville
   }))
 
   const handleSelectChange = (selectedOption: any) => {
@@ -57,7 +57,7 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
       newErrors.id_ville = "La ville de reference est requise";
       valid = false;
     }
-    if (!sectioncommunale.libelle) {
+    if (!sectioncommunale.libelle_sectioncommunale) {
       newErrors.libelle = "Nom de la section communale est requis";
       valid = false;
     }
@@ -80,7 +80,7 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
       if (response.status === 200) {
         setSectioncommunale({
           id_ville: "",
-          libelle: "",
+          libelle_sectioncommunale: "",
 
         });
         onClose();
@@ -131,7 +131,7 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
             </div>
             <div className="mb-4">
               <label
-                htmlFor="libelle"
+                htmlFor="libelle_sectioncommunale"
                 className="block text-sm font-normal mb-2"
               >
                 Section Communale
@@ -139,10 +139,10 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
               <input
                 type="text"
                 placeholder="Entrer la commune"
-                id="libelle"
-                name="libelle"
+                id="libelle_sectioncommunale"
+                name="libelle_sectioncommunale"
                 onChange={handleinputChange}
-                value={sectioncommunale.libelle}
+                value={sectioncommunale.libelle_sectioncommunale}
                 className="border rounded-md w-full p-2 text-sm"
               />
               {errors.libelle && <span className="text-red-500 text-sm">{errors.libelle}</span>}

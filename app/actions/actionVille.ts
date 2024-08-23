@@ -4,7 +4,7 @@ import Ville from "../api/models/villeModel";
 
 export async function updateVille(
   id_ville: number,
-  libelle: string,
+  libelle_ville: string,
   id_commune: number,
 
 ) {
@@ -13,7 +13,7 @@ export async function updateVille(
     throw new Error("Ville not found");
   }
   await vil.update({
-    libelle,
+    libelle_ville,
     id_commune
   });
   return vil.toJSON();

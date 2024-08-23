@@ -6,7 +6,7 @@ import SectionCommunale from "./sectionCommunalModel";
 export interface AdresseAttributes {
   id_adresses: number;
   numero_rue: string;
-  libelle: string;
+  libelle_adresse: string;
   cle_unicite: string;
   statut: string;
   code_postal: string,
@@ -19,7 +19,7 @@ interface AdresseCreationAttributes extends Optional<AdresseAttributes, "id_adre
 class Adresse extends Model<AdresseAttributes, AdresseCreationAttributes> implements AdresseAttributes {
   public id_adresses!: number;
   public numero_rue!: string;
-  public libelle!: string;
+  public libelle_adresse!: string;
   public cle_unicite!: string;
   public statut!: string;
   public code_postal!: string;
@@ -37,7 +37,7 @@ Adresse.init(
       type: DataTypes.STRING(4),
       allowNull: false,
     },
-    libelle: {
+    libelle_adresse: {
       type: DataTypes.STRING(255),
       allowNull: false,
     },

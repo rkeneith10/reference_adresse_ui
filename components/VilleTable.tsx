@@ -23,7 +23,7 @@ const VilleTable: React.FC<VilleTableProps> = ({ vil,
   getCommuneNameById }) => {
 
   const filteredVille = vil.filter((v) =>
-    v.libelle.toLowerCase().includes(searchTerm.toLowerCase())
+    v.libelle_ville.toLowerCase().includes(searchTerm.toLowerCase())
   );
   const startIndex = currentPage * itemsPerPage;
   const endIndex = Math.min((currentPage + 1) * itemsPerPage, filteredVille.length);
@@ -69,7 +69,7 @@ const VilleTable: React.FC<VilleTableProps> = ({ vil,
                     {index + 1}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {v.libelle}
+                    {v.libelle_ville}
                   </td>
 
                   <td className="text-left py-3 px-4 border-b border-gray-200">

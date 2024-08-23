@@ -3,7 +3,7 @@ import { DataTypes, Model, Optional } from "sequelize";
 
 export interface CountryAttributes {
   id_pays: number;
-  libelle: string;
+  libelle_pays: string;
   code_pays: string;
   continent: string;
   indicatif_tel: string;
@@ -19,7 +19,7 @@ class Country
   extends Model<CountryAttributes, CountryCreationAttributes>
   implements CountryAttributes {
   public id_pays!: number;
-  public libelle!: string;
+  public libelle_pays!: string;
   public code_pays!: string;
 
   public continent!: string;
@@ -42,7 +42,7 @@ Country.init(
       primaryKey: true,
     },
 
-    libelle: {
+    libelle_pays: {
       type: DataTypes.STRING(255),
       allowNull: false,
     },

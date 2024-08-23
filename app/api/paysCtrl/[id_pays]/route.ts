@@ -20,7 +20,7 @@ export async function GET(
 
     const responseData = {
       id_pays: detailpays.id_pays,
-      libelle: detailpays.libelle,
+      libelle_pays: detailpays.libelle_pays,
       code_pays: detailpays.code_pays,
       indicatif_tel: detailpays.indicatif_tel,
       continent: detailpays.continent,

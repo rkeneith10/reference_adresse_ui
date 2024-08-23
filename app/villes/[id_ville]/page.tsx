@@ -16,7 +16,7 @@ const DetailVille = ({ params }: { params: { id_ville: number } }) => {
   const [deleteLoading, setDeleteLoading] = useState()
   const [commune, setCommune] = useState<any[]>([]);
   const [formData, setFormData] = useState<any>({
-    libelle: "",
+    libelle_ville: "",
     id_commune: "",
     longitude: "",
     lattitude: ""
@@ -42,7 +42,7 @@ const DetailVille = ({ params }: { params: { id_ville: number } }) => {
         const response = await axios.get(`/api/villeCtrl/${id_ville}`);
         setVille(response.data);
         setFormData({
-          libelle: response.data.libelle,
+          libelle_ville: response.data.libelle_ville,
           id_commune: response.data.id_commune,
           longitude: response.data.longitude,
           lattitude: response.data.lattitude
@@ -94,7 +94,7 @@ const DetailVille = ({ params }: { params: { id_ville: number } }) => {
     try {
       const updatedVille = await updateVille(
         ville.id_ville,
-        formData.libelle,
+        formData.libelle_ville,
         formData.id_commune, // Pass the country reference ID
       );
       setVille(updatedVille);
@@ -135,9 +135,9 @@ const DetailVille = ({ params }: { params: { id_ville: number } }) => {
                 </label>
                 <input
                   type="text"
-                  id="libelle"
-                  name="libelle"
-                  value={formData.libelle}
+                  id="libelle_ville"
+                  name="libelle_ville"
+                  value={formData.libelle_ville}
                   className="border border-gray-300 p-2 rounded-md"
                   onChange={handleInputChange}
                 />

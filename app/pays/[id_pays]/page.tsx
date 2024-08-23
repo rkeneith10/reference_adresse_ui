@@ -14,7 +14,7 @@ const DetailPays = ({ params }: { params: { id_pays: string } }) => {
   const router = useRouter();
   const [country, setCountry] = useState<any>(null);
   const [formData, setFormData] = useState<any>({
-    libelle: "",
+    libelle_pays: "",
     code_pays: "",
     continent: "",
     indicatif_tel: "",
@@ -40,7 +40,7 @@ const DetailPays = ({ params }: { params: { id_pays: string } }) => {
         const response = await axios.get(`/api/paysCtrl/${id_pays}`);
         setCountry(response.data);
         setFormData({
-          libelle: response.data.libelle,
+          libelle_pays: response.data.libelle_pays,
           code_pays: response.data.code_pays,
           continent: response.data.continent,
           indicatif_tel: response.data.indicatif_tel,
@@ -79,7 +79,7 @@ const DetailPays = ({ params }: { params: { id_pays: string } }) => {
     try {
       const updatedCountry = await updateCountry(
         country.id_pays,
-        formData.libelle,
+        formData.libelle_pays,
         formData.code_pays,
         formData.continent,
         formData.indicati_tel,
@@ -134,9 +134,9 @@ const DetailPays = ({ params }: { params: { id_pays: string } }) => {
                     </label>
                     <input
                       type="text"
-                      id="libelle"
-                      name="libelle"
-                      value={formData.libelle}
+                      id="libelle_pays"
+                      name="libelle_pays"
+                      value={formData.libelle_pays}
                       className="border border-gray-300 p-2 rounded-md"
                       onChange={handleInputChange}
                     />

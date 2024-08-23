@@ -5,7 +5,7 @@ import Departement from "./departementModel";
 export interface CommuneAttributes {
   id_commune: number;
   id_departement: number;
-  libelle: string;
+  libelle_commune: string;
 }
 
 interface CommuneCreationAttributes
@@ -16,7 +16,7 @@ class Commune
   implements CommuneAttributes {
   public id_commune!: number;
   public id_departement!: number;
-  public libelle!: string;
+  public libelle_commune!: string;
 
 
 
@@ -43,7 +43,7 @@ Commune.init(
       },
       onDelete: "CASCADE"
     },
-    libelle: {
+    libelle_commune: {
       type: DataTypes.STRING(255),
       allowNull: false,
     },

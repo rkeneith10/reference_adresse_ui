@@ -100,7 +100,7 @@ const Departements: React.FC = () => {
 
   const getCountryNameById = (id: number) => {
     const country = countries.find((c) => c.id_pays === id);
-    return country ? country.libelle : "Pays Inconnu";
+    return country ? country.libelle_pays : "Pays Inconnu";
   };
 
   return (

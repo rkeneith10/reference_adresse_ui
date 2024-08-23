@@ -4,7 +4,7 @@ import SectionCommunale from "../api/models/sectionCommunalModel";
 
 export async function updateSectionCommunale(
   id_sectioncommunale: number,
-  libelle: string,
+  libelle_sectioncommunale: string,
   id_ville: number
 
 ) {
@@ -13,7 +13,7 @@ export async function updateSectionCommunale(
     throw new Error("Section Communale not found");
   }
   await com.update({
-    libelle,
+    libelle_sectioncommunale,
     id_ville
 
   });

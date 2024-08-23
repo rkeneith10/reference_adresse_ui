@@ -20,7 +20,7 @@ export async function GET(
 
     const responseData = {
       id_departement: detaildepartement.id_departement,
-      libelle: detaildepartement.libelle,
+      libelle_departement: detaildepartement.libelle_departement,
       code_departement: detaildepartement.code_departement,
       chef_lieux: detaildepartement.chef_lieux,
       id_pays: detaildepartement.id_pays,

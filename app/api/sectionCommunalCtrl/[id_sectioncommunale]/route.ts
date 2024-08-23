@@ -14,7 +14,7 @@ export async function GET(req: NextRequest, { params }: { params: { id_sectionco
     const responseData = {
       id_sectioncommunale: detailSectionCommunale.id_sectioncommunale,
       id_ville: detailSectionCommunale?.id_ville,
-      libelle: detailSectionCommunale.libelle,
+      libelle_sectioncommunale: detailSectionCommunale.libelle_sectioncommunale,
 
 
 

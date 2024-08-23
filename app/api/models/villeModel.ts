@@ -5,7 +5,7 @@ import Commune from "./communeModel";
 export interface VilleAttributes {
   id_ville: number;
   id_commune: number;
-  libelle: string;
+  libelle_ville: string;
   longitude: string;
   lattitude: string;
 }
@@ -20,7 +20,7 @@ class Ville
   implements VilleAttributes {
   public id_ville!: number;
   public id_commune!: number;
-  public libelle!: string;
+  public libelle_ville!: string;
   public longitude!: string;
   public lattitude!: string;
 
@@ -45,7 +45,7 @@ Ville.init(
       },
       onDelete: "CASCADE"
     },
-    libelle: {
+    libelle_ville: {
       type: DataTypes.STRING(255),
       allowNull: false,
     },

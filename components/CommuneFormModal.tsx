@@ -24,13 +24,13 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
   const [adding, setAdding] = useState(false);
   const [commune, setCommune] = useState({
     id_departement: "",
-    libelle: "",
+    libelle_commune: "",
 
   });
 
   const [errors, setErrors] = useState({
     id_departement: "",
-    libelle: "",
+    libelle_commune: "",
 
   });
 
@@ -48,13 +48,13 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = { libelle: "", id_departement: "" };
+    const newErrors = { libelle_commune: "", id_departement: "" };
     if (!commune.id_departement) {
       newErrors.id_departement = "Le departement de reference est requis";
       valid = false;
     }
-    if (!commune.libelle) {
-      newErrors.libelle = "Nom de la commune est requis";
+    if (!commune.libelle_commune) {
+      newErrors.libelle_commune = "Nom de la commune est requis";
       valid = false;
     }
 
@@ -76,7 +76,7 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
       if (response.status === 200) {
         setCommune({
           id_departement: "",
-          libelle: "",
+          libelle_commune: "",
 
         });
         onClose();
@@ -93,7 +93,7 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
   const DepartementOption = departements.map((dept) => (
     {
       value: dept.id_departement,
-      label: dept.libelle
+      label: dept.libelle_departement
     }
   ))
   const handleSelectChange = (selectedOption: any) => {
@@ -147,13 +147,13 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
               <input
                 type="text"
                 placeholder="Entrer la commune"
-                id="libelle"
-                name="libelle"
+                id="libelle_commune"
+                name="libelle_commune"
                 onChange={handleinputChange}
-                value={commune.libelle}
+                value={commune.libelle_commune}
                 className="border rounded-md w-full p-2 text-sm"
               />
-              {errors.libelle && <span className="text-red-500 text-sm">{errors.libelle}</span>}
+              {errors.libelle_commune && <span className="text-red-500 text-sm">{errors.libelle_commune}</span>}
             </div>
 
 

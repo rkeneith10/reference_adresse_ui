@@ -10,8 +10,8 @@ import {
   useMediaQuery
 } from "@chakra-ui/react";
 import axios from "axios";
-import { getSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+//import { getSession } from "next-auth/react";
+//import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaFileExcel, FaFileImport, FaPlus } from "react-icons/fa";
 import * as XLSX from "xlsx";
@@ -19,7 +19,7 @@ import { AdresseAttributes } from "../api/models/adresseModel";
 import { SectionCommunaleAttributes } from "../api/models/sectionCommunalModel";
 
 const Adresses: React.FC = () => {
-  const router = useRouter();
+  //const router = useRouter();
   const [adresse, setAdresse] = useState<AdresseAttributes[]>([]);
   const [file, setFile] = useState<File | null>(null)
   const [section, setSection] = useState<SectionCommunaleAttributes[]>([]);
@@ -49,7 +49,7 @@ const Adresses: React.FC = () => {
   };
   const getSectionNameById = (id: number) => {
     const sect = section.find((c) => c.id_sectioncommunale === id);
-    return sect ? sect.libelle : " Inconnu";
+    return sect ? sect.libelle_sectioncommunale : " Inconnu";
   };
 
   const handleDeleteAdresse = async (id: number) => {
@@ -128,17 +128,17 @@ const Adresses: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const checkSession = async () => {
-      const session = await getSession();
+  // useEffect(() => {
+  //   const checkSession = async () => {
+  //     const session = await getSession();
 
-      if (!session) {
-        router.push('/');
-      }
-    };
+  //     if (!session) {
+  //       router.push('/');
+  //     }
+  //   };
 
-    checkSession();
-  }, [router]);
+  //   checkSession();
+  // }, [router]);
 
   useEffect(() => {
     document.title = "Adresses";

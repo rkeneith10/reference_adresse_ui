@@ -23,7 +23,7 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
   onDelete,
   getSectionNameById }) => {
   const filteredAdresse = adresse.filter((adr) =>
-    adr.libelle.toLowerCase().includes(searchTerm.toLowerCase())
+    adr.libelle_adresse.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const startIndex = currentPage * itemsPerPage;
@@ -75,7 +75,7 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                     {index + 1}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.libelle}
+                    {adr.libelle_adresse}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     {adr.numero_rue}

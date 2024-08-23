@@ -9,7 +9,7 @@ import Ville from "../../models/villeModel";
 
 export async function POST(req: NextRequest) {
   try {
-    const { id_adresses, libelle, numero_rue, id_sectioncommunale, code_postal, statut } = await req.json();
+    const { id_adresses, libelle_adresse, numero_rue, id_sectioncommunale, code_postal, statut } = await req.json();
 
     const adr = await Adresse.findOne({ where: { id_adresses } });
     if (!adr) {
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     console.log(pays)
 
     // Generate unicité key
-    const cle_unicite_base = `${pays.code_pays}${departement.code_departement}${code_postal}${numero_rue || 'X'}${libelle.charAt(0).toUpperCase()}${libelle.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
+    const cle_unicite_base = `${pays.code_pays}${departement.code_departement}${code_postal}${numero_rue || 'X'}${libelle_adresse.charAt(0).toUpperCase()}${libelle_adresse.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
 
     // Find the highest sequence number with similar cle_unicite
     const similarKeys = await Adresse.findAll({
@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
 
     await adr.update({
       numero_rue,
-      libelle,
+      libelle_adresse,
       cle_unicite,
       statut,
       code_postal,
