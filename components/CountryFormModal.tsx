@@ -1,5 +1,6 @@
 // CountryFormModal.tsx
 //import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
+import { TooltipAttributes } from '@/app/api/models/tooltipModel';
 import {
   Button,
   Modal,
@@ -10,7 +11,7 @@ import {
   ModalOverlay
 } from '@chakra-ui/react';
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaQuestionCircle } from 'react-icons/fa';
 
 
@@ -37,6 +38,8 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
     fuseau_horaire: "",
   });
   const [adding, setAdding] = useState(false);
+  const [visibleTooltip, setVisibleTooltip] = useState<string | null>(null);
+  const [tooltips, setTooltips] = useState<Record<string, string>>({});
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -44,6 +47,14 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
     setErrors({ ...errors, [name]: "" });
   };
 
+
+  const handleTooltipToggle = (field: string) => {
+    setVisibleTooltip(field);
+  };
+
+  const handleTooltipHide = () => {
+    setVisibleTooltip(null);
+  };
   const validateForm = () => {
     let valid = true;
     const newErrors = { libelle_pays: "", code_pays: "", continent: "", indicatif_tel: "", fuseau_horaire: "" };
@@ -101,6 +112,29 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
       setAdding(false);
     }
   };
+  useEffect(() => {
+    const fetchTooltips = async () => {
+      try {
+
+        const nom_application = "Adresse";
+
+        const response = await axios.get(`/api/tooltipCtrl?nom_application=${encodeURIComponent(nom_application)}`);
+
+        const tooltipMap: Record<string, string> = {};
+        const tooltips = response.data.tooltip;
+
+        tooltips.forEach((tooltip: TooltipAttributes) => {
+          tooltipMap[tooltip.nom_champ] = tooltip.message_tooltip;
+        });
+
+        setTooltips(tooltipMap);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des tooltips:', error);
+      }
+    };
+
+    fetchTooltips();
+  }, []);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">    <ModalOverlay
@@ -114,11 +148,19 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
             <label htmlFor="libelle" className="block text-medium font-normal mb-2">
               Nom du pays
               <div
-                className="ml-2 inline-block cursor-pointer"
-                title="Sélectionnez la section communale appropriée pour cette adresse."
+                className="ml-2 inline-block cursor-pointer relative"
+                onMouseEnter={() => handleTooltipToggle('libelle_pays')}
+                onMouseLeave={handleTooltipHide}
               >
-                <FaQuestionCircle className="text-gray-500" />
+                <FaQuestionCircle className="text-gray-500" size={15} />
+                {visibleTooltip === 'libelle_pays' && (
+                  <div className="absolute z-10 bg-gray-900 text-white text-xs rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
+                    {tooltips['libelle_pays']}
+                    <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
+                  </div>
+                )}
               </div>
+
             </label>
             <input
               type="text"
@@ -133,6 +175,19 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
           <div className="mb-4">
             <label htmlFor="code_pays" className="block text-medium font-normal mb-2">
               Code du pays
+              <div
+                className="ml-2 inline-block cursor-pointer relative"
+                onMouseEnter={() => handleTooltipToggle('code_pays')}
+                onMouseLeave={handleTooltipHide}
+              >
+                <FaQuestionCircle className="text-gray-500" size={15} />
+                {visibleTooltip === 'code_pays' && (
+                  <div className="absolute z-10 bg-gray-900 text-white text-xs rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
+                    {tooltips['code_pays']}
+                    <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
+                  </div>
+                )}
+              </div>
             </label>
             <input
               type="text"

@@ -13,9 +13,10 @@ export async function GET(req: NextRequest) {
 
     const tooltips = await Tooltip.findAll({
       where: {
-        nom_application: {
-          [Op.or]: [nom_application, '*'],
-        },
+        [Op.or]: [
+          { nom_application },
+          { nom_application: '*' }
+        ],
       },
     });
 

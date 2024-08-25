@@ -179,7 +179,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
           </ModalHeader>
           <ModalBody>
             <div className="mb-4 relative">
-              <label htmlFor="id_departement" className="block text-sm font-normal mb-2">
+              <label htmlFor="id_sectioncommunale" className="block text-sm font-normal mb-2">
                 Choisir une section communale
                 <div
                   className="ml-2 inline-block cursor-pointer relative"
@@ -200,7 +200,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
                 name="id_sectioncommunale"
                 onChange={handleSelectChange}
                 options={adresseOption}
-                className='w-full'
+                className="w-full"
               />
               {errors.id_sectioncommunale && (
                 <span className="text-red-500 text-sm">{errors.id_sectioncommunale}</span>
@@ -208,14 +208,11 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
             </div>
 
             <div className="mb-4 relative">
-              <label
-                htmlFor="libelle"
-                className="block text-sm font-normal mb-2"
-              >
+              <label htmlFor="libelle_adresse" className="block text-sm font-normal mb-2">
                 Libelle
                 <div
                   className="ml-2 inline-block cursor-pointer relative"
-                  onMouseEnter={() => handleTooltipToggle('libelle')}
+                  onMouseEnter={() => handleTooltipToggle('libelle_adresse')}
                   onMouseLeave={handleTooltipHide}
                 >
                   <FaQuestionCircle className="text-gray-500" size={15} />
@@ -241,21 +238,18 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
               )}
             </div>
 
-            {/*  <div className="mb-4 relative">
-              <label
-                htmlFor="numero_rue"
-                className="block text-sm font-normal mb-2"
-              >
+            <div className="mb-4 relative">
+              <label htmlFor="numero_rue" className="block text-sm font-normal mb-2">
                 Numero de rue
                 <div
                   className="ml-2 inline-block cursor-pointer relative"
-                  onMouseEnter={() => handleTooltipToggle('numeroRue')}
-                  onMouseLeave={() => handleTooltipToggle('numeroRue')}
+                  onMouseEnter={() => handleTooltipToggle('numero_rue')}
+                  onMouseLeave={handleTooltipHide}
                 >
                   <FaQuestionCircle className="text-gray-500" size={15} />
-                  {tooltip.numeroRue && (
+                  {visibleTooltip === 'numero_rue' && (
                     <div className="absolute z-10 bg-gray-900 text-white text-xs rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
-                      Entrez le numéro de rue.
+                      {tooltips['numero_rue']}
                       <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
                     </div>
                   )}
@@ -276,20 +270,17 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
             </div>
 
             <div className="mb-4 relative">
-              <label
-                htmlFor="code_postal"
-                className="block text-sm font-normal mb-2"
-              >
+              <label htmlFor="code_postal" className="block text-sm font-normal mb-2">
                 Code postal
                 <div
                   className="ml-2 inline-block cursor-pointer relative"
-                  onMouseEnter={() => handleTooltipToggle('codePostal')}
-                  onMouseLeave={() => handleTooltipToggle('codePostal')}
+                  onMouseEnter={() => handleTooltipToggle('code_postal')}
+                  onMouseLeave={handleTooltipHide}
                 >
                   <FaQuestionCircle className="text-gray-500" size={15} />
-                  {tooltip.codePostal && (
+                  {visibleTooltip === 'code_postal' && (
                     <div className="absolute z-10 bg-gray-900 text-white text-xs rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
-                      Entrez le code postal de l'adresse.
+                      {tooltips['code_postal']}
                       <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
                     </div>
                   )}
@@ -307,9 +298,9 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
               {errors.code_postal && (
                 <span className="text-red-500 text-sm">{errors.code_postal}</span>
               )}
-            </div> */}
-
+            </div>
           </ModalBody>
+
           <ModalFooter>
             <Button
               colorScheme='red'
