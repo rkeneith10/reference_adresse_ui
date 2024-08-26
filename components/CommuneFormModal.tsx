@@ -1,4 +1,5 @@
 import { DepartementAttributes } from '@/app/api/models/departementModel';
+import { TooltipAttributes } from '@/app/api/models/tooltipModel';
 import {
   Button,
   Modal,
@@ -9,8 +10,9 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import axios from 'axios';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from 'react-select';
+import TooltipIcon from './tooltipIcon';
 
 interface CommuneFormModalProps {
   isOpen: boolean;
@@ -22,6 +24,7 @@ interface CommuneFormModalProps {
 
 const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, onSuccess, onFailed, departements }) => {
   const [adding, setAdding] = useState(false);
+  const [tooltips, setTooltips] = useState<Record<string, string>>({});
   const [commune, setCommune] = useState({
     id_departement: "",
     libelle_commune: "",
@@ -62,6 +65,32 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
     setErrors(newErrors);
     return valid;
   };
+
+
+
+  useEffect(() => {
+    const fetchTooltips = async () => {
+      try {
+
+        const nom_application = "Adresse";
+
+        const response = await axios.get(`/api/tooltipCtrl?nom_application=${encodeURIComponent(nom_application)}`);
+
+        const tooltipMap: Record<string, string> = {};
+        const tooltips = response.data.tooltip;
+
+        tooltips.forEach((tooltip: TooltipAttributes) => {
+          tooltipMap[tooltip.nom_champ] = tooltip.message_tooltip;
+        });
+
+        setTooltips(tooltipMap);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des tooltips:', error);
+      }
+    };
+
+    fetchTooltips();
+  }, []);
 
   const addCommune = async () => {
     if (!validateForm()) {
@@ -125,6 +154,7 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
                 className="block text-sm font-normal mb-2"
               >
                 Choisir un département
+                <TooltipIcon field='id_departement' tooltipMessage={tooltips['id_departement'] || ""} />
               </label>
               <Select
                 placeholder="Choisir un département"
@@ -143,6 +173,7 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
                 className="block text-sm font-normal mb-2"
               >
                 Commune
+                <TooltipIcon field='libelle_commune' tooltipMessage={tooltips['libelle_commune'] || ""} />
               </label>
               <input
                 type="text"

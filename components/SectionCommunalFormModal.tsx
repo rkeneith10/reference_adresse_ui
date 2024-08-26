@@ -1,3 +1,4 @@
+import { TooltipAttributes } from '@/app/api/models/tooltipModel';
 import { VilleAttributes } from '@/app/api/models/villeModel';
 import {
   Button,
@@ -9,8 +10,9 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import axios from 'axios';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
+import TooltipIcon from './tooltipIcon';
 
 interface SectionCommunalFormModal {
   isOpen: boolean;
@@ -21,6 +23,7 @@ interface SectionCommunalFormModal {
 }
 const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, onClose, onSuccess, onFailed, villes }) => {
   const [adding, setAdding] = useState<boolean>(false);
+  const [tooltips, setTooltips] = useState<Record<string, string>>({});
   const [sectioncommunale, setSectioncommunale] = useState({
     id_ville: "",
     libelle_sectioncommunale: "",
@@ -66,6 +69,30 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
     setErrors(newErrors);
     return valid;
   };
+
+  useEffect(() => {
+    const fetchTooltips = async () => {
+      try {
+
+        const nom_application = "Adresse";
+
+        const response = await axios.get(`/api/tooltipCtrl?nom_application=${encodeURIComponent(nom_application)}`);
+
+        const tooltipMap: Record<string, string> = {};
+        const tooltips = response.data.tooltip;
+
+        tooltips.forEach((tooltip: TooltipAttributes) => {
+          tooltipMap[tooltip.nom_champ] = tooltip.message_tooltip;
+        });
+
+        setTooltips(tooltipMap);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des tooltips:', error);
+      }
+    };
+
+    fetchTooltips();
+  }, []);
 
   const addSectionCommunale = async () => {
     if (!validateForm()) {
@@ -117,6 +144,7 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
                 className="block text-sm font-normal mb-2"
               >
                 Choisir une ville
+                <TooltipIcon field='id_ville' tooltipMessage={tooltips['id_ville']} />
               </label>
               <Select
                 placeholder="Choisir une ville"
@@ -135,6 +163,7 @@ const SectionCommunalFormModal: React.FC<SectionCommunalFormModal> = ({ isOpen, 
                 className="block text-sm font-normal mb-2"
               >
                 Section Communale
+                <TooltipIcon field='libelle_sectioncommunale' tooltipMessage={tooltips['libelle_sectioncommunale']} />
               </label>
               <input
                 type="text"

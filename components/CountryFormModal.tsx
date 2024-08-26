@@ -167,7 +167,7 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
               value={pays.libelle_pays}
               onChange={handleInputChange}
               placeholder="Entrer le nom du pays"
-              name="libelle"
+              name="libelle_pays"
               className="border rounded-md w-full p-2"
             />
             {errors.libelle_pays && <span className="text-red-500 text-sm">{errors.libelle_pays}</span>}
@@ -202,6 +202,21 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
           <div className="mb-4">
             <label htmlFor="continent" className="block text-medium font-normal mb-2">
               Continent
+
+              <div
+                className="ml-2 inline-block cursor-pointer relative"
+                onMouseEnter={() => handleTooltipToggle('continent')}
+                onMouseLeave={handleTooltipHide}
+              >
+                <FaQuestionCircle className="text-gray-500" size={15} />
+                {visibleTooltip === 'continent' && (
+                  <div className="absolute z-10 bg-gray-900 text-white text-xs rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
+                    {tooltips['continent']}
+                    <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
+                  </div>
+                )}
+              </div>
+
             </label>
             <input
               type="text"
@@ -216,6 +231,19 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
           <div className="mb-4">
             <label htmlFor="indicatif_tel" className="block text-medium font-normal mb-2">
               Indicatif Téléphonique
+              <div
+                className="ml-2 inline-block cursor-pointer relative"
+                onMouseEnter={() => handleTooltipToggle('indicatif_tel')}
+                onMouseLeave={handleTooltipHide}
+              >
+                <FaQuestionCircle className="text-gray-500" size={15} />
+                {visibleTooltip === 'indicatif_tel' && (
+                  <div className="absolute z-10 bg-gray-900 text-white text-xs rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
+                    {tooltips['indicatif_tel']}
+                    <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
+                  </div>
+                )}
+              </div>
             </label>
             <input
               type="text"
@@ -230,6 +258,19 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
           <div className="mb-4">
             <label htmlFor="fuseau_horaire" className="block text-medium font-normal mb-2">
               Fuseau Horaire
+              <div
+                className="ml-2 inline-block cursor-pointer relative"
+                onMouseEnter={() => handleTooltipToggle('fuseau_horaire')}
+                onMouseLeave={handleTooltipHide}
+              >
+                <FaQuestionCircle className="text-gray-500" size={15} />
+                {visibleTooltip === 'fuseau_horaire' && (
+                  <div className="absolute z-10 bg-gray-900 text-white text-xs rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
+                    {tooltips['fuseau_horaire']}
+                    <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
+                  </div>
+                )}
+              </div>
             </label>
             <input
               type="text"

@@ -1,4 +1,5 @@
 import { CountryAttributes } from "@/app/api/models/paysModel";
+import { TooltipAttributes } from "@/app/api/models/tooltipModel";
 import {
   Button,
   Modal,
@@ -10,8 +11,9 @@ import {
   Spinner
 } from '@chakra-ui/react';
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from 'react-select';
+import TooltipIcon from "./tooltipIcon";
 
 interface DepartementFormModal {
   isOpen: boolean;
@@ -24,14 +26,18 @@ interface DepartementFormModal {
 const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose, onSuccess, onFailed, countries }) => {
   const [adding, setAdding] = useState(false);
   const [departement, setDepartement] = useState({
-    libelle: "",
+    libelle_departement: "",
     code_departement: "",
     chef_lieux: "",
     id_pays: "",
   });
 
+
+
+  const [tooltips, setTooltips] = useState<Record<string, string>>({});
+
   const [errors, setErrors] = useState({
-    libelle: "",
+    libelle_departement: "",
     code_departement: "",
     chef_lieux: "",
     id_pays: "",
@@ -50,10 +56,10 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = { libelle: "", code_departement: "", chef_lieux: "", id_pays: "" };
+    const newErrors = { libelle_departement: "", code_departement: "", chef_lieux: "", id_pays: "" };
 
-    if (!departement.libelle) {
-      newErrors.libelle = "Nom du departement est requis";
+    if (!departement.libelle_departement) {
+      newErrors.libelle_departement = "Nom du departement est requis";
       valid = false;
     }
     if (!departement.code_departement) {
@@ -73,6 +79,30 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
     return valid;
   };
 
+
+  useEffect(() => {
+    const fetchTooltips = async () => {
+      try {
+
+        const nom_application = "Adresse";
+
+        const response = await axios.get(`/api/tooltipCtrl?nom_application=${encodeURIComponent(nom_application)}`);
+
+        const tooltipMap: Record<string, string> = {};
+        const tooltips = response.data.tooltip;
+
+        tooltips.forEach((tooltip: TooltipAttributes) => {
+          tooltipMap[tooltip.nom_champ] = tooltip.message_tooltip;
+        });
+
+        setTooltips(tooltipMap);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des tooltips:', error);
+      }
+    };
+
+    fetchTooltips();
+  }, []);
   const addDepartement = async () => {
     if (!validateForm()) {
       return;
@@ -84,7 +114,7 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
       });
       if (response.status === 200) {
         setDepartement({
-          libelle: "",
+          libelle_departement: "",
           code_departement: "",
           chef_lieux: "",
           id_pays: "",
@@ -120,6 +150,8 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
             <div className="mb-4">
               <label htmlFor="codepays" className="block text-medium font-normal mb-2">
                 Choisir un pays
+                <TooltipIcon field="id_pays" tooltipMessage={tooltips['id_pays'] || ''} />
+
               </label>
 
               <Select
@@ -137,22 +169,27 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
             <div className="mb-2">
               <label htmlFor="libelle" className="block text-medium font-normal mb-2">
                 Nom du departement
+                <TooltipIcon field="id_pays" tooltipMessage={tooltips['id_pays'] || ''} />
+
+
               </label>
               <input
                 type="text"
                 placeholder="Entrer le nom du departement"
                 onChange={handleInputChange}
-                id="libelle"
-                name="libelle"
+                id="libelle_departement"
+                name="libelle_departement"
                 className="border rounded-md w-full p-2"
               />
-              {errors.libelle && (
-                <span className="text-red-500 text-sm">{errors.libelle}</span>
+              {errors.libelle_departement && (
+                <span className="text-red-500 text-sm">{errors.libelle_departement}</span>
               )}
             </div>
             <div className="mb-4">
               <label htmlFor="code_departement" className="block text-medium font-normal mb-2">
                 Code du departement
+                <TooltipIcon field="code_departement" tooltipMessage={tooltips['code_departement'] || ''} />
+
               </label>
               <input
                 type="text"
@@ -169,6 +206,8 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
             <div className="mb-4">
               <label htmlFor="chef_lieux" className="block text-medium font-normal mb-2">
                 Chef Lieux
+                <TooltipIcon field="chef_lieux" tooltipMessage={tooltips['chef_lieux'] || ''} />
+
               </label>
               <input
                 type="text"
