@@ -25,7 +25,7 @@ const TooltipIcon: React.FC<TooltipIconProps> = ({ field, tooltipMessage }) => {
     >
       <FaQuestionCircle className="text-gray-500" size={15} />
       {visibleTooltip === field && (
-        <div className="absolute z-10 bg-gray-900 text-white text-xs rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
+        <div className="absolute z-10 bg-gray-900 text-white text-md rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
           {tooltipMessage}
           <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
         </div>
