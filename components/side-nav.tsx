@@ -21,11 +21,17 @@ const SideNav = () => {
           </span>
         </Link>
 
-        <div className="flex flex-col space-y-2  md:px-6 ">
-          {SIDENAV_ITEMS.map((item, idx) => {
-            return <MenuItem key={idx} item={item} />;
-          })}
+        <div className="flex flex-col space-y-2 md:px-6">
+          {SIDENAV_ITEMS.map((item, idx) => (
+            <>
+              <MenuItem key={idx} item={item} />
+              {item.title === "Immeubles" && (
+                <hr key={`divider-${idx}`} className="border-t my-2" />
+              )}
+            </>
+          ))}
         </div>
+
       </div>
     </div>
   );
@@ -38,9 +44,8 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
   return (
     <Link
       href={item.path}
-      className={`flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100 text-blue-500  ${
-        item.path === pathname ? "bg-zinc-100" : ""
-      }`}
+      className={`flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100 text-blue-500  ${item.path === pathname ? "bg-zinc-100" : ""
+        }`}
     >
       {item.icon}
       <span className="font-semibold text-sm text-gray-700 flex">

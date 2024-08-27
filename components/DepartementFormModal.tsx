@@ -147,10 +147,10 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
             Ajouter un d&eacute;partement
           </ModalHeader>
           <ModalBody>
-            <div className="mb-4">
+            <div className="mb-4 mt-7 relative">
               <label htmlFor="codepays" className="block text-medium font-normal mb-2">
                 Choisir un pays
-                <TooltipIcon field="id_pays" tooltipMessage={tooltips['id_pays'] || ''} />
+                <TooltipIcon field="id_pays" tooltipMessage={tooltips['id_pays']} />
 
               </label>
 
@@ -169,7 +169,7 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
             <div className="mb-2">
               <label htmlFor="libelle" className="block text-medium font-normal mb-2">
                 Nom du departement
-                <TooltipIcon field="id_pays" tooltipMessage={tooltips['id_pays'] || ''} />
+                <TooltipIcon field="libelle_departement" tooltipMessage={tooltips['libelle_departement']} />
 
 
               </label>
@@ -188,7 +188,7 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
             <div className="mb-4">
               <label htmlFor="code_departement" className="block text-medium font-normal mb-2">
                 Code du departement
-                <TooltipIcon field="code_departement" tooltipMessage={tooltips['code_departement'] || ''} />
+                <TooltipIcon field="code_departement" tooltipMessage={tooltips['code_departement']} />
 
               </label>
               <input
@@ -206,7 +206,7 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
             <div className="mb-4">
               <label htmlFor="chef_lieux" className="block text-medium font-normal mb-2">
                 Chef Lieux
-                <TooltipIcon field="chef_lieux" tooltipMessage={tooltips['chef_lieux'] || ''} />
+                <TooltipIcon field="chef_lieux" tooltipMessage={tooltips['chef_lieux']} />
 
               </label>
               <input

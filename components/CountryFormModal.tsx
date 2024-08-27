@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { FaQuestionCircle } from 'react-icons/fa';
+import TooltipIcon from './tooltipIcon';
 
 
 interface CountryFormModalProps {
@@ -142,24 +142,13 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
       backdropFilter="blur(10px)"
     />
       <ModalContent>
-        <ModalHeader className="flex flex-col gap-1">Ajouter un pays</ModalHeader>
-        <ModalBody className="overflow-auto max-h-[50vh]">
-          <div className="mb-4">
+        <ModalHeader className="flex flex-col gap-1 " >Ajouter un pays</ModalHeader>
+        <ModalBody >
+          <div className="mb-4  mt-7 relative">
             <label htmlFor="libelle" className="block text-medium font-normal mb-2">
               Nom du pays
-              <div
-                className="ml-2 inline-block cursor-pointer relative"
-                onMouseEnter={() => handleTooltipToggle('libelle_pays')}
-                onMouseLeave={handleTooltipHide}
-              >
-                <FaQuestionCircle className="text-gray-500" size={15} />
-                {visibleTooltip === 'libelle_pays' && (
-                  <div className="absolute z-10 bg-gray-900 text-white text-md rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
-                    {tooltips['libelle_pays']}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
-                  </div>
-                )}
-              </div>
+              <TooltipIcon field='libelle_pays' tooltipMessage={tooltips['libelle_pays']} />
+
 
             </label>
             <input
@@ -175,19 +164,7 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
           <div className="mb-4">
             <label htmlFor="code_pays" className="block text-medium font-normal mb-2">
               Code du pays
-              <div
-                className="ml-2 inline-block cursor-pointer relative"
-                onMouseEnter={() => handleTooltipToggle('code_pays')}
-                onMouseLeave={handleTooltipHide}
-              >
-                <FaQuestionCircle className="text-gray-500" size={15} />
-                {visibleTooltip === 'code_pays' && (
-                  <div className="absolute z-10 bg-gray-900 text-white text-md rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
-                    {tooltips['code_pays']}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
-                  </div>
-                )}
-              </div>
+              <TooltipIcon field='code_pays' tooltipMessage={tooltips['code_pays']} />
             </label>
             <input
               type="text"
@@ -203,19 +180,9 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
             <label htmlFor="continent" className="block text-medium font-normal mb-2">
               Continent
 
-              <div
-                className="ml-2 inline-block cursor-pointer relative"
-                onMouseEnter={() => handleTooltipToggle('continent')}
-                onMouseLeave={handleTooltipHide}
-              >
-                <FaQuestionCircle className="text-gray-500" size={15} />
-                {visibleTooltip === 'continent' && (
-                  <div className="absolute z-10 bg-gray-900 text-white text-md rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
-                    {tooltips['continent']}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
-                  </div>
-                )}
-              </div>
+              <TooltipIcon field="continent" tooltipMessage={tooltips['continent']} />
+
+
 
             </label>
             <input
@@ -231,19 +198,9 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
           <div className="mb-4">
             <label htmlFor="indicatif_tel" className="block text-medium font-normal mb-2">
               Indicatif Téléphonique
-              <div
-                className="ml-2 inline-block cursor-pointer relative"
-                onMouseEnter={() => handleTooltipToggle('indicatif_tel')}
-                onMouseLeave={handleTooltipHide}
-              >
-                <FaQuestionCircle className="text-gray-500" size={15} />
-                {visibleTooltip === 'indicatif_tel' && (
-                  <div className="absolute z-10 bg-gray-900 text-white text-md rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
-                    {tooltips['indicatif_tel']}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
-                  </div>
-                )}
-              </div>
+
+              <TooltipIcon field="indicatif_tel" tooltipMessage={tooltips['indicatif_tel']} />
+
             </label>
             <input
               type="text"
@@ -258,19 +215,9 @@ const CountryFormModal: React.FC<CountryFormModalProps> = ({ isOpen, onClose, on
           <div className="mb-4">
             <label htmlFor="fuseau_horaire" className="block text-medium font-normal mb-2">
               Fuseau Horaire
-              <div
-                className="ml-2 inline-block cursor-pointer relative"
-                onMouseEnter={() => handleTooltipToggle('fuseau_horaire')}
-                onMouseLeave={handleTooltipHide}
-              >
-                <FaQuestionCircle className="text-gray-500" size={15} />
-                {visibleTooltip === 'fuseau_horaire' && (
-                  <div className="absolute z-10 bg-gray-900 text-white text-md rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
-                    {tooltips['fuseau_horaire']}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
-                  </div>
-                )}
-              </div>
+
+              <TooltipIcon field="fuseau_horaire" tooltipMessage={tooltips["fuseau_horaire"]} />
+
             </label>
             <input
               type="text"

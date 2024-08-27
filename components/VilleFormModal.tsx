@@ -74,7 +74,7 @@ const VilleFormModal: React.FC<VilleFormModalProps> = ({ isOpen, onClose, onSucc
     setVille({ ...ville, [name]: value });
     setErrors({ ...errors, [name]: "" });
 
-    if (name === "libelle") {
+    if (name === "libelle_ville") {
       setSearchTerm(value);
     }
   };
@@ -105,7 +105,7 @@ const VilleFormModal: React.FC<VilleFormModalProps> = ({ isOpen, onClose, onSucc
   };
 
   const addVille = async () => {
-    if (!validateForm) {
+    if (!validateForm()) {
       return
     }
     setAdding(true);
@@ -212,7 +212,7 @@ const VilleFormModal: React.FC<VilleFormModalProps> = ({ isOpen, onClose, onSucc
                 className="block text-sm font-normal mb-2"
               >
                 Ville
-                <TooltipIcon field="libelle_vile" tooltipMessage={tooltips['libelle_vile'] || ""} />
+                <TooltipIcon field="libelle_ville" tooltipMessage={tooltips['libelle_ville'] || ""} />
               </label>
               <input
                 type="text"
