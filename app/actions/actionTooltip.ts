@@ -3,13 +3,13 @@
 import Tooltip from "../api/models/tooltipModel";
 
 export async function updateTooltip(
-  id: number,
+  id_tooltip: number,
   nom_champ: string,
   nom_application: string,
   message_tooltip: string,
 
 ) {
-  const tooltip = await Tooltip.findOne({ where: { id } });
+  const tooltip = await Tooltip.findOne({ where: { id_tooltip } });
   if (!tooltip) {
     throw new Error("Tooltip not found");
   }
@@ -19,8 +19,8 @@ export async function updateTooltip(
   return tooltip.toJSON();
 }
 
-export async function deleteCountry(id: number) {
-  const tooltip = await Tooltip.findByPk(id);
+export async function deleteCountry(id_tooltip: number) {
+  const tooltip = await Tooltip.findByPk(id_tooltip);
   if (!tooltip) {
     throw new Error('Country not found');
   }
