@@ -8,8 +8,8 @@ import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-const DetailsTooltip = ({ params }: { params: { id: string } }) => {
-  const { id } = params;
+const DetailsTooltip = ({ params }: { params: { id_tooltip: string } }) => {
+  const { id_tooltip } = params;
   const router = useRouter();
 
   const [tooltip, setTooltip] = useState<any>(null);
@@ -35,7 +35,7 @@ const DetailsTooltip = ({ params }: { params: { id: string } }) => {
     const fetchTooltip = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`/api/tooltipCtrl/${id}`);
+        const response = await axios.get(`/api/tooltipCtrl/${id_tooltip}`);
         setTooltip(response.data);
         setFormData({
           nom_champ: response.data.nom_champ,
@@ -58,7 +58,7 @@ const DetailsTooltip = ({ params }: { params: { id: string } }) => {
 
     fetchTooltip();
 
-  }, [id]);
+  }, [id_tooltip]);
 
   const handleUpdateTooltip = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

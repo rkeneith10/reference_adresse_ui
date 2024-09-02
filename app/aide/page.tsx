@@ -1,5 +1,6 @@
 "use client";
 import AideTable from "@/components/AideTable";
+import DeleteConfirmationModal from "@/components/DeleteConfirmationModal";
 import RootLayout from "@/components/rootLayout";
 import { Button, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import axios from "axios";
@@ -16,6 +17,8 @@ const Aide = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
+  const [modalMessage, setModalMessage] = useState("");
   const [itemsPerPage] = useState(10);
   const [aide, setAide] = useState<TooltipAttributes[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,6 +32,21 @@ const Aide = () => {
     fetchAide();
 
   }, []);
+
+  const handleDeleteTooltip = async (id: number) => {
+    setDeleteLoading(true);
+    try {
+      await axios.delete(`/api/tooltipCtrl/${id}`);
+      setAide(aide.filter((a) => a.id_tooltip !== id));
+      setModalMessage("Le message d'aide a été supprimé avec succès");
+      onConfirmationOpen();
+    } catch (error) {
+      console.error("Failed to delete tooltip:", error);
+    } finally {
+      setDeleteLoading(false);
+      onDeleteClose();
+    }
+  };
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
@@ -149,6 +167,12 @@ const Aide = () => {
         </Modal>
 
       </div>
+      <DeleteConfirmationModal
+        isOpen={isDeleteOpen}
+        onClose={onDeleteClose}
+        onDelete={() => selectedAideId && handleDeleteTooltip(selectedAideId)}
+        deleteLoading={deleteLoading}
+      />
     </RootLayout>
   );
 }

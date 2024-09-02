@@ -4,22 +4,22 @@ import Tooltip from "../../models/tooltipModel";
 // Handler for GET request
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: { id_tooltip: number } }
 ) {
   try {
-    const { id } = params;
+    const { id_tooltip } = params;
 
-    if (!id) {
+    if (!id_tooltip) {
       return NextResponse.json({ error: "Invalid Id" }, { status: 400 });
     }
 
-    const detailTooltip = await Tooltip.findOne({ where: { id } });
+    const detailTooltip = await Tooltip.findOne({ where: { id_tooltip } });
     if (!detailTooltip) {
       return NextResponse.json({ error: "Tooltip introuvable" }, { status: 404 });
     }
 
     const responseData = {
-      id: detailTooltip.id,
+      id_tooltip: detailTooltip.id_tooltip,
       nom_champ: detailTooltip.nom_champ,
       nom_application: detailTooltip.nom_application,
       message_tooltip: detailTooltip.message_tooltip,
@@ -39,16 +39,16 @@ export async function GET(
 // Handler for DELETE request
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: { id_tooltip: number } }
 ) {
   try {
-    const { id } = params;
+    const { id_tooltip } = params;
 
-    if (!id) {
+    if (!id_tooltip) {
       return NextResponse.json({ error: "Invalid Id" }, { status: 400 });
     }
 
-    const tooltip = await Tooltip.findOne({ where: { id } });
+    const tooltip = await Tooltip.findOne({ where: { id_tooltip } });
     if (!tooltip) {
       return NextResponse.json(
         { message: "Le pays n'existe pas." },
@@ -56,7 +56,7 @@ export async function DELETE(
       );
     }
 
-    await Tooltip.destroy({ where: { id } });
+    await Tooltip.destroy({ where: { id_tooltip } });
     return NextResponse.json(
       { message: "Le message a été supprimé avec succès." },
       { status: 200 }

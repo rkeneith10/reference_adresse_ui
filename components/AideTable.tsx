@@ -61,7 +61,7 @@ const AideTable: React.FC<AdresseTableProps> = ({ aide = [],
               </tr>
             ) : (
               filteredAide.slice(startIndex, endIndex).map((a, index) => (
-                <tr key={a.id}>
+                <tr key={a.id_tooltip}>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     {index + 1}
                   </td>
@@ -81,7 +81,7 @@ const AideTable: React.FC<AdresseTableProps> = ({ aide = [],
                         size="sm"
                         colorScheme="red"
                         variant="ghost"
-                        onClick={() => onDelete(a.id)}
+                        onClick={() => onDelete(a.id_tooltip)}
                         p={0}
                         minWidth="auto"
                         mr={2}
@@ -89,7 +89,7 @@ const AideTable: React.FC<AdresseTableProps> = ({ aide = [],
                         <FaRegTrashAlt className="text-lg" />
                       </Button>
 
-                      <Link href={`/aide/${a.id}`}>
+                      <Link href={`/aide/${a.id_tooltip}`}>
                         <Button
                           size="sm"
                           colorScheme="blue"

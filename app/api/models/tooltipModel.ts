@@ -3,18 +3,18 @@ import { DataTypes, Model, Optional } from "sequelize";
 
 // Define the attributes interface
 export interface TooltipAttributes {
-  id: number;
+  id_tooltip: number;
   nom_application: string;
   nom_champ: string;
   message_tooltip: string;
 }
 
 // Define the creation attributes interface
-interface TooltipCreationAttributes extends Optional<TooltipAttributes, "id"> { }
+interface TooltipCreationAttributes extends Optional<TooltipAttributes, "id_tooltip"> { }
 
 // Define the Tooltip model
 class Tooltip extends Model<TooltipAttributes, TooltipCreationAttributes> implements TooltipAttributes {
-  public id!: number;
+  public id_tooltip!: number;
   public nom_application!: string;
   public nom_champ!: string;
   public message_tooltip!: string;
@@ -23,7 +23,7 @@ class Tooltip extends Model<TooltipAttributes, TooltipCreationAttributes> implem
 // Initialize the model
 Tooltip.init(
   {
-    id: {
+    id_tooltip: {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
