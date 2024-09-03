@@ -31,20 +31,22 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     const { nom_champ, nom_application, message_tooltip } = await req.json();
 
-    const existingAide = await Tooltip.findOne({ where: { nom_application, nom_champ } })
+    const existingAide = await Tooltip.findOne({ where: { nom_application, nom_champ } });
     if (existingAide) {
-      NextResponse.json({ message: "Un message d'aide existe deja poour cette application et ce champ" })
+      return NextResponse.json({ message: "Un message d'aide existe déjà pour cette application et ce champ" }, { status: 400 });
     }
 
     const newTooltip = await Tooltip.create({
       nom_application, nom_champ, message_tooltip
-    })
-    return NextResponse.json({ newTooltip }, { status: 201 })
-  } catch (error) {
+    });
 
+    return NextResponse.json({ newTooltip }, { status: 201 });
+  } catch (error) {
+    console.error('Erreur lors de la création du tooltip:', error);
+    return NextResponse.json({ message: `Erreur interne du serveur ${error}` }, { status: 500 });
   }
 }

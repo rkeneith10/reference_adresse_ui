@@ -44,7 +44,7 @@ Tooltip.init(
   {
     sequelize,
     modelName: "Tooltip",
-    tableName: "tooltips",
+    tableName: "tooltip_message",
     timestamps: false, // Disable Sequelize's automatic timestamps
   }
 );
