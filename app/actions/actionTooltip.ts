@@ -22,8 +22,8 @@ export async function updateTooltip(
 export async function deleteCountry(id_tooltip: number) {
   const tooltip = await Tooltip.findByPk(id_tooltip);
   if (!tooltip) {
-    throw new Error('Country not found');
+    throw new Error('Tooltip not found');
   }
   await tooltip.destroy();
-  return { message: 'Country deleted successfully' };
+  return { message: 'Tooltip deleted successfully' };
 }

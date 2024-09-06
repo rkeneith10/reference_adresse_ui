@@ -66,7 +66,7 @@ const DetailsTooltip = ({ params }: { params: { id_tooltip: string } }) => {
 
     try {
       const updatedTooltip = await updateTooltip(
-        tooltip.id,
+        tooltip.id_tooltip,
         formData.nom_champ,
         formData.nom_application,
         formData.message_tooltip,
