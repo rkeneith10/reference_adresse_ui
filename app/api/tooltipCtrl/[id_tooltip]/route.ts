@@ -23,10 +23,16 @@ export async function GET(
       nom_champ: detailTooltip.nom_champ,
       nom_application: detailTooltip.nom_application,
       message_tooltip: detailTooltip.message_tooltip,
-
     };
 
-    return NextResponse.json(responseData, { status: 200 });
+    const response = NextResponse.json(responseData, { status: 200 });
+
+    // Ajout des en-têtes CORS
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    return response;
   } catch (error: any) {
     console.error(error);
     return NextResponse.json(
@@ -57,10 +63,18 @@ export async function DELETE(
     }
 
     await Tooltip.destroy({ where: { id_tooltip } });
-    return NextResponse.json(
+
+    const response = NextResponse.json(
       { message: "Le message a été supprimé avec succès." },
       { status: 200 }
     );
+
+    // Ajout des en-têtes CORS
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    return response;
   } catch (error: any) {
     console.error(error);
     return NextResponse.json(
@@ -71,4 +85,13 @@ export async function DELETE(
       { status: 500 }
     );
   }
+}
+
+// Gérer les requêtes OPTIONS pour CORS (préflight requests)
+export function OPTIONS() {
+  const response = NextResponse.json({});
+  response.headers.set('Access-Control-Allow-Origin', '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  return response;
 }

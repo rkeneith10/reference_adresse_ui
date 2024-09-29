@@ -28,6 +28,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
 
   const [visibleTooltip, setVisibleTooltip] = useState<string | null>(null);
 
+
   const [adresse, setAdresse] = useState({
     id_sectioncommunale: "",
     numero_rue: "",

@@ -20,16 +20,31 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    if (tooltips && tooltips.length > 0) {
-      return NextResponse.json({ tooltip: tooltips }, { status: 200 });
-    } else {
-      return NextResponse.json({ message: "Pas d'aide pour cette application" }, { status: 404 });
-    }
+    const response = tooltips && tooltips.length > 0
+      ? NextResponse.json({ tooltip: tooltips }, { status: 200 })
+      : NextResponse.json({ message: "Pas d'aide pour cette application" }, { status: 404 });
+
+    // Ajout des en-têtes CORS
+    response.headers.set('Access-Control-Allow-Origin', '*'); // Autorise toutes les origines (à restreindre en production)
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    return response;
   } catch (error: any) {
     console.error("Erreur lors de la récupération des tooltips:", error);
     return NextResponse.json({ message: "Erreur du serveur" }, { status: 500 });
   }
 }
+
+// Gérer les requêtes OPTIONS (preflight request) pour CORS
+export function OPTIONS() {
+  const response = NextResponse.json({});
+  response.headers.set('Access-Control-Allow-Origin', '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  return response;
+}
+
 
 export async function POST(req: NextRequest) {
   try {
