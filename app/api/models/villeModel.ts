@@ -27,6 +27,7 @@ class Ville
   // Timestamps
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  Commune: any;
 }
 
 Ville.init(

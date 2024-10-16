@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import validator from 'validator';
+import React from 'react';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
