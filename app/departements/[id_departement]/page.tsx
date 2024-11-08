@@ -177,9 +177,9 @@ const DetailsDepartement = ({ params }: { params: { id_departement: string } }) 
                   onChange={handleInputChange}
                 >
                   <option value="">Sélectionnez un pays</option>
-                  {countries.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((country) => (
+                  {countries.sort((a, b) => (a.libelle || "").localeCompare(b.libelle || "")).map((country) => (
                     <option key={country.id_pays} value={country.id_pays}>
-                      {country.libelle_departement}
+                      {country.libelle_pays}
                     </option>
                   ))}
                 </select>

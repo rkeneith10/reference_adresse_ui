@@ -84,7 +84,7 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
     try {
       const updatedCommune = await updateCommune(
         commune.id_commune,
-        formData.libelle_departement,
+        formData.libelle_commune,
         formData.id_departement, // Pass the country reference ID
       );
       setCommune(updatedCommune);
@@ -150,7 +150,7 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
                   <option value="">Sélectionnez un departement</option>
                   {departement.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((dept) => (
                     <option key={dept.id_departement} value={dept.id_departement}>
-                      {dept.libelle_commune}
+                      {dept.libelle_departement}
                     </option>
                   ))}
                 </select>

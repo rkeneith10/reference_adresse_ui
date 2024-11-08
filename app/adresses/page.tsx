@@ -83,7 +83,7 @@ const Adresses: React.FC = () => {
   };
 
   const handleAddAdresseFailed = () => {
-    setModalMessage("Cette adresse existe déjà dans la base de données");
+    setModalMessage("Une erreur est survenue lors de l'ajout");
     onConfirmationOpen();
   };
   const handleFileChange = (event: any) => {

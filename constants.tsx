@@ -49,16 +49,16 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     path: "/adresses",
     icon: <FaMapMarkerAlt size={20} />,
   },
-  {
-    title: "Quartiers",
-    path: "/quartiers",
-    icon: <MdStreetview size={20} />,
-  },
-  {
-    title: "Immeubles",
-    path: "/immeubles",
-    icon: <RiBuilding2Line size={20} />,
-  },
+  // {
+  //   title: "Quartiers",
+  //   path: "/quartiers",
+  //   icon: <MdStreetview size={20} />,
+  // },
+  // {
+  //   title: "Immeubles",
+  //   path: "/immeubles",
+  //   icon: <RiBuilding2Line size={20} />,
+  // },
 
   {
     title: "Aide",

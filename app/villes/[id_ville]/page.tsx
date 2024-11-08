@@ -188,7 +188,7 @@ const DetailVille = ({ params }: { params: { id_ville: number } }) => {
                   <option value="">Sélectionnez une commune</option>
                   {commune.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((com) => (
                     <option key={com.id_commune} value={com.id_commune}>
-                      {com.libelle}
+                      {com.libelle_commune}
                     </option>
                   ))}
                 </select>

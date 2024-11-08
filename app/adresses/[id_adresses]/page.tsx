@@ -173,7 +173,7 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
                   <option value="">Sélectionnez une section communale</option>
                   {sections.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((section) => (
                     <option key={section.id_sectioncommunale} value={section.id_sectioncommunale}>
-                      {section.libelle}
+                      {section.libelle_sectioncommunale}
                     </option>
                   ))}
                 </select>
