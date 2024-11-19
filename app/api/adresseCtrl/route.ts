@@ -31,7 +31,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { numero_rue, libelle_adresse, statut, id_sectioncommunale, code_postal } = await req.json();
+    const { numero_rue, libelle_adresse, statut, id_sectioncommunale, code_postal ,from} = await req.json();
 
     const sectionCommunale = await SectionCommune.findOne({ where: { id_sectioncommunale } });
     if (!sectionCommunale) {
@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
       id_sectioncommunale,
       code_postal,
       cle_unicite,
-      from: "moi",
+      from,
     });
 
     const response = NextResponse.json({ message: "Adresse created successfully", data: adresse }, { status: 201 });

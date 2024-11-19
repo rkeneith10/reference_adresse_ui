@@ -78,7 +78,7 @@ const Adresses: React.FC = () => {
 
   const handleAddAdressSuccess = () => {
     fetchAdresse();
-    setModalMessage("L'adresse a été enregistré avec succès");
+    setModalMessage("L'adresse a été enregistrée avec succès");
     onConfirmationOpen();
   };
 
