@@ -7,56 +7,60 @@ import Pays from "../models/paysModel";
 import SectionCommune from "../models/sectionCommunalModel";
 import Ville from "../models/villeModel";
 
+// Middleware CORS
+const withCORS = (response: NextResponse) => {
+  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  return response;
+};
+
 export async function GET() {
   try {
-    const adr = await Adresse.findAll({})
+    const adr = await Adresse.findAll({});
     if (adr) {
-      return NextResponse.json({ data: adr }, { status: 200 })
+      const response = NextResponse.json({ data: adr }, { status: 200 });
+      return withCORS(response);
     }
   } catch (error: any) {
-    console.error(error)
+    console.error(error);
+    const response = NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return withCORS(response);
   }
 }
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     const { numero_rue, libelle_adresse, statut, id_sectioncommunale, code_postal } = await req.json();
 
     const sectionCommunale = await SectionCommune.findOne({ where: { id_sectioncommunale } });
     if (!sectionCommunale) {
-      return NextResponse.json(
-        { message: "Section Communale not found." },
-        { status: 404 }
-      );
+      const response = NextResponse.json({ message: "Section Communale not found." }, { status: 404 });
+      return withCORS(response);
     }
 
     const ville = await Ville.findOne({ where: { id_ville: sectionCommunale.id_ville } });
     if (!ville) {
-      return NextResponse.json({ message: "Ville not found" }, { status: 400 })
+      const response = NextResponse.json({ message: "Ville not found" }, { status: 400 });
+      return withCORS(response);
     }
 
     const commune = await Commune.findOne({ where: { id_commune: ville.id_commune } });
     if (!commune) {
-      return NextResponse.json(
-        { message: "Commune not found." },
-        { status: 404 }
-      );
+      const response = NextResponse.json({ message: "Commune not found." }, { status: 404 });
+      return withCORS(response);
     }
 
     const departement = await Departement.findOne({ where: { id_departement: commune.id_departement } });
     if (!departement) {
-      return NextResponse.json(
-        { message: "Departement not found." },
-        { status: 404 }
-      );
+      const response = NextResponse.json({ message: "Departement not found." }, { status: 404 });
+      return withCORS(response);
     }
 
     const pays = await Pays.findOne({ where: { id_pays: departement.id_pays } });
     if (!pays) {
-      return NextResponse.json(
-        { message: "Pays not found." },
-        { status: 404 }
-      );
+      const response = NextResponse.json({ message: "Pays not found." }, { status: 404 });
+      return withCORS(response);
     }
 
     // Generer clé unicité
@@ -74,32 +78,31 @@ export async function POST(req: NextRequest, res: NextResponse) {
     let sequence = '01';
     if (similarKeys.length > 0) {
       const highestSequence = Math.max(...similarKeys.map(key => parseInt(key.cle_unicite.slice(-2))));
-      sequence = (highestSequence + 1).toString().padStart(2, '0');
+      sequence = (highestSequence + 1).toString().padStart(2, "0");
     }
 
     const cle_unicite = `${cle_unicite_base}${sequence}`;
 
-
-    const newAddress = await Adresse.create({
+    const adresse = await Adresse.create({
       numero_rue,
       libelle_adresse,
-      cle_unicite,
       statut,
-      code_postal,
       id_sectioncommunale,
-
+      code_postal,
+      cle_unicite,
+      from: "moi",
     });
 
-    return NextResponse.json({
-      success: true,
-      data: newAddress,
-    }, { status: 200 });
+    const response = NextResponse.json({ message: "Adresse created successfully", data: adresse }, { status: 201 });
+    return withCORS(response);
   } catch (error: any) {
     console.error(error);
-    return NextResponse.json({
-      message: "Erreur lors de la création de l'adresse",
-      error: error.message,
-    }, { status: 500 });
+    const response = NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return withCORS(response);
   }
 }
 
+export async function OPTIONS() {
+  const response = NextResponse.json(null, { status: 204 });
+  return withCORS(response);
+}

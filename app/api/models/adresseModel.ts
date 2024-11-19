@@ -11,6 +11,7 @@ export interface AdresseAttributes {
   statut: string;
   code_postal: string,
   id_sectioncommunale: number;
+  from:string;
 
 }
 
@@ -24,6 +25,7 @@ class Adresse extends Model<AdresseAttributes, AdresseCreationAttributes> implem
   public statut!: string;
   public code_postal!: string;
   public id_sectioncommunale!: number;
+  public from!:string;
 
 }
 Adresse.init(
@@ -63,6 +65,11 @@ Adresse.init(
         key: 'id_sectioncommunale',
       },
       onDelete: "CASCADE"
+    },
+    from: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+
     },
 
   },

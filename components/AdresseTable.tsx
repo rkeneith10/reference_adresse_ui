@@ -94,29 +94,30 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     <div className="flex space-x-2">
-                      <Button
-                        size="sm"
-                        colorScheme="red"
-                        variant="ghost"
-                        onClick={() => onDelete(adr.id_adresses)}
-                        p={0}
-                        minWidth="auto"
-                        mr={2}
-                      >
-                        <FaRegTrashAlt className="text-lg" />
-                      </Button>
-
-                      <Link href={`/adresses/${adr.id_adresses}`}>
-                        <Button
-                          size="sm"
-                          colorScheme="blue"
-                          variant="ghost"
-                          p={0}
-                          minWidth="auto"
-                        >
-                          <FaRegEye className="text-lg" />
-                        </Button>
-                      </Link>
+                      {adr.from === "moi" ? (
+                        <>
+                          <Button
+                            size="sm"
+                            colorScheme="red"
+                            variant="ghost"
+                            onClick={() => onDelete(adr.id_adresses)}
+                            p={0}
+                            minWidth="auto"
+                            mr={2}
+                          >
+                            <FaRegTrashAlt className="text-lg" />
+                          </Button><Link href={`/adresses/${adr.id_adresses}`}>
+                            <Button
+                              size="sm"
+                              colorScheme="blue"
+                              variant="ghost"
+                              p={0}
+                              minWidth="auto"
+                            >
+                              <FaRegEye className="text-lg" />
+                            </Button>
+                          </Link></>
+                      ) : (<span className="text-gray-400"> </span>)}
                     </div>
                   </td>
                 </tr>

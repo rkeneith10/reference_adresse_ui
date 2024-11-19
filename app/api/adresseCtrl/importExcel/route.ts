@@ -28,7 +28,8 @@ export async function POST(req: NextRequest) {
         code_postal: adr.code_postal,
         cle_unicite: adr.cle_unicite,
         statut: adr.statut,
-        id_sectioncommunale: adr.id_sectioncommunale
+        id_sectioncommunale: adr.id_sectioncommunale,
+        from:adr.from
       });
 
       console.log("Created addresses:", createdAdresses);
