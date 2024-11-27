@@ -7,11 +7,12 @@ export interface AdresseAttributes {
   id_adresses: number;
   numero_rue: string;
   libelle_adresse: string;
-  cle_unicite: string;
   statut: string;
-  code_postal: string,
-  id_sectioncommunale: number;
-  from:string;
+  id_sectioncommunale?: number; 
+  villeRecord?: string; 
+  code_postal?: string;
+  cle_unicite: string;
+  from: string;
 
 }
 
@@ -24,6 +25,7 @@ class Adresse extends Model<AdresseAttributes, AdresseCreationAttributes> implem
   public cle_unicite!: string;
   public statut!: string;
   public code_postal!: string;
+  public villeRecord!:string;
   public id_sectioncommunale!: number;
   public from!:string;
 
@@ -54,12 +56,17 @@ Adresse.init(
     },
     code_postal: {
       type: DataTypes.STRING(20),
-      allowNull: false,
+      allowNull: true,
+
+    },
+    villeRecord: {
+      type: DataTypes.STRING(20),
+      allowNull: true,
 
     },
     id_sectioncommunale: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: SectionCommunale,
         key: 'id_sectioncommunale',

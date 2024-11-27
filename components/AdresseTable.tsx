@@ -54,7 +54,7 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                 Statut
               </th>
               <th scope="col" className="px-6 py-3">
-                Section Communale Reference
+                Section Communale Reference /Ville
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -90,7 +90,9 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                     {adr.statut}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {getSectionNameById(adr.id_sectioncommunale)}
+                    {adr.villeRecord ? adr.villeRecord : adr.id_sectioncommunale !== undefined
+                      ? getSectionNameById(adr.id_sectioncommunale)
+                      : ""}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     <div className="flex space-x-2">

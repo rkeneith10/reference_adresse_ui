@@ -31,69 +31,134 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { numero_rue, libelle_adresse, statut, id_sectioncommunale, code_postal ,from} = await req.json();
-
-    const sectionCommunale = await SectionCommune.findOne({ where: { id_sectioncommunale } });
-    if (!sectionCommunale) {
-      const response = NextResponse.json({ message: "Section Communale not found." }, { status: 404 });
-      return withCORS(response);
-    }
-
-    const ville = await Ville.findOne({ where: { id_ville: sectionCommunale.id_ville } });
-    if (!ville) {
-      const response = NextResponse.json({ message: "Ville not found" }, { status: 400 });
-      return withCORS(response);
-    }
-
-    const commune = await Commune.findOne({ where: { id_commune: ville.id_commune } });
-    if (!commune) {
-      const response = NextResponse.json({ message: "Commune not found." }, { status: 404 });
-      return withCORS(response);
-    }
-
-    const departement = await Departement.findOne({ where: { id_departement: commune.id_departement } });
-    if (!departement) {
-      const response = NextResponse.json({ message: "Departement not found." }, { status: 404 });
-      return withCORS(response);
-    }
-
-    const pays = await Pays.findOne({ where: { id_pays: departement.id_pays } });
-    if (!pays) {
-      const response = NextResponse.json({ message: "Pays not found." }, { status: 404 });
-      return withCORS(response);
-    }
-
-    // Generer clé unicité
-    const cle_unicite_base = `${pays.code_pays}${departement.code_departement}${code_postal}${numero_rue || 'X'}${libelle_adresse.charAt(0).toUpperCase()}${libelle_adresse.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
-
-    // Trouver le plus grand numéro de séquence avec une cle_unicite similaire
-    const similarKeys = await Adresse.findAll({
-      where: {
-        cle_unicite: {
-          [Op.like]: `${cle_unicite_base}%`,
-        },
-      },
-    });
-
-    let sequence = '01';
-    if (similarKeys.length > 0) {
-      const highestSequence = Math.max(...similarKeys.map(key => parseInt(key.cle_unicite.slice(-2))));
-      sequence = (highestSequence + 1).toString().padStart(2, "0");
-    }
-
-    const cle_unicite = `${cle_unicite_base}${sequence}`;
-
-    const adresse = await Adresse.create({
+    const {
       numero_rue,
       libelle_adresse,
       statut,
       id_sectioncommunale,
-      code_postal,
-      cle_unicite,
+      villeRecord, 
+      code_postal, 
       from,
-    });
+    } = await req.json();
 
-    const response = NextResponse.json({ message: "Adresse created successfully", data: adresse }, { status: 201 });
+    let cle_unicite_base;
+    let cle_unicite;
+
+    
+    if (villeRecord) {
+      cle_unicite_base = `${villeRecord.replace(/\s+/g, '').toUpperCase()}${numero_rue || 'X'}${libelle_adresse
+        .charAt(0)
+        .toUpperCase()}${libelle_adresse.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
+
+      // Trouver le plus grand numéro de séquence pour des clés similaires
+      const similarKeys = await Adresse.findAll({
+        where: {
+          cle_unicite: {
+            [Op.like]: `${cle_unicite_base}%`,
+          },
+        },
+      });
+
+      let sequence = '01';
+      if (similarKeys.length > 0) {
+        const highestSequence = Math.max(...similarKeys.map(key => parseInt(key.cle_unicite.slice(-2))));
+        sequence = (highestSequence + 1).toString().padStart(2, '0');
+      }
+
+      cle_unicite = `${cle_unicite_base}${sequence}`;
+
+      // Créez l'adresse avec villeRecord
+      const adresse = await Adresse.create({
+        numero_rue,
+        libelle_adresse,
+        statut,
+        villeRecord,
+        cle_unicite,
+        from,
+      });
+
+      const response = NextResponse.json(
+        { message: "Adresse created successfully", data: adresse },
+        { status: 201 }
+      );
+      return withCORS(response);
+    }
+
+    // 2. Cas avec `id_sectioncommunale`
+    if (id_sectioncommunale) {
+      const sectionCommunale = await SectionCommune.findOne({ where: { id_sectioncommunale } });
+      if (!sectionCommunale) {
+        const response = NextResponse.json({ message: "Section Communale not found." }, { status: 404 });
+        return withCORS(response);
+      }
+
+      const ville = await Ville.findOne({ where: { id_ville: sectionCommunale.id_ville } });
+      if (!ville) {
+        const response = NextResponse.json({ message: "Ville not found" }, { status: 400 });
+        return withCORS(response);
+      }
+
+      const commune = await Commune.findOne({ where: { id_commune: ville.id_commune } });
+      if (!commune) {
+        const response = NextResponse.json({ message: "Commune not found." }, { status: 404 });
+        return withCORS(response);
+      }
+
+      const departement = await Departement.findOne({ where: { id_departement: commune.id_departement } });
+      if (!departement) {
+        const response = NextResponse.json({ message: "Departement not found." }, { status: 404 });
+        return withCORS(response);
+      }
+
+      const pays = await Pays.findOne({ where: { id_pays: departement.id_pays } });
+      if (!pays) {
+        const response = NextResponse.json({ message: "Pays not found." }, { status: 404 });
+        return withCORS(response);
+      }
+
+      cle_unicite_base = `${pays.code_pays}${departement.code_departement}${code_postal}${numero_rue || 'X'}${libelle_adresse
+        .charAt(0)
+        .toUpperCase()}${libelle_adresse.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
+
+      // Trouver le plus grand numéro de séquence pour des clés similaires
+      const similarKeys = await Adresse.findAll({
+        where: {
+          cle_unicite: {
+            [Op.like]: `${cle_unicite_base}%`,
+          },
+        },
+      });
+
+      let sequence = '01';
+      if (similarKeys.length > 0) {
+        const highestSequence = Math.max(...similarKeys.map(key => parseInt(key.cle_unicite.slice(-2))));
+        sequence = (highestSequence + 1).toString().padStart(2, '0');
+      }
+
+      cle_unicite = `${cle_unicite_base}${sequence}`;
+
+      
+      const adresse = await Adresse.create({
+        numero_rue,
+        libelle_adresse,
+        statut,
+        id_sectioncommunale,
+        code_postal,
+        cle_unicite,
+        from,
+      });
+
+      const response = NextResponse.json(
+        { message: "Adresse created successfully", data: adresse },
+        { status: 201 }
+      );
+      return withCORS(response);
+    }
+
+    const response = NextResponse.json(
+      { message: "You must provide either 'id_sectioncommunale' or 'villeRecord'." },
+      { status: 400 }
+    );
     return withCORS(response);
   } catch (error: any) {
     console.error(error);
@@ -101,6 +166,7 @@ export async function POST(req: NextRequest) {
     return withCORS(response);
   }
 }
+
 
 export async function OPTIONS() {
   const response = NextResponse.json(null, { status: 204 });

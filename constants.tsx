@@ -1,9 +1,8 @@
-import { FaCity, FaHome, FaMapMarkerAlt, FaMapSigns, FaQuestionCircle, FaRegFlag } from "react-icons/fa";
+import { FaCity, FaHome, FaMapMarkerAlt, FaMapSigns, FaRegFlag } from "react-icons/fa";
 import { FaTreeCity } from "react-icons/fa6";
 
-import { MdListAlt, MdStreetview } from "react-icons/md";
+import { MdListAlt } from "react-icons/md";
 
-import { RiBuilding2Line } from "react-icons/ri";
 
 import { SideNavItem } from "./types";
 
@@ -60,9 +59,9 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
   //   icon: <RiBuilding2Line size={20} />,
   // },
 
-  {
-    title: "Aide",
-    path: "/aide",
-    icon: <FaQuestionCircle size={20} />,
-  },
+  // {
+  //   title: "Aide",
+  //   path: "/aide",
+  //   icon: <FaQuestionCircle size={20} />,
+  // },
 ];
