@@ -81,7 +81,7 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                     {adr.numero_rue}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.code_postal}
+                    {adr.code_postal ? adr.code_postal : "XXXXX"}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     {adr.cle_unicite}
