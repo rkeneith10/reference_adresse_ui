@@ -13,10 +13,11 @@ import { FaRegFlag, FaTreeCity } from "react-icons/fa6";
 import { AdresseAttributes } from "../api/models/adresseModel";
 import { CountryAttributes } from "../api/models/paysModel";
 import { VilleAttributes } from "../api/models/villeModel";
+import { CommuneAttributes } from "../api/models/communeModel";
 
 const Home: React.FC = () => {
   const [countries, setCountries] = useState<CountryAttributes[]>([]);
-  const [ville, setVille] = useState<VilleAttributes[]>([])
+  const [commune, setCommune] = useState<CommuneAttributes[]>([])
   const [adresse, setAdresse] = useState<AdresseAttributes[]>([])
   const [loading, setLoading] = useState<boolean>(true);
   const [dataSubdivision, setDataSubdivision] = useState([])
@@ -31,10 +32,10 @@ const Home: React.FC = () => {
       try {
         const response = await axios.get("/api/paysCtrl");
         const responseadresse = await axios.get("/api/adresseCtrl")
-        const responseVille = await axios.get("/api/villeCtrl")
+        const responseVille = await axios.get("/api/communeCtrl")
         setCountries(response.data.data);
         setAdresse(responseadresse.data.data)
-        setVille(responseVille.data.data)
+        setCommune(responseVille.data.data)
         setLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -111,7 +112,7 @@ const Home: React.FC = () => {
                       </Button>
                     </Link>
                   </div>
-                  <p className="font-bold text-2xl text-blue-500">{ville.length}</p>
+                  <p className="font-bold text-2xl text-blue-500">{commune.length}</p>
                 </div>
               </div>
 

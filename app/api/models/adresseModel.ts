@@ -1,6 +1,6 @@
 import sequelize from "@/lib/sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
-import SectionCommunale from "./sectionCommunalModel";
+import Commune from "./communeModel";
 
 
 export interface AdresseAttributes {
@@ -8,8 +8,9 @@ export interface AdresseAttributes {
   numero_rue: string;
   libelle_adresse: string;
   statut: string;
-  id_sectioncommunale?: number; 
-  villeRecord?: string; 
+  id_commune?: number;
+  section_communale: string;
+  villeRecord?: string;
   code_postal?: string;
   cle_unicite: string;
   from: string;
@@ -24,10 +25,11 @@ class Adresse extends Model<AdresseAttributes, AdresseCreationAttributes> implem
   public libelle_adresse!: string;
   public cle_unicite!: string;
   public statut!: string;
+  public id_commune!: number;
   public code_postal!: string;
-  public villeRecord!:string;
-  public id_sectioncommunale!: number;
-  public from!:string;
+  public villeRecord!: string;
+  public section_communale!: string;
+  public from!: string;
 
 }
 Adresse.init(
@@ -64,13 +66,19 @@ Adresse.init(
       allowNull: true,
 
     },
-    id_sectioncommunale: {
+    section_communale: {
+      type: DataTypes.STRING(20),
+      allowNull: true,
+
+    },
+    id_commune: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: true,
       references: {
-        model: SectionCommunale,
-        key: 'id_sectioncommunale',
+        model: Commune,
+        key: 'id_commune',
       },
+
       onDelete: "CASCADE"
     },
     from: {
@@ -89,8 +97,8 @@ Adresse.init(
 );
 
 // Define associations
-SectionCommunale.hasMany(Adresse, { foreignKey: 'id_sectioncommunale', onDelete: "CASCADE" });
-Adresse.belongsTo(SectionCommunale, { foreignKey: 'id_sectioncommunale' });
+Commune.hasMany(Adresse, { foreignKey: 'id_commune', onDelete: "CASCADE" });
+Adresse.belongsTo(Commune, { foreignKey: 'id_commune' });
 
 
 

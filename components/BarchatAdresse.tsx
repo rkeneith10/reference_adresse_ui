@@ -1,7 +1,7 @@
 "use client";
+
 import { AdresseAttributes } from "@/app/api/models/adresseModel";
-import { SectionCommunaleAttributes } from "@/app/api/models/sectionCommunalModel";
-import { VilleAttributes } from "@/app/api/models/villeModel";
+import { CommuneAttributes } from "@/app/api/models/communeModel";
 import { Spinner } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -9,25 +9,22 @@ import Chart from "react-google-charts";
 
 export const options = {
   chart: {
-    title: "Nombre de sections communales et adresses par ville",
+    title: "Nombre d'adresses par commune",
   },
 };
 
 const BarChartAdresse: React.FC = () => {
-  const [sections, setSections] = useState<SectionCommunaleAttributes[]>([]);
   const [addresses, setAddresses] = useState<AdresseAttributes[]>([]);
-  const [villes, setVilles] = useState<VilleAttributes[]>([]);
+  const [commune, setCommune] = useState<CommuneAttributes[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const sectionResponse = await axios.get('/api/sectionCommunalCtrl');
-        const addressesResponse = await axios.get('/api/adresseCtrl')
-        const communesResponse = await axios.get('/api/villeCtrl')
-        setSections(sectionResponse.data.data);
+        const addressesResponse = await axios.get('/api/adresseCtrl');
+        const communesResponse = await axios.get('/api/communeCtrl');
         setAddresses(addressesResponse.data.data);
-        setVilles(communesResponse.data.data);
+        setCommune(communesResponse.data.data);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -37,41 +34,32 @@ const BarChartAdresse: React.FC = () => {
     fetchData();
   }, []);
 
-  const dataByVille = villes.map((ville) => {
-    const sectionCount = sections.filter(section => section.id_ville === ville.id_commune).length;
-    const addressCount = sections.reduce((acc, section) => {
-      if (section.id_ville === ville.id_ville) {
-        return acc + addresses.filter(address => address.id_sectioncommunale === section.id_sectioncommunale).length;
-      }
-      return acc;
-    }, 0);
-    return [ville.libelle_ville, sectionCount, addressCount];
+  const dataByCommune = commune.map((comm) => {
+    const addressCount = addresses.filter(address => address.id_commune === comm.id_commune).length;
+    return [comm.libelle_commune, addressCount];
   });
 
-
   const chartData = [
-    ["Communes", "Nombre de sections", "Nombre d'adresses"],
-    ...dataByVille,
+    ["Communes", "Nombre d'adresses"],
+    ...dataByCommune,
   ];
 
   return (
-    <>
-      <div className="bg-white rounded-md shadow-md p-5">
-        {loading ? (
-          <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-            <Spinner size="lg" color="primary" />
-          </div>
-        ) : (
-          <Chart
-            chartType="Bar"
-            data={chartData}
-            options={options}
-            width="100%"
-            height="400px"
-          />
-        )}
-      </div>
-    </>
+    <div className="bg-white rounded-md shadow-md p-5">
+      {loading ? (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+          <Spinner size="lg" color="primary" />
+        </div>
+      ) : (
+        <Chart
+          chartType="Bar"
+          data={chartData}
+          options={options}
+          width="100%"
+          height="400px"
+        />
+      )}
+    </div>
   );
 };
 

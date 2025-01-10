@@ -9,30 +9,17 @@ interface Adresse {
   cle_unicite: string;
   code_postal: string,
   statut: string;
-  id_sectioncommunale: number;
-}
-
-interface SectionCommune {
-  id_sectioncommunale: number;
-  id_ville: number;
-  libelle_sectioncommunale: string;
-  Adresses: Adresse[];
-}
-
-interface Ville {
-  id_ville: number;
+  section_communale: string,
   id_commune: number;
-  libelle_ville: string;
-  longitude: string;
-  lattitude: string;
-  SectionCommunes: SectionCommune[];
 }
+
+
 
 interface Commune {
   id_commune: number;
   id_departement: number;
   libelle_commune: string;
-  Villes: Ville[];
+  Adresses: Adresse[];
 }
 
 interface Departement {
@@ -76,17 +63,11 @@ const SubdivisionGeographique: React.FC<Props> = ({ data }) => {
         dept.Communes?.forEach((com: Commune) => {
           setStateCommune((prevState: any) => ({ ...prevState, [`${com.libelle_commune}-${com.id_commune}`]: false }));
 
-          com.Villes?.forEach((vil: Ville) => {
-            setStateVille((prevState: any) => ({ ...prevState, [`${vil.libelle_ville}-${vil.id_ville}`]: false }));
+          com.Adresses?.forEach((adr: Adresse) => {
+            setStateAdresse((prevState: any) => ({ ...prevState, [`${adr.libelle_adresse}-${adr.id_adresses}`]: false }))
+          })
 
-            vil.SectionCommunes?.forEach((section: SectionCommune) => {
-              setStateSection((prevState: any) => ({ ...prevState, [`${section.libelle_sectioncommunale}-${section.id_sectioncommunale}`]: false }));
 
-              section.Adresses?.forEach((adr: Adresse) => {
-                setStateAdresse((prevState: any) => ({ ...prevState, [`${adr.libelle_adresse}-${adr.id_adresses}`]: false }));
-              });
-            });
-          });
         });
       });
     });
@@ -132,7 +113,7 @@ const SubdivisionGeographique: React.FC<Props> = ({ data }) => {
 
                   {stateDept[`${deptLibelle}-${id_departement}`] && (
                     <VStack align="start" pl={8}>
-                      {Communes?.map(({ id_commune, libelle_commune: comLibelle, Villes }: Commune) => (
+                      {Communes?.map(({ id_commune, libelle_commune: comLibelle, Adresses }: Commune) => (
                         <Box key={id_commune} w="100%">
                           <HStack onClick={() => toggleState(`${comLibelle}-${id_commune}`, setStateCommune)}>
                             <IconButton
@@ -148,59 +129,14 @@ const SubdivisionGeographique: React.FC<Props> = ({ data }) => {
 
                           {stateCommune[`${comLibelle}-${id_commune}`] && (
                             <VStack align="start" pl={8}>
-                              {Villes?.map(({ id_ville, libelle_ville: vilLibelle, SectionCommunes }: Ville) => (
-                                <Box key={id_ville} w="100%">
-                                  <HStack onClick={() => toggleState(`${vilLibelle}-${id_ville}`, setStateVille)}>
-                                    <IconButton
-                                      icon={renderIcon(stateVille[`${vilLibelle}-${id_ville}`])}
-                                      className='border border-gray-500'
-                                      aria-label="Toggle"
-                                      variant="ghost"
-                                    />
+                              {Adresses?.map(({ id_adresses, numero_rue, code_postal,section_communale, libelle_adresse: adrLibelle }: Adresse) => (
+                                <Box key={id_adresses} w="100%">
+                                  <HStack onClick={() => toggleState(`${adrLibelle}-${id_adresses}`, setStateAdresse)}>
+
                                     <Text className='cursor-pointer'>
-                                      <span className='font-bold text-blue-500'>Ville:</span> {vilLibelle}
+                                      <span className='font-bold text-blue-500'>Adresse:</span> {`${code_postal ? code_postal : "XXXX"},${numero_rue}, ${adrLibelle}, ${section_communale}`}
                                     </Text>
                                   </HStack>
-
-                                  {stateVille[`${vilLibelle}-${id_ville}`] && (
-                                    <VStack align="start" pl={8}>
-                                      {SectionCommunes?.map(({ id_sectioncommunale, libelle_sectioncommunale: secLibelle, Adresses }: SectionCommune) => (
-                                        <Box key={id_sectioncommunale} w="100%">
-                                          <HStack onClick={() => toggleState(`${secLibelle}-${id_sectioncommunale}`, setStateSection)}>
-                                            <IconButton
-                                              icon={renderIcon(stateSection[`${secLibelle}-${id_sectioncommunale}`])}
-                                              className='border border-gray-500'
-                                              aria-label="Toggle"
-                                              variant="ghost"
-                                            />
-                                            <Text className='cursor-pointer'>
-                                              <span className='font-bold text-blue-500'>Section Communale:</span> {secLibelle}
-                                            </Text>
-                                          </HStack>
-
-                                          {stateSection[`${secLibelle}-${id_sectioncommunale}`] && (
-                                            <VStack align="start" pl={8}>
-                                              {Adresses?.map(({ id_adresses, numero_rue, code_postal, libelle_adresse: adrLibelle }: Adresse) => (
-                                                <Box key={id_adresses} w="100%">
-                                                  <HStack onClick={() => toggleState(`${adrLibelle}-${id_adresses}`, setStateAdresse)}>
-                                                    {/* <IconButton
-                                                      icon={renderIcon(stateAdresse[`${adrLibelle}-${id_adresses}`])}
-                                                      aria-label="Toggle"
-                                                      className='border border-gray-500'
-                                                      variant="ghost"
-                                                    /> */}
-                                                    <Text className='cursor-pointer'>
-                                                      <span className='font-bold text-blue-500'>Adresse:</span> {`${code_postal},${numero_rue}, ${adrLibelle}`}
-                                                    </Text>
-                                                  </HStack>
-                                                </Box>
-                                              ))}
-                                            </VStack>
-                                          )}
-                                        </Box>
-                                      ))}
-                                    </VStack>
-                                  )}
                                 </Box>
                               ))}
                             </VStack>

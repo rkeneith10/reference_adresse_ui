@@ -3,8 +3,6 @@ import Adresse from "../models/adresseModel";
 import Commune from "../models/communeModel";
 import Departement from "../models/departementModel";
 import Country from '../models/paysModel';
-import SectionCommune from "../models/sectionCommunalModel";
-import Ville from "../models/villeModel";
 
 export async function GET(req: NextRequest) {
   try {
@@ -13,15 +11,8 @@ export async function GET(req: NextRequest) {
         model: Departement,
         include: [{
           model: Commune,
-          include: [{
-            model: Ville,
-            include: [{
-              model: SectionCommune,
-              include: [{
-                model: Adresse
-              }]
-            }]
-
+          include:[{
+            model:Adresse
           }]
 
         }]

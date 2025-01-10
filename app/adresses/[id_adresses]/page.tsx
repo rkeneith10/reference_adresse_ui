@@ -11,9 +11,9 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
   const { id_adresses } = params;
   const router = useRouter();
   const [adresse, setAdresse] = useState<any>(null);
-  const [sections, setSections] = useState<any[]>([]);
+  const [commune, setCommune] = useState<any[]>([]);
   const [formData, setFormData] = useState<any>({
-    numero_rue: "", libelle_adresse: "", code_postal: "", cle_unicite: "", statut: "", id_sectioncommunale: "",
+    numero_rue: "", libelle_adresse: "", code_postal: "", cle_unicite: "", statut: "", section_communale: "", id_commune: "",
 
   });
   const [loading, setLoading] = useState<boolean>(true);
@@ -37,8 +37,9 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
         setAdresse(response.data);
         setFormData({
           libelle_adresse: response.data.libelle_adresse,
+          section_communale: response.data.section_communale,
           numero_rue: response.data.numero_rue,
-          id_sectioncommunale: response.data.id_sectioncommunale,
+          id_commune: response.data.id_commune,
           code_postal: response.data.code_postal,
           cle_unicite: response.data.cle_unicite,
           statut: response.data.statut
@@ -56,10 +57,10 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
 
     const fetchSections = async () => {
       try {
-        const response = await axios.get('/api/sectionCommunalCtrl'); // Adjust the endpoint as needed
-        setSections(response.data.data);
+        const response = await axios.get('/api/communeCtrl'); // Adjust the endpoint as needed
+        setCommune(response.data.data);
       } catch (error) {
-        console.error("Error fetching sections:", error);
+        console.error("Error fetching commune:", error);
       }
     };
 
@@ -79,7 +80,8 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
         cle_unicite: formData.cle_unicite,
         statut: formData.statut,
         code_postal: formData.code_postal,
-        id_sectioncommunale: formData.id_sectioncommunale,
+        id_commune: formData.id_commune,
+        section_communale: formData.section_communale
 
       });
 
@@ -160,24 +162,40 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="id_sectioncommune" className="mb-2 font-medium">
-                  Section Communale
+                <label htmlFor="id_commune" className="mb-2 font-medium">
+                  Commune
                 </label>
                 <select
-                  id="id_sectioncommune"
-                  name="id_sectioncommune"
-                  value={formData.id_sectioncommunale}
+                  id="id_commune"
+                  name="id_commune"
+                  value={formData.id_commune}
                   className="border border-gray-300 p-2 rounded-md"
                   onChange={handleInputChange}
                 >
-                  <option value="">Sélectionnez une section communale</option>
-                  {sections.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((section) => (
-                    <option key={section.id_sectioncommunale} value={section.id_sectioncommunale}>
-                      {section.libelle_sectioncommunale}
+                  <option value="">Sélectionnez une commune</option>
+                  {commune.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((com) => (
+                    <option key={com.id_commune} value={com.id_commune}>
+                      {com.libelle_commune}
                     </option>
                   ))}
                 </select>
               </div>
+
+              <div className="flex flex-col">
+                <label htmlFor="section_communale" className="mb-2 font-medium">
+                  Section Communale
+                </label>
+                <input
+                  type="text"
+                  id="section_communale"
+                  name="section_communale"
+                  value={formData.section_communale}
+                  className="border border-gray-300 p-2 rounded-md"
+                  onChange={handleInputChange}
+
+                />
+              </div>
+
               <div className="flex flex-col">
                 <label htmlFor="code_postal" className="mb-2 font-medium">
                   Code Postal

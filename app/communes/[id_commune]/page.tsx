@@ -148,7 +148,7 @@ const DetailCommune = ({ params }: { params: { id_commune: number } }) => {
                   onChange={handleInputChange}
                 >
                   <option value="">Sélectionnez un departement</option>
-                  {departement.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((dept) => (
+                  {departement.sort((a, b) => a.libelle_departement.localeCompare(b.libelle_departement)).map((dept) => (
                     <option key={dept.id_departement} value={dept.id_departement}>
                       {dept.libelle_departement}
                     </option>

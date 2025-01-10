@@ -12,7 +12,7 @@ interface AdresseTableProps {
   itemsPerPage: number;
   setCurrentPage: (page: number) => void;
   onDelete: (id: number) => void;
-  getSectionNameById: (id: number) => string,
+  getCommuneNameById: (id: number) => string,
 }
 
 const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
@@ -21,7 +21,7 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
   itemsPerPage,
   setCurrentPage,
   onDelete,
-  getSectionNameById }) => {
+  getCommuneNameById }) => {
   const filteredAdresse = adresse.filter((adr) =>
     adr.libelle_adresse.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -54,7 +54,10 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                 Statut
               </th>
               <th scope="col" className="px-6 py-3">
-                Section Communale Reference /Ville
+                Commune
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Section Communale
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -90,9 +93,12 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                     {adr.statut}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.villeRecord ? adr.villeRecord : adr.id_sectioncommunale !== undefined
-                      ? getSectionNameById(adr.id_sectioncommunale)
+                    {adr.villeRecord ? adr.villeRecord : adr.id_commune !== undefined
+                      ? getCommuneNameById(adr.id_commune)
                       : ""}
+                  </td>
+                  <td className="text-left py-3 px-4 border-b border-gray-200">
+                    {adr.section_communale}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     <div className="flex space-x-2">

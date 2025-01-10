@@ -4,28 +4,23 @@ import Adresse from "../models/adresseModel";
 import Commune from "../models/communeModel";
 import Departement from "../models/departementModel";
 import Pays from "../models/paysModel";
-import SectionCommune from "../models/sectionCommunalModel";
-import Ville from "../models/villeModel";
 
-// Middleware CORS
-const withCORS = (response: NextResponse) => {
-  response.headers.set("Access-Control-Allow-Origin", "*");
-  response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  return response;
-};
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+
     const adr = await Adresse.findAll({});
-    if (adr) {
+    if (adr && adr.length > 0) {
       const response = NextResponse.json({ data: adr }, { status: 200 });
-      return withCORS(response);
+      return response;
+    } else {
+      const response = NextResponse.json({ message: "No addresses found" }, { status: 404 });
+      return response;
     }
   } catch (error: any) {
     console.error(error);
     const response = NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
-    return withCORS(response);
+    return response;
   }
 }
 
@@ -35,20 +30,25 @@ export async function POST(req: NextRequest) {
       numero_rue,
       libelle_adresse,
       statut,
-      id_sectioncommunale,
-      villeRecord, 
-      code_postal, 
+      id_commune,
+      section_communale,
+      villeRecord,
+      code_postal,
       from,
     } = await req.json();
 
     let cle_unicite_base;
     let cle_unicite;
 
-    
+
     if (villeRecord) {
-      cle_unicite_base = `${villeRecord.replace(/\s+/g, '').toUpperCase()}${numero_rue || 'X'}${libelle_adresse
+
+      cle_unicite_base = `${villeRecord.replace(/\s+/g, '').toUpperCase()}${section_communale.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}${numero_rue || 'X'}${libelle_adresse
         .charAt(0)
         .toUpperCase()}${libelle_adresse.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
+
+      console.log("cle_unicite_base générée :", cle_unicite_base);
+
 
       // Trouver le plus grand numéro de séquence pour des clés similaires
       const similarKeys = await Adresse.findAll({
@@ -59,6 +59,7 @@ export async function POST(req: NextRequest) {
         },
       });
 
+
       let sequence = '01';
       if (similarKeys.length > 0) {
         const highestSequence = Math.max(...similarKeys.map(key => parseInt(key.cle_unicite.slice(-2))));
@@ -67,53 +68,47 @@ export async function POST(req: NextRequest) {
 
       cle_unicite = `${cle_unicite_base}${sequence}`;
 
+
       // Créez l'adresse avec villeRecord
       const adresse = await Adresse.create({
         numero_rue,
         libelle_adresse,
         statut,
+        section_communale,
         villeRecord,
         cle_unicite,
         from,
       });
 
+
+
       const response = NextResponse.json(
-        { message: "Adresse created successfully", data: adresse },
+        { message: "Adresse created successfully", adresse },
         { status: 201 }
       );
-      return withCORS(response);
+      return response;
     }
 
-    // 2. Cas avec `id_sectioncommunale`
-    if (id_sectioncommunale) {
-      const sectionCommunale = await SectionCommune.findOne({ where: { id_sectioncommunale } });
-      if (!sectionCommunale) {
-        const response = NextResponse.json({ message: "Section Communale not found." }, { status: 404 });
-        return withCORS(response);
-      }
+    // 2. Cas avec `id_commune`
+    if (id_commune) {
 
-      const ville = await Ville.findOne({ where: { id_ville: sectionCommunale.id_ville } });
-      if (!ville) {
-        const response = NextResponse.json({ message: "Ville not found" }, { status: 400 });
-        return withCORS(response);
-      }
 
-      const commune = await Commune.findOne({ where: { id_commune: ville.id_commune } });
+      const commune = await Commune.findOne({ where: { id_commune } });
       if (!commune) {
         const response = NextResponse.json({ message: "Commune not found." }, { status: 404 });
-        return withCORS(response);
+        return response;
       }
 
       const departement = await Departement.findOne({ where: { id_departement: commune.id_departement } });
       if (!departement) {
         const response = NextResponse.json({ message: "Departement not found." }, { status: 404 });
-        return withCORS(response);
+        return response;
       }
 
       const pays = await Pays.findOne({ where: { id_pays: departement.id_pays } });
       if (!pays) {
         const response = NextResponse.json({ message: "Pays not found." }, { status: 404 });
-        return withCORS(response);
+        return response;
       }
 
       cle_unicite_base = `${pays.code_pays}${departement.code_departement}${code_postal}${numero_rue || 'X'}${libelle_adresse
@@ -137,38 +132,36 @@ export async function POST(req: NextRequest) {
 
       cle_unicite = `${cle_unicite_base}${sequence}`;
 
-      
+
       const adresse = await Adresse.create({
         numero_rue,
         libelle_adresse,
         statut,
-        id_sectioncommunale,
+        id_commune,
+        section_communale,
         code_postal,
         cle_unicite,
         from,
       });
 
       const response = NextResponse.json(
-        { message: "Adresse created successfully", data: adresse },
+        { message: "Adresse created successfully", adresse },
         { status: 201 }
       );
-      return withCORS(response);
+      return response;
     }
 
     const response = NextResponse.json(
-      { message: "You must provide either 'id_sectioncommunale' or 'villeRecord'." },
+      { message: "You must provide either 'id_commune' or 'villeRecord'." },
       { status: 400 }
     );
-    return withCORS(response);
+    return response;
   } catch (error: any) {
     console.error(error);
-    const response = NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
-    return withCORS(response);
+    const response = NextResponse.json({ error: `Internal Server Error ${error}` }, { status: 500 });
+    return response;
   }
 }
 
 
-export async function OPTIONS() {
-  const response = NextResponse.json(null, { status: 204 });
-  return withCORS(response);
-}
+

@@ -28,9 +28,9 @@ export async function GET(
     const response = NextResponse.json(responseData, { status: 200 });
 
     // Ajout des en-têtes CORS
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    // response.headers.set('Access-Control-Allow-Origin', '*');
+    // response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    // response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     return response;
   } catch (error: any) {
@@ -70,9 +70,9 @@ export async function DELETE(
     );
 
     // Ajout des en-têtes CORS
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    // response.headers.set('Access-Control-Allow-Origin', '*');
+    // response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    // response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     return response;
   } catch (error: any) {
@@ -120,9 +120,9 @@ export async function PUT(
     );
 
     // Ajout des en-têtes CORS
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    // response.headers.set('Access-Control-Allow-Origin', '*');
+    // response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    // response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     return response;
   } catch (error: any) {
@@ -138,10 +138,10 @@ export async function PUT(
 }
 
 // Gérer les requêtes OPTIONS pour CORS (préflight requests)
-export function OPTIONS() {
-  const response = NextResponse.json({});
-  response.headers.set('Access-Control-Allow-Origin', '*');
-  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  return response;
-}
+// export function OPTIONS() {
+//   const response = NextResponse.json({});
+//   response.headers.set('Access-Control-Allow-Origin', '*');
+//   response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+//   response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//   return response;
+// }

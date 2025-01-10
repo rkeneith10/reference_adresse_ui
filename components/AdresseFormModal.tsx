@@ -1,4 +1,4 @@
-import { SectionCommunaleAttributes } from '@/app/api/models/sectionCommunalModel';
+import { CommuneAttributes } from '@/app/api/models/communeModel';
 import { TooltipAttributes } from '@/app/api/models/tooltipModel';
 import {
   Button,
@@ -20,17 +20,18 @@ interface AdresseFormModalProps {
   onClose: () => void;
   onSuccess: () => void;
   onFailed: () => void;
-  sectioncommunales: SectionCommunaleAttributes[];
+  communes: CommuneAttributes[];
 }
 
-const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, onSuccess, onFailed, sectioncommunales }) => {
+const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, onSuccess, onFailed, communes }) => {
   const [adding, setAdding] = useState(false);
 
   const [visibleTooltip, setVisibleTooltip] = useState<string | null>(null);
 
 
   const [adresse, setAdresse] = useState({
-    id_sectioncommunale: "",
+    id_commune: "",
+    section_communale: "",
     numero_rue: "",
     libelle_adresse: "",
     statut: "En creation",
@@ -42,7 +43,8 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
   const [errors, setErrors] = useState({
     numero_rue: "",
     libelle_adresse: "",
-    id_sectioncommunale: "",
+    id_commune: "",
+    section_communale: "",
     code_postal: ""
   });
 
@@ -91,9 +93,13 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = { libelle_adresse: "", numero_rue: "", id_sectioncommunale: "", code_postal: "" };
-    if (!adresse.id_sectioncommunale) {
-      newErrors.id_sectioncommunale = "La section communale de reference est requise";
+    const newErrors = { libelle_adresse: "", numero_rue: "", id_commune: "", section_communale: "", code_postal: "" };
+    if (!adresse.section_communale) {
+      newErrors.section_communale = "La section communale est requise";
+      valid = false;
+    }
+    if (!adresse.id_commune) {
+      newErrors.id_commune = "La commune de reference est requise";
       valid = false;
     }
     if (!adresse.libelle_adresse) {
@@ -126,9 +132,10 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
       const response = await axios.post("/api/adresseCtrl", adresse, {
         headers: { "Content-Type": "application/json" },
       });
-      if (response.status === 200) {
+      if (response.status === 201) {
         setAdresse({
-          id_sectioncommunale: "",
+          id_commune: "",
+          section_communale: "",
           numero_rue: "",
           libelle_adresse: "",
           statut: "En creation",
@@ -148,13 +155,13 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
 
   }
   const handleSelectChange = (selectedOption: any) => {
-    setAdresse({ ...adresse, id_sectioncommunale: selectedOption.value });
-    setErrors({ ...errors, id_sectioncommunale: "" });
+    setAdresse({ ...adresse, id_commune: selectedOption.value });
+    setErrors({ ...errors, id_commune: "" });
   };
 
-  const adresseOption = sectioncommunales.map((section) => ({
-    value: section.id_sectioncommunale,
-    label: section.libelle_sectioncommunale
+  const adresseOption = communes.map((comm) => ({
+    value: comm.id_commune,
+    label: comm.libelle_commune
   }))
 
   const handleTooltipToggle = (field: string) => {
@@ -183,7 +190,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
           <ModalBody>
             <div className="mb-4 relative">
               <label htmlFor="id_sectioncommunale" className="block text-sm font-normal mb-2">
-                Choisir une section communale
+                Choisir une commune
                 <div
                   className="ml-2 inline-block cursor-pointer relative"
                   onMouseEnter={() => handleTooltipToggle('id_sectioncommunale')}
@@ -199,14 +206,14 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
                 </div>
               </label>
               <Select
-                placeholder="Choisir une section communale"
-                name="id_sectioncommunale"
+                placeholder="Choisir une commune"
+                name="id_commune"
                 onChange={handleSelectChange}
                 options={adresseOption}
                 className="w-full"
               />
-              {errors.id_sectioncommunale && (
-                <span className="text-red-500 text-sm">{errors.id_sectioncommunale}</span>
+              {errors.id_commune && (
+                <span className="text-red-500 text-sm">{errors.id_commune}</span>
               )}
             </div>
 
@@ -271,6 +278,41 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
                 <span className="text-red-500 text-sm">{errors.numero_rue}</span>
               )}
             </div>
+
+
+            <div className="mb-4 relative">
+              <label htmlFor="section_communale" className="block text-sm font-normal mb-2">
+                Section Communale
+                <div
+                  className="ml-2 inline-block cursor-pointer relative"
+                  onMouseEnter={() => handleTooltipToggle('section_communale')}
+                  onMouseLeave={handleTooltipHide}
+                >
+                  <FaQuestionCircle className="text-gray-500" size={15} />
+                  {visibleTooltip === 'section_communale' && (
+                    <div className="absolute z-10 bg-gray-900 text-white text-md rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
+                      {tooltips['section_communale']}
+                      <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
+                    </div>
+                  )}
+                </div>
+              </label>
+              <input
+                type="text"
+                placeholder="Entrer la section communale"
+                id="section_communale"
+                name="section_communale"
+                onChange={handleinputChange}
+                value={adresse.section_communale}
+                className="border rounded-md w-full p-2 text-sm"
+              />
+              {errors.section_communale && (
+                <span className="text-red-500 text-sm">{errors.section_communale}</span>
+              )}
+            </div>
+
+
+
 
             <div className="mb-4 relative">
               <label htmlFor="code_postal" className="block text-sm font-normal mb-2">

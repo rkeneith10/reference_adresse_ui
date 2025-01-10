@@ -1,4 +1,4 @@
-import { FaCity, FaHome, FaMapMarkerAlt, FaMapSigns, FaRegFlag } from "react-icons/fa";
+import { FaCity, FaHome, FaMapMarkerAlt, FaMapSigns, FaQuestionCircle, FaRegFlag } from "react-icons/fa";
 import { FaTreeCity } from "react-icons/fa6";
 
 import { MdListAlt } from "react-icons/md";
@@ -33,16 +33,16 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     path: "/communes",
     icon: <FaTreeCity size={20} />,
   },
-  {
-    title: "Villes",
-    path: "/villes",
-    icon: <FaCity size={20} />,
-  },
-  {
-    title: "Sections Communales",
-    path: "/sectioncommunales",
-    icon: <MdListAlt size={26} />,
-  },
+  // {
+  //   title: "Villes",
+  //   path: "/villes",
+  //   icon: <FaCity size={20} />,
+  // },
+  // {
+  //   title: "Sections Communales",
+  //   path: "/sectioncommunales",
+  //   icon: <MdListAlt size={26} />,
+  // },
   {
     title: "Adresses",
     path: "/adresses",

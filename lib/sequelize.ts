@@ -2,10 +2,10 @@ import { Sequelize } from "sequelize";
 
 const sequelize = new Sequelize({
   port: 3306,
-  host: process.env.DB_HOST,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: "localhost",
+  username: "root",
+  password: "RSKeneith1210",
+  database: "referentieldb",
   dialect: "mysql",
   dialectModule: require("mysql2"),
 });

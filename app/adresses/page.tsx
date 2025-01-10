@@ -16,13 +16,13 @@ import React, { useEffect, useState } from "react";
 import { FaFileExcel, FaFileImport, FaPlus } from "react-icons/fa";
 import * as XLSX from "xlsx";
 import { AdresseAttributes } from "../api/models/adresseModel";
-import { SectionCommunaleAttributes } from "../api/models/sectionCommunalModel";
+import { CommuneAttributes } from "../api/models/communeModel";
 
 const Adresses: React.FC = () => {
   const router = useRouter();
   const [adresse, setAdresse] = useState<AdresseAttributes[]>([]);
   const [file, setFile] = useState<File | null>(null)
-  const [section, setSection] = useState<SectionCommunaleAttributes[]>([]);
+  const [com, setCom] = useState<CommuneAttributes[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingExcel, setLoadingExcel] = useState<boolean>(false);
@@ -39,18 +39,18 @@ const Adresses: React.FC = () => {
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
   const { isOpen: isConfirmationOpen, onOpen: onConfirmationOpen, onClose: onConfirmationClose } = useDisclosure();
 
-  const fetchSection = async () => {
+  const fetchCommune = async () => {
     try {
-      const response = await axios.get("/api/sectionCommunalCtrl");
-      setSection(response.data.data);
+      const response = await axios.get("/api/communeCtrl");
+      setCom(response.data.data);
     } catch (error) {
-      console.error("Error fetching countries:", error);
+      console.error("Error fetching commune:", error);
     }
 
   };
-  const getSectionNameById = (id: number) => {
-    const sect = section.find((c) => c.id_sectioncommunale === id);
-    return sect ? sect.libelle_sectioncommunale : " Inconnu";
+  const getCommuneNameById = (id: number) => {
+    const infocom = com.find((c) => c.id_commune === id);
+    return infocom ? infocom.libelle_commune : " Inconnu";
   };
 
   const handleDeleteAdresse = async (id: number) => {
@@ -71,6 +71,7 @@ const Adresses: React.FC = () => {
     setLoading(true)
     try {
       const response = await axios.get("/api/adresseCtrl")
+      console.log(response.data.data)
       setAdresse(response.data.data)
       setLoading(false);
     } catch (error) { console.error('Error fetching adresse') }
@@ -143,7 +144,7 @@ const Adresses: React.FC = () => {
 
   useEffect(() => {
     document.title = "Adresses";
-    fetchSection();
+    fetchCommune();
     fetchAdresse();
   }, []);
   return (
@@ -195,7 +196,7 @@ const Adresses: React.FC = () => {
                 setSelectedAdresseId(id);
                 onDeleteOpen();
               }}
-              getSectionNameById={getSectionNameById}
+              getCommuneNameById={getCommuneNameById}
             />
           </div>
         )}
@@ -205,7 +206,7 @@ const Adresses: React.FC = () => {
         onClose={onClose}
         onSuccess={handleAddAdressSuccess}
         onFailed={handleAddAdresseFailed}
-        sectioncommunales={section}
+        communes={com}
       />
       <DeleteConfirmationModal
         isOpen={isDeleteOpen}

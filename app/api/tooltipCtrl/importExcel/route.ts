@@ -26,10 +26,10 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
 
-    // Ajout des en-têtes CORS
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    // // Ajout des en-têtes CORS
+    // response.headers.set('Access-Control-Allow-Origin', '*');
+    // response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    // response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     return response;
 
@@ -44,20 +44,20 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
 
-    // Ajout des en-têtes CORS dans le cas d'une erreur également
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    // // Ajout des en-têtes CORS dans le cas d'une erreur également
+    // response.headers.set('Access-Control-Allow-Origin', '*');
+    // response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    // response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     return response;
   }
 }
 
 // Gérer les requêtes OPTIONS pour CORS (préflight requests)
-export function OPTIONS() {
-  const response = NextResponse.json({});
-  response.headers.set('Access-Control-Allow-Origin', '*');
-  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  return response;
-}
+// export function OPTIONS() {
+//   const response = NextResponse.json({});
+//   response.headers.set('Access-Control-Allow-Origin', '*');
+//   response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+//   response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//   return response;
+// }

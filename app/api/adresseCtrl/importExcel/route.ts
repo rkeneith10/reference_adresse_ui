@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Adresse, { AdresseAttributes } from '../../models/adresseModel';
-import SectionCommune from '../../models/sectionCommunalModel';
+import Commune from '../../models/communeModel';
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,10 +15,10 @@ export async function POST(req: NextRequest) {
 
     for (let adr of adresses) {
 
-      const sectionCommuneExists = await SectionCommune.findByPk(adr.id_sectioncommunale);
+      const communeExists = await Commune.findByPk(adr.id_commune);
 
-      if (!sectionCommuneExists) {
-        console.error(`SectionCommune avec id ${adr.id_sectioncommunale} non trouvée.`);
+      if (!communeExists) {
+        console.error(`Commune avec id ${adr.id_commune} non trouvée.`);
         continue;
       }
 
@@ -28,8 +28,9 @@ export async function POST(req: NextRequest) {
         code_postal: adr.code_postal,
         cle_unicite: adr.cle_unicite,
         statut: adr.statut,
-        id_sectioncommunale: adr.id_sectioncommunale,
-        from:adr.from
+        section_communale: adr.section_communale,
+        id_commune: adr.id_commune,
+        from: adr.from
       });
 
       console.log("Created addresses:", createdAdresses);
