@@ -4,7 +4,7 @@ const sequelize = new Sequelize({
   port: 3306,
   host: "localhost",
   username: "root",
-  password: "RSKeneith1210",
+  password: "haiti1234",
   database: "referentieldb",
   dialect: "mysql",
   dialectModule: require("mysql2"),
