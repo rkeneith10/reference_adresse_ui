@@ -30,9 +30,11 @@ export async function POST(req: NextRequest) {
 
     // Cas avec `villeRecord`
     if (villeRecord) {
-      cle_unicite_base = `${villeRecord.replace(/\s+/g, '').toUpperCase()}${section_communale.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}${numero_rue || 'X'}${libelle_adresse
+      cle_unicite_base = `${(villeRecord || '').replace(/\s+/g, '').toUpperCase()}${(section_communale || '').replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}${numero_rue || 'X'}${(libelle_adresse || '')
       .charAt(0)
-      .toUpperCase()}${libelle_adresse.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
+      .toUpperCase()}${(libelle_adresse || '').replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
+    
+    
 
       const similarKeys = await Adresse.findAll({
         where: {

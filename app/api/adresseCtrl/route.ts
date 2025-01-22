@@ -10,11 +10,9 @@ export async function GET(req: NextRequest) {
   try {
 
     const adr = await Adresse.findAll({});
-    if (adr && adr.length > 0) {
+    if (adr) {
       const response = NextResponse.json({ data: adr }, { status: 200 });
-      return response;
-    } else {
-      const response = NextResponse.json({ message: "No addresses found" }, { status: 404 });
+
       return response;
     }
   } catch (error: any) {

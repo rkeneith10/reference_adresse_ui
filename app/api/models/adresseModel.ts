@@ -37,6 +37,7 @@ Adresse.init(
     id_adresses: {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
+      allowNull:false,
       primaryKey: true,
     },
     numero_rue: {

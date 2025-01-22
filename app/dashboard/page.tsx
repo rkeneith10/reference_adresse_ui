@@ -38,7 +38,7 @@ const Home: React.FC = () => {
         setCommune(responseVille.data.data)
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Error fetching :", error);
       }
     };
     const fetchDataSubdivision = async () => {

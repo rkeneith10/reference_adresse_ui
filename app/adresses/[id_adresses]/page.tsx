@@ -173,7 +173,7 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
                   onChange={handleInputChange}
                 >
                   <option value="">Sélectionnez une commune</option>
-                  {commune.sort((a, b) => a.libelle.localeCompare(b.libelle)).map((com) => (
+                  {commune.map((com) => (
                     <option key={com.id_commune} value={com.id_commune}>
                       {com.libelle_commune}
                     </option>
