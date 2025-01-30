@@ -4,8 +4,8 @@ import { NextResponse } from 'next/server';
 const isProduction = process.env.DATASET === 'production';
 const corsOrigins = isProduction
   ? [
-    'domain1',
-    'domain2',
+    'http://signaletique.focus-industry.com',
+    'http://isteah-tech.ddns.net:3090',
     'domain3',
     'domain4',
   ]
