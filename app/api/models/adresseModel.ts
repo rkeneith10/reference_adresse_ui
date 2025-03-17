@@ -8,9 +8,8 @@ export interface AdresseAttributes {
   numero_rue: string;
   libelle_adresse: string;
   statut: string;
-  id_commune?: number;
+  id_commune: number;
   section_communale: string;
-  villeRecord?: string;
   code_postal?: string;
   cle_unicite: string;
   from: string;
@@ -27,7 +26,6 @@ class Adresse extends Model<AdresseAttributes, AdresseCreationAttributes> implem
   public statut!: string;
   public id_commune!: number;
   public code_postal!: string;
-  public villeRecord!: string;
   public section_communale!: string;
   public from!: string;
 
@@ -62,11 +60,7 @@ Adresse.init(
       allowNull: true,
 
     },
-    villeRecord: {
-      type: DataTypes.STRING(20),
-      allowNull: true,
 
-    },
     section_communale: {
       type: DataTypes.STRING(20),
       allowNull: true,

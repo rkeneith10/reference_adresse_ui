@@ -4,8 +4,7 @@ import Adresse from '../../models/adresseModel';
 import Commune from '../../models/communeModel';
 import Departement from '../../models/departementModel';
 import Pays from '../../models/paysModel';
-import SectionCommunale from '../../models/sectionCommunalModel';
-import Ville from "../../models/villeModel";
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,7 +15,6 @@ export async function POST(req: NextRequest) {
       code_postal,
       id_commune,
       section_communale,
-      villeRecord,
       statut,
     } = await req.json();
 
@@ -28,47 +26,7 @@ export async function POST(req: NextRequest) {
     let cle_unicite_base;
     let cle_unicite;
 
-    // Cas avec `villeRecord`
-    if (villeRecord) {
-      cle_unicite_base = `${(villeRecord || '').replace(/\s+/g, '').toUpperCase()}${(section_communale || '').replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}${numero_rue || 'X'}${(libelle_adresse || '')
-      .charAt(0)
-      .toUpperCase()}${(libelle_adresse || '').replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
-    
-    
 
-      const similarKeys = await Adresse.findAll({
-        where: {
-          cle_unicite: {
-            [Op.like]: `${cle_unicite_base}%`,
-          },
-        },
-      });
-
-      let sequence = '01';
-      if (similarKeys.length > 0) {
-        const highestSequence = Math.max(
-          ...similarKeys.map((key) => parseInt(key.cle_unicite.slice(-2)))
-        );
-        sequence = (highestSequence + 1).toString().padStart(2, '0');
-      }
-
-      cle_unicite = `${cle_unicite_base}${sequence}`;
-
-      await adr.update({
-        libelle_adresse,
-        numero_rue,
-        section_communale,
-        code_postal,
-        villeRecord,
-        cle_unicite,
-        statut,
-      });
-
-      return NextResponse.json({ success: true, data: adr.toJSON() }, { status: 200 });
-    }
-
-    // Cas avec `id_sectioncommunale`
-    if (id_commune) {
       const commune = await Commune.findOne({ where: { id_commune} });
       if (!commune) {
         return NextResponse.json({ message: "Commune not found." }, { status: 404 });
@@ -117,12 +75,9 @@ export async function POST(req: NextRequest) {
       });
 
       return NextResponse.json({ success: true, data: adr.toJSON() }, { status: 200 });
-    }
+    
 
-    return NextResponse.json(
-      { message: "You must provide either 'id_commune' or 'villeRecord'." },
-      { status: 400 }
-    );
+
   } catch (error:any) {
     console.error(error);
     return NextResponse.json({

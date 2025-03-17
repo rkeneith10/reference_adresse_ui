@@ -30,7 +30,6 @@ export async function POST(req: NextRequest) {
       statut,
       id_commune,
       section_communale,
-      villeRecord,
       code_postal,
       from,
     } = await req.json();
@@ -39,56 +38,7 @@ export async function POST(req: NextRequest) {
     let cle_unicite;
 
 
-    if (villeRecord) {
 
-      cle_unicite_base = `${villeRecord.replace(/\s+/g, '').toUpperCase()}${section_communale.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}${numero_rue || 'X'}${libelle_adresse
-        .charAt(0)
-        .toUpperCase()}${libelle_adresse.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
-
-      console.log("cle_unicite_base générée :", cle_unicite_base);
-
-
-      // Trouver le plus grand numéro de séquence pour des clés similaires
-      const similarKeys = await Adresse.findAll({
-        where: {
-          cle_unicite: {
-            [Op.like]: `${cle_unicite_base}%`,
-          },
-        },
-      });
-
-
-      let sequence = '01';
-      if (similarKeys.length > 0) {
-        const highestSequence = Math.max(...similarKeys.map(key => parseInt(key.cle_unicite.slice(-2))));
-        sequence = (highestSequence + 1).toString().padStart(2, '0');
-      }
-
-      cle_unicite = `${cle_unicite_base}${sequence}`;
-
-
-      // Créez l'adresse avec villeRecord
-      const adresse = await Adresse.create({
-        numero_rue,
-        libelle_adresse,
-        statut,
-        section_communale,
-        villeRecord,
-        cle_unicite,
-        from,
-      });
-
-
-
-      const response = NextResponse.json(
-        { message: "Adresse created successfully", adresse },
-        { status: 201 }
-      );
-      return response;
-    }
-
-    // 2. Cas avec `id_commune`
-    if (id_commune) {
 
 
       const commune = await Commune.findOne({ where: { id_commune } });
@@ -147,18 +97,17 @@ export async function POST(req: NextRequest) {
         { status: 201 }
       );
       return response;
-    }
+    
 
-    const response = NextResponse.json(
-      { message: "You must provide either 'id_commune' or 'villeRecord'." },
-      { status: 400 }
-    );
+
     return response;
   } catch (error: any) {
     console.error(error);
     const response = NextResponse.json({ error: `Internal Server Error ${error}` }, { status: 500 });
     return response;
   }
+
+  
 }
 
 

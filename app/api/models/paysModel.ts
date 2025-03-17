@@ -8,8 +8,6 @@ export interface CountryAttributes {
   continent: string;
   indicatif_tel: string;
   fuseau_horaire: string;
-
-
 }
 
 interface CountryCreationAttributes
