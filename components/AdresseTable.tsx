@@ -93,9 +93,8 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                     {adr.statut}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.villeRecord ? adr.villeRecord : adr.id_commune !== undefined
-                      ? getCommuneNameById(adr.id_commune)
-                      : ""}
+                    {getCommuneNameById(adr.id_commune)
+                    }
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     {adr.section_communale}
