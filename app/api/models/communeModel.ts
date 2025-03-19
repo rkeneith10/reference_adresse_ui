@@ -1,11 +1,12 @@
 import sequelize from "@/lib/sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
-import Departement from "./departementModel";
+import Departement, { DepartementAttributes } from "./departementModel";
 
 export interface CommuneAttributes {
   id_commune: number;
   id_departement: number;
   libelle_commune: string;
+  Departement?: DepartementAttributes
 }
 
 interface CommuneCreationAttributes

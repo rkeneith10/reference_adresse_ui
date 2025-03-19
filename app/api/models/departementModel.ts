@@ -1,7 +1,7 @@
 
 import sequelize from "@/lib/sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
-import Country from "./paysModel";
+import Country, { CountryAttributes } from "./paysModel";
 
 export interface DepartementAttributes {
   id_departement: number;
@@ -9,6 +9,7 @@ export interface DepartementAttributes {
   code_departement: string;
   chef_lieux: string;
   id_pays: number;
+  Country?: CountryAttributes;
 }
 
 interface DepartementCreationAttributes

@@ -1,6 +1,6 @@
 import sequelize from "@/lib/sequelize";
 import { DataTypes, Model, Optional } from "sequelize";
-import Commune from "./communeModel";
+import Commune, { CommuneAttributes } from "./communeModel";
 
 
 export interface AdresseAttributes {
@@ -13,6 +13,7 @@ export interface AdresseAttributes {
   code_postal?: string;
   cle_unicite: string;
   from: string;
+  Commune?: CommuneAttributes;
 
 }
 

@@ -3,7 +3,7 @@ import { Op } from 'sequelize';
 import Adresse from '../../models/adresseModel';
 import Commune from '../../models/communeModel';
 import Departement from '../../models/departementModel';
-import Pays from '../../models/paysModel';
+import { default as Country, default as Pays } from '../../models/paysModel';
 
 
 // Handler for GET request
@@ -18,10 +18,32 @@ export async function GET(
       return NextResponse.json({ error: "Invalid Id" }, { status: 400 });
     }
 
-    const detailAdresse = await Adresse.findOne({ where: { id_adresses } });
+    const detailAdresse = await Adresse.findOne({
+      where: { id_adresses },
+      include: [
+        {
+          model: Commune,
+          attributes: ["libelle_commune", "id_commune"],
+          include: [
+            {
+              model: Departement,
+              attributes: ["libelle_departement", "id_departement"],
+              include: [
+                {
+                  model: Country,
+                  attributes: ["libelle_pays", "id_pays"],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
     if (!detailAdresse) {
       return NextResponse.json({ error: "Adresse introuvable" }, { status: 404 });
     }
+
 
     const responseData = {
       id_adresses: detailAdresse.id_adresses,
@@ -31,8 +53,19 @@ export async function GET(
       cle_unicite: detailAdresse.cle_unicite,
       statut: detailAdresse.statut,
       section_communale: detailAdresse.section_communale,
-      id_commune: detailAdresse.id_commune
-
+      // id_commune: detailAdresse.id_commune,
+      commune: {
+        libelle_commune: detailAdresse.Commune.libelle_commune,
+        id_commune: detailAdresse.Commune.id_commune,
+        departement: {
+          libelle_departement: detailAdresse.Commune.Departement.libelle_departement,
+          id_departement: detailAdresse.Commune.Departement.id_departement,
+          country: {
+            libelle_pays: detailAdresse.Commune.Departement.Country.libelle_pays,
+            id_pays: detailAdresse.Commune.Departement.Country.id_pays,
+          },
+        },
+      },
     };
 
     return NextResponse.json(responseData, { status: 200 });
