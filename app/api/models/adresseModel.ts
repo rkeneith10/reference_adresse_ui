@@ -29,6 +29,7 @@ class Adresse extends Model<AdresseAttributes, AdresseCreationAttributes> implem
   public code_postal!: string;
   public section_communale!: string;
   public from!: string;
+  Commune: any;
 
 }
 Adresse.init(
@@ -36,7 +37,7 @@ Adresse.init(
     id_adresses: {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
-      allowNull:false,
+      allowNull: false,
       primaryKey: true,
     },
     numero_rue: {
