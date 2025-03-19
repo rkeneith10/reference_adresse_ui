@@ -116,44 +116,42 @@ export async function DELETE(
   }
 }
 
-
-export async function POST(req: NextRequest) {
+export async function PUT(req: NextRequest, { params }: { params: { id_adresses: string } }) {
   try {
-    const {
-      id_adresses,
-      libelle_adresse,
-      numero_rue,
-      code_postal,
-      id_commune,
-      section_communale,
-      statut,
-    } = await req.json();
+    const id_adresses = parseInt(params.id_adresses, 10);
+    if (isNaN(id_adresses)) {
+      return NextResponse.json({ message: "L'identifiant de l'adresse est invalide." }, { status: 400 });
+    }
 
+    const body = await req.json();
+    const { libelle_adresse, numero_rue, code_postal, id_commune, section_communale, statut, from } = body;
+
+    // Vérifier si l'adresse existe
     const adr = await Adresse.findOne({ where: { id_adresses } });
     if (!adr) {
-      return NextResponse.json({ message: "Adresse not found" }, { status: 404 });
+      return NextResponse.json({ message: "Adresse non trouvée." }, { status: 404 });
     }
 
-    let cle_unicite_base;
-    let cle_unicite;
-
-
+    // Vérifier si la commune existe
     const commune = await Commune.findOne({ where: { id_commune } });
     if (!commune) {
-      return NextResponse.json({ message: "Commune not found." }, { status: 404 });
+      return NextResponse.json({ message: "Commune non trouvée." }, { status: 404 });
     }
 
+    // Vérifier le département
     const departement = await Departement.findOne({ where: { id_departement: commune.id_departement } });
     if (!departement) {
-      return NextResponse.json({ message: "Departement not found." }, { status: 404 });
+      return NextResponse.json({ message: "Département non trouvé." }, { status: 404 });
     }
 
+    // Vérifier le pays
     const pays = await Pays.findOne({ where: { id_pays: departement.id_pays } });
     if (!pays) {
-      return NextResponse.json({ message: "Pays not found." }, { status: 404 });
+      return NextResponse.json({ message: "Pays non trouvé." }, { status: 404 });
     }
 
-    cle_unicite_base = `${pays.code_pays}${departement.code_departement}${code_postal}${numero_rue || 'X'}${libelle_adresse
+    // Générer une nouvelle clé d'unicité
+    const cle_unicite_base = `${pays.code_pays}${departement.code_departement}${code_postal}${numero_rue || 'X'}${libelle_adresse
       .charAt(0)
       .toUpperCase()}${libelle_adresse.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
 
@@ -168,13 +166,14 @@ export async function POST(req: NextRequest) {
     let sequence = '01';
     if (similarKeys.length > 0) {
       const highestSequence = Math.max(
-        ...similarKeys.map((key) => parseInt(key.cle_unicite.slice(-2)))
+        ...similarKeys.map((key) => parseInt(key.cle_unicite.slice(-2), 10))
       );
       sequence = (highestSequence + 1).toString().padStart(2, '0');
     }
 
-    cle_unicite = `${cle_unicite_base}${sequence}`;
+    const cle_unicite = `${cle_unicite_base}${sequence}`;
 
+    // Mise à jour de l'adresse
     await adr.update({
       libelle_adresse,
       numero_rue,
@@ -183,18 +182,20 @@ export async function POST(req: NextRequest) {
       section_communale,
       cle_unicite,
       statut,
+      from
     });
 
     return NextResponse.json({ success: true, data: adr.toJSON() }, { status: 200 });
 
   } catch (error: any) {
-    console.error(error);
+    console.error("Erreur lors de la mise à jour de l'adresse:", error);
     return NextResponse.json({
       message: "Erreur lors de la mise à jour de l'adresse",
       error: error.message,
     }, { status: 500 });
   }
 }
+
 
 
 
