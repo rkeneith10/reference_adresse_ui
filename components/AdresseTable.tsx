@@ -5,6 +5,7 @@ import { FaChevronLeft, FaChevronRight, FaRegEye, FaRegTrashAlt } from "react-ic
 import { AdresseAttributes } from "../app/api/models/adresseModel";
 
 
+
 interface AdresseTableProps {
   adresse: AdresseAttributes[];
   searchTerm: string;
@@ -51,6 +52,12 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                 Cle unicite
               </th>
               <th scope="col" className="px-6 py-3">
+                Latitude
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Longitude
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Statut
               </th>
               <th scope="col" className="px-6 py-3">
@@ -88,6 +95,12 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     {adr.cle_unicite}
+                  </td>
+                  <td className="text-left py-3 px-4 border-b border-gray-200">
+                    {adr.latitude ? adr.latitude : ""}
+                  </td>
+                  <td className="text-left py-3 px-4 border-b border-gray-200">
+                    {adr.longitude ? adr.longitude : ""}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     {adr.statut}
@@ -158,6 +171,8 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
           <FaChevronRight className="text-gray-500 h-2 w-2" />
         </button>
       </div>
+
+
     </div>
   )
 }

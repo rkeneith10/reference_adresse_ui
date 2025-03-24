@@ -19,14 +19,17 @@ export async function GET(req: NextRequest) {
       include: [
         {
           model: Commune,
+
           attributes: ["libelle_commune", "id_commune"],
           include: [
             {
               model: Departement,
+
               attributes: ["libelle_departement", "id_departement"],
               include: [
                 {
                   model: Country,
+
                   attributes: ["libelle_pays", "id_pays"],
                 },
               ],

@@ -55,7 +55,7 @@ Commune.init(
   },
   {
     sequelize,
-    modelName: "Commune",
+    modelName: "commune",
     tableName: "communes",
     timestamps: false, // Automatically adds createdAt and updatedAt fields
   }

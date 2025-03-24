@@ -25,7 +25,7 @@ const SideNav = () => {
           {SIDENAV_ITEMS.map((item, idx) => (
             <>
               <MenuItem key={idx} item={item} />
-              {item.title === "Adresses" && (
+              {item.title === "Map" && (
                 <hr key={`divider-${idx}`} className="border-t my-4" />
               )}
             </>

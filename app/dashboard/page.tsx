@@ -12,7 +12,6 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaRegFlag, FaTreeCity } from "react-icons/fa6";
 import { AdresseAttributes } from "../api/models/adresseModel";
 import { CountryAttributes } from "../api/models/paysModel";
-import { VilleAttributes } from "../api/models/villeModel";
 import { CommuneAttributes } from "../api/models/communeModel";
 
 const Home: React.FC = () => {

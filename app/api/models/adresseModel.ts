@@ -10,10 +10,12 @@ export interface AdresseAttributes {
   statut: string;
   id_commune: number;
   section_communale: string;
+  longitude?: number,
+  latitude?: number;
   code_postal?: string;
   cle_unicite: string;
   from: string;
-  Commune?: CommuneAttributes;
+  commune?: CommuneAttributes;
 
 }
 
@@ -26,10 +28,12 @@ class Adresse extends Model<AdresseAttributes, AdresseCreationAttributes> implem
   public cle_unicite!: string;
   public statut!: string;
   public id_commune!: number;
+  public latitude!: number;
+  public longitude!: number;
   public code_postal!: string;
   public section_communale!: string;
   public from!: string;
-  Commune: any;
+  commune: any;
 
 }
 Adresse.init(
@@ -48,6 +52,14 @@ Adresse.init(
       type: DataTypes.STRING(255),
       allowNull: false,
     },
+    latitude: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    longitude: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
     cle_unicite: {
       type: DataTypes.STRING(255),
       allowNull: false,
@@ -55,7 +67,7 @@ Adresse.init(
     statut: {
       type: DataTypes.STRING(20),
       allowNull: false,
-      defaultValue: 'En creation', // assuming default status
+      defaultValue: 'En creation',
     },
     code_postal: {
       type: DataTypes.STRING(20),
@@ -87,7 +99,7 @@ Adresse.init(
   },
   {
     sequelize,
-    modelName: "Adresse",
+    modelName: "adresse",
     tableName: "adresses",
     timestamps: false, // Disable Sequelize's automatic timestamps
   }

@@ -4,6 +4,7 @@ import Adresse from "../models/adresseModel";
 import Commune from "../models/communeModel";
 import Departement from "../models/departementModel";
 import { default as Country, default as Pays } from "../models/paysModel";
+import axios from "axios";
 
 
 export async function GET(req: NextRequest) {
@@ -37,6 +38,34 @@ export async function GET(req: NextRequest) {
   }
 }
 
+const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/search";
+
+async function getCoordinates(adresse: string): Promise<{ lat: number; lon: number } | null> {
+  try {
+    const response = await axios.get(NOMINATIM_BASE_URL, {
+      params: {
+        q: adresse,
+        format: "json",
+        addressdetails: 1,
+        limit: 1,
+      },
+    });
+
+    if (response.data.length > 0) {
+      return {
+        lat: parseFloat(response.data[0].lat),
+        lon: parseFloat(response.data[0].lon), 
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error("Erreur lors de la requête Nominatim :", error);
+    return null;
+  }
+}
+
+
+
 export async function POST(req: NextRequest) {
   try {
     const {
@@ -49,36 +78,44 @@ export async function POST(req: NextRequest) {
       from,
     } = await req.json();
 
-    let cle_unicite_base;
-    let cle_unicite;
-
-
-
-
-
     const commune = await Commune.findOne({ where: { id_commune } });
     if (!commune) {
-      const response = NextResponse.json({ message: "Commune not found." }, { status: 404 });
-      return response;
+      return NextResponse.json({ message: "Commune not found." }, { status: 404 });
     }
 
     const departement = await Departement.findOne({ where: { id_departement: commune.id_departement } });
     if (!departement) {
-      const response = NextResponse.json({ message: "Departement not found." }, { status: 404 });
-      return response;
+      return NextResponse.json({ message: "Departement not found." }, { status: 404 });
     }
 
     const pays = await Pays.findOne({ where: { id_pays: departement.id_pays } });
     if (!pays) {
-      const response = NextResponse.json({ message: "Pays not found." }, { status: 404 });
-      return response;
+      return NextResponse.json({ message: "Pays not found." }, { status: 404 });
     }
 
-    cle_unicite_base = `${pays.code_pays}${departement.code_departement}${code_postal}${numero_rue || 'X'}${libelle_adresse
+
+    const essais = [
+      `${numero_rue}, ${libelle_adresse}, ${section_communale}, ${commune.libelle_commune}, ${departement.libelle_departement}, ${pays.libelle_pays}`,
+      `${numero_rue}, ${libelle_adresse}, ${commune.libelle_commune}, ${departement.libelle_departement}, ${pays.libelle_pays}`,
+      `${commune.libelle_commune}, ${departement.libelle_departement}, ${pays.libelle_pays}`,
+
+    ];
+
+    let coords = null;
+    for (const essai of essais) {
+      coords = await getCoordinates(essai);
+      if (coords) break; // On sort de la boucle dès qu'on trouve des coordonnées
+    }
+
+    if (!coords) {
+      return NextResponse.json({ message: "Impossible d'obtenir les coordonnées GPS." }, { status: 400 });
+    }
+
+    // Génération de la clé d'unicité
+    const cle_unicite_base = `${pays.code_pays}${departement.code_departement}${code_postal}${numero_rue || 'X'}${libelle_adresse
       .charAt(0)
       .toUpperCase()}${libelle_adresse.replace(/[aeiouAEIOU\s]/g, '').toUpperCase()}`;
 
-    // Trouver le plus grand numéro de séquence pour des clés similaires
     const similarKeys = await Adresse.findAll({
       where: {
         cle_unicite: {
@@ -93,8 +130,7 @@ export async function POST(req: NextRequest) {
       sequence = (highestSequence + 1).toString().padStart(2, '0');
     }
 
-    cle_unicite = `${cle_unicite_base}${sequence}`;
-
+    const cle_unicite = `${cle_unicite_base}${sequence}`;
 
     const adresse = await Adresse.create({
       numero_rue,
@@ -104,22 +140,20 @@ export async function POST(req: NextRequest) {
       section_communale,
       code_postal,
       cle_unicite,
+      latitude: coords.lat,
+      longitude: coords.lon,
       from,
     });
 
-    const response = NextResponse.json(
-      { message: "Adresse created successfully", adresse },
-      { status: 201 }
-    );
-    return response;
+    return NextResponse.json({ message: "Adresse created successfully", adresse }, { status: 201 });
+
   } catch (error: any) {
     console.error(error);
-    const response = NextResponse.json({ error: `Internal Server Error ${error}` }, { status: 500 });
-    return response;
+    return NextResponse.json({ error: `Internal Server Error: ${error.message}` }, { status: 500 });
   }
-
-
 }
+
+
 
 
 
