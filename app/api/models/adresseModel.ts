@@ -9,7 +9,7 @@ export interface AdresseAttributes {
   libelle_adresse: string;
   statut: string;
   id_commune: number;
-  section_communale: string;
+  section_communale?: string;
   longitude?: number,
   latitude?: number;
   code_postal?: string;
