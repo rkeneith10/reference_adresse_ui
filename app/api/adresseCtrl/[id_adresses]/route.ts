@@ -23,17 +23,17 @@ export async function GET(
       include: [
         {
           model: Commune,
-          as:'commune',
+          as: 'commune',
           attributes: ["libelle_commune", "id_commune"],
           include: [
             {
               model: Departement,
-              as :'departement',
+              as: 'departement',
               attributes: ["libelle_departement", "id_departement"],
               include: [
                 {
                   model: Country,
-                  as:'country',
+                  as: 'country',
                   attributes: ["libelle_pays", "id_pays"],
                 },
               ],
@@ -56,6 +56,7 @@ export async function GET(
       cle_unicite: detailAdresse.cle_unicite,
       statut: detailAdresse.statut,
       section_communale: detailAdresse.section_communale,
+      from: detailAdresse.from,
       commune: {
         libelle_commune: detailAdresse.commune.libelle_commune,
         id_commune: detailAdresse.commune.id_commune,
