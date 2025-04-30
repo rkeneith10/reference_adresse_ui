@@ -31,10 +31,12 @@ const BarChart: React.FC = () => {
   const countriesByContinent = countries.reduce(
     (acc: { [continent: string]: number }, country) => {
       const continent = country.continent;
-      if (!acc[continent]) {
-        acc[continent] = 1;
-      } else {
-        acc[continent]++;
+      if (continent) {
+        if (!acc[continent]) {
+          acc[continent] = 1;
+        } else {
+          acc[continent]++;
+        }
       }
       return acc;
     },
