@@ -6,8 +6,8 @@ import Country, { CountryAttributes } from "./paysModel";
 export interface DepartementAttributes {
   id_departement: number;
   libelle_departement: string;
-  code_departement: string;
-  chef_lieux: string;
+  code_departement?: string;
+  chef_lieux?: string;
   id_pays: number;
   Country?: CountryAttributes;
 }
@@ -42,11 +42,11 @@ Departement.init(
     },
     code_departement: {
       type: DataTypes.STRING(5),
-      allowNull: false,
+      allowNull: true,
     },
     chef_lieux: {
       type: DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: true,
     },
     id_pays: {
       type: DataTypes.INTEGER.UNSIGNED,

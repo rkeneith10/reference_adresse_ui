@@ -4,10 +4,10 @@ import { DataTypes, Model, Optional } from "sequelize";
 export interface CountryAttributes {
   id_pays: number;
   libelle_pays: string;
-  code_pays: string;
-  continent: string;
-  indicatif_tel: string;
-  fuseau_horaire: string;
+  code_pays?: string;
+  continent?: string;
+  indicatif_tel?: string;
+  fuseau_horaire?: string;
 }
 
 interface CountryCreationAttributes
@@ -46,19 +46,19 @@ Country.init(
     },
     code_pays: {
       type: DataTypes.STRING(6),
-      allowNull: false,
+      allowNull: true,
     },
     continent: {
       type: DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: true,
     },
     indicatif_tel: {
       type: DataTypes.STRING(6),
-      allowNull: false,
+      allowNull: true,
     },
     fuseau_horaire: {
       type: DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: true,
     },
 
   },
