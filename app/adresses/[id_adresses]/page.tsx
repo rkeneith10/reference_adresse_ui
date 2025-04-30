@@ -6,11 +6,12 @@ import axios from 'axios';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { AdresseAttributes } from '@/app/api/models/adresseModel';
 
 const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
   const { id_adresses } = params;
   const router = useRouter();
-  const [adresse, setAdresse] = useState<any>(null);
+  const [adresse, setAdresse] = useState<AdresseAttributes>();
   const [commune, setCommune] = useState<any[]>([]);
   const [formData, setFormData] = useState<any>({
     numero_rue: "", libelle_adresse: "", code_postal: "", cle_unicite: "", statut: "", section_communale: "", id_commune: "",
@@ -74,7 +75,7 @@ const DetailsAdresse = ({ params }: { params: { id_adresses: string } }) => {
 
     try {
       const response = await axios.post('/api/adresseCtrl/updateadresse', {
-        id_adresses: adresse.id_adresses,
+        id_adresses: adresse?.id_adresses,
         numero_rue: formData.numero_rue,
         libelle_adresse: formData.libelle_adresse,
         cle_unicite: formData.cle_unicite,
