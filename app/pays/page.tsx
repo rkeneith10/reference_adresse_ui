@@ -51,6 +51,7 @@ const Pays: React.FC = () => {
       const session = await getSession();
 
       if (!session) {
+        
         router.push('/'); // Redirection vers la page d'accueil si la session n'est pas active
       }
     };

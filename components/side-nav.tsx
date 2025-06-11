@@ -1,13 +1,20 @@
 "use client";
+import { getVisibleSideNavItems } from "@/lib/helper";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { SIDENAV_ITEMS } from "@/constants";
 import { SideNavItem } from "@/types";
+import { useSession } from "next-auth/react";
 import logo from "../public/images/ref.png";
 
 const SideNav = () => {
+  const { data: session } = useSession();
+  const userRole = session?.user?.role;
+  const statutUser = session?.user.status;
+
+  const visibleItems = getVisibleSideNavItems(SIDENAV_ITEMS, userRole);
   return (
     <div className="md:w-60 bg-white h-screen flex-1 fixed border-r border-zinc-200 hidden md:flex">
       <div className="flex flex-col space-y-6 w-full">
@@ -22,10 +29,10 @@ const SideNav = () => {
         </Link>
 
         <div className="flex flex-col space-y-2 md:px-6">
-          {SIDENAV_ITEMS.map((item, idx) => (
+          {visibleItems.map((item, idx) => (
             <>
-              <MenuItem key={idx} item={item} />
-              {item.title === "Map" && (
+              {statutUser !== 0 && <MenuItem key={idx} item={item} />}
+              {item.title === "Gestion Utilisateurs" && (
                 <hr key={`divider-${idx}`} className="border-t my-4" />
               )}
             </>

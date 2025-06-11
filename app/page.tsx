@@ -1,7 +1,7 @@
 "use client";
 
 import { Spinner } from '@chakra-ui/react';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,14 +12,19 @@ import BackImage1 from "../public/images/téléchargement.jpg";
 import {
   useToast
 } from '@chakra-ui/react';
+import axios from 'axios';
+import { getSession } from 'next-auth/react';
+import React from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import validator from 'validator';
-import React from 'react';
+
 
 const LoginPage: React.FC = () => {
+  const { data: session } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [showRegisterButton, setShowRegisterButton] = useState(false);
   const toast = useToast()
   const router = useRouter();
   const [show, setShow] = useState(false);
@@ -28,6 +33,18 @@ const LoginPage: React.FC = () => {
 
   useEffect(() => {
     document.title = "Referentiel d'adresse";
+
+    const checkAdminExists = async () => {
+      try {
+        const response = await axios.get('/api/checkAdmin');
+        console.log(response.data.adminExists)
+        setShowRegisterButton(response.data.adminExists);
+      } catch (error) {
+        console.error("Erreur lors de la vérification de l'admin :", error);
+      }
+    };
+
+    checkAdminExists();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,8 +72,15 @@ const LoginPage: React.FC = () => {
       });
 
       if (result?.ok) {
-        router.push('/dashboard');
-        setLoading(false);
+        const upDateSession = await getSession();
+        console.log("session:", upDateSession)
+        if (upDateSession && upDateSession?.user.status === 1) {
+          router.push('/dashboard');
+          setLoading(false);
+        } else {
+          router.push('/change-password');
+          setLoading(false);
+        }
       } else {
         toast({
           title: `Email ou mot de passe incorrect`,
@@ -135,15 +159,13 @@ const LoginPage: React.FC = () => {
                 )}
               </button>
             </div>
-
-            {/* <div className="mt-6 text-center">
-              <button
-                onClick={() => signIn('google')}
-                className="w-full flex justify-center items-center rounded-md border border-gray-300 bg-white py-2 px-4 text-gray-500 font-medium hover:bg-gray-50"
-              >
-                <FcGoogle className="mr-2" /> Connexion avec Google
-              </button>
-            </div> */}
+            {!showRegisterButton && (
+              <div className="mt-6 text-center">
+                <Link href="/register" className="text-indigo-600 hover:underline">
+                  Vous n'avez pas de compte ? Créez-en un
+                </Link>
+              </div>
+            )}
 
             <div className="mt-6 text-center">
               <Link href="/forgot-password">Mot de passe oublié?</Link>

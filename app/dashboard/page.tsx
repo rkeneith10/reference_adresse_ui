@@ -4,15 +4,15 @@ import BarChartAdresse from "@/components/BarchatAdresse";
 import RootLayout from "@/components/rootLayout";
 import { Button, Grid, GridItem, Spinner } from "@chakra-ui/react";
 import axios from "axios";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaRegFlag, FaTreeCity } from "react-icons/fa6";
 import { AdresseAttributes } from "../api/models/adresseModel";
-import { CountryAttributes } from "../api/models/paysModel";
 import { CommuneAttributes } from "../api/models/communeModel";
+import { CountryAttributes } from "../api/models/paysModel";
 
 const Home: React.FC = () => {
   const [countries, setCountries] = useState<CountryAttributes[]>([]);
@@ -55,6 +55,7 @@ const Home: React.FC = () => {
   }, []);
 
 
+
   useEffect(() => {
     const checkSession = async () => {
       const session = await getSession();
@@ -66,6 +67,7 @@ const Home: React.FC = () => {
 
     checkSession();
   }, [router]);
+
   return (
     <RootLayout isAuthenticated={true}>
       <>

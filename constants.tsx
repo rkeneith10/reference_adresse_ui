@@ -1,10 +1,12 @@
-import { FaHome, FaMapMarkerAlt, FaMapPin, FaMapSigns, FaRegFlag } from "react-icons/fa";
+import { FaHome, FaMapMarkerAlt, FaMapPin, FaMapSigns, FaRegFlag, FaUsers } from "react-icons/fa";
 import { FaTreeCity } from "react-icons/fa6";
+
 
 import { MdListAlt } from "react-icons/md";
 
 
 import { SideNavItem } from "./types";
+
 
 export const SIDENAV_ITEMS: SideNavItem[] = [
   {
@@ -21,6 +23,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     title: "Pays",
     path: "/pays",
     icon: <FaRegFlag size={20} />,
+
   },
   {
     title: "Departements",
@@ -44,6 +47,12 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     title: "Map",
     path: "/mapAdresse",
     icon: <FaMapPin size={20} />,
+  },
+  {
+    title: "Gestion Utilisateurs",
+    path: "/gestion-utilisateur",
+    icon: <FaUsers size={20} />,
+    isAdminOnly: true
   },
 
 ];

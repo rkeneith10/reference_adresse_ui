@@ -21,7 +21,8 @@ const authOptions = {
           const isValidPassword = bcrypt.compareSync(password, user.password);
          // console.log("Mot de passe valide :", isValidPassword);
           if (isValidPassword) {
-            const customUser = { id: user.id, name: user.name, email: user.email };
+            const customUser = { id: user.id, name: user.name, email: user.email ,role:user.role,status:user.status};
+            console.log("customuser:",customUser)
             return customUser;
           } else {
             console.log("Mot de passe incorrect");
@@ -36,16 +37,28 @@ const authOptions = {
 
   ],
   callbacks: {
-    async session({ session, token, user }) {
-      // Vérifiez ce qui est passé dans token et user
-     // console.log("Session callback:", { session, token, user });
-      
+    async jwt({ token, user }) {
+      // Quand l'utilisateur se connecte, on ajoute ses données au token
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.role = user.role; 
+        token.status=user.status;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Injecte les infos du token dans la session
       if (token) {
         session.user = {
           id: token.id,
           name: token.name,
           email: token.email,
+          role: token.role, 
+          status:token.status,
         };
+        console.log("session user:",session.user)
       }
       return session;
     },

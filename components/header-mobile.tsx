@@ -1,6 +1,7 @@
 "use client";
 
 import { SIDENAV_ITEMS } from "@/constants";
+import { getVisibleSideNavItems } from "@/lib/helper";
 import { Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure } from '@chakra-ui/react';
 import { motion, useCycle } from "framer-motion";
 import { signOut, useSession } from 'next-auth/react';
@@ -8,7 +9,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode, useEffect, useRef } from "react";
 import { FaSignOutAlt, FaUser } from 'react-icons/fa';
-
 const sidebar = {
   open: (height = 1000) => ({
     clipPath: `circle(${height * 2 + 200}px at 100% 0)`,
@@ -34,6 +34,9 @@ const HeaderMobile = () => {
   const { height } = useDimensions(containerRef);
   const [isOpen, toggleOpen] = useCycle(false, true);
   const { data: session } = useSession();
+  const userRole = session?.user?.role;
+
+  const visibleItems = getVisibleSideNavItems(SIDENAV_ITEMS, userRole);
   const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
   const btnRef = useRef(null);
 
@@ -53,20 +56,23 @@ const HeaderMobile = () => {
         variants={variants}
         className="absolute grid w-full gap-3 px-10 py-16 max-h-screen overflow-y-auto"
       >
-        {SIDENAV_ITEMS.map((item, idx) => {
+        {visibleItems.map((item, idx) => {
           const isLastItem = idx === SIDENAV_ITEMS.length - 1;
 
           return (
             <div key={idx}>
-              <MenuItem>
-                <Link
-                  href={item.path}
-                  onClick={() => toggleOpen()}
-                  className={`flex w-full text-2xl ${item.path === pathname ? "font-bold" : ""}`}
-                >
-                  {item.title}
-                </Link>
-              </MenuItem>
+           {session?.user.status !==0 && (
+               <MenuItem>
+               <Link
+                 href={item.path}
+
+                 onClick={() => toggleOpen()}
+                 className={`flex w-full text-2xl ${item.path === pathname ? "font-bold" : ""}`}
+               >
+                 {item.title}
+               </Link>
+             </MenuItem>
+           )}
               {!isLastItem && <MenuItem className="my-3 h-px w-full bg-gray-300" />}
             </div>
           );
@@ -90,6 +96,7 @@ const HeaderMobile = () => {
               <DrawerBody>
                 <p className='text-gray-900 font-bold px-4 py-2 mt-4'>Bienvenue</p>
                 <p className="px-4 text-gray-500 font-semibold mb-4">{session.user.name}</p>
+
                 <div className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer border border-gray-200 rounded-md">
                   <FaUser className="h-5 w-5 text-blue-500 mr-2" />
                   <div>

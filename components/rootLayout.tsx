@@ -1,4 +1,4 @@
-// components/RootLayout.tsx
+
 "use client";
 import Header from "@/components/header";
 import HeaderMobile from "@/components/header-mobile";

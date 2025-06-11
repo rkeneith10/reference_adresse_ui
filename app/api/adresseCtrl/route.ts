@@ -1,10 +1,10 @@
+import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { Op } from "sequelize";
 import Adresse from "../models/adresseModel";
 import Commune from "../models/communeModel";
 import Departement from "../models/departementModel";
 import { default as Country, default as Pays } from "../models/paysModel";
-import axios from "axios";
 
 
 export async function GET(req: NextRequest) {
@@ -54,7 +54,7 @@ async function getCoordinates(adresse: string): Promise<{ lat: number; lon: numb
     if (response.data.length > 0) {
       return {
         lat: parseFloat(response.data[0].lat),
-        lon: parseFloat(response.data[0].lon), 
+        lon: parseFloat(response.data[0].lon),
       };
     }
     return null;
@@ -93,24 +93,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Pays not found." }, { status: 404 });
     }
 
-
-    const essais = [
-      `${numero_rue}, ${libelle_adresse}, ${section_communale}, ${commune.libelle_commune}, ${departement.libelle_departement}, ${pays.libelle_pays}`,
-      `${numero_rue}, ${libelle_adresse}, ${commune.libelle_commune}, ${departement.libelle_departement}, ${pays.libelle_pays}`,
-      `${commune.libelle_commune}, ${departement.libelle_departement}, ${pays.libelle_pays}`,
-
-    ];
-
-    let coords = null;
-    for (const essai of essais) {
-      coords = await getCoordinates(essai);
-      if (coords) break; // On sort de la boucle dès qu'on trouve des coordonnées
-    }
-
-    if (!coords) {
-      return NextResponse.json({ message: "Impossible d'obtenir les coordonnées GPS." }, { status: 400 });
-    }
-
     // Génération de la clé d'unicité
     const cle_unicite_base = `${pays.code_pays}${departement.code_departement}${code_postal}${numero_rue || 'X'}${libelle_adresse
       .charAt(0)
@@ -132,6 +114,7 @@ export async function POST(req: NextRequest) {
 
     const cle_unicite = `${cle_unicite_base}${sequence}`;
 
+    // Création sans latitude et longitude
     const adresse = await Adresse.create({
       numero_rue,
       libelle_adresse,
@@ -140,18 +123,19 @@ export async function POST(req: NextRequest) {
       section_communale,
       code_postal,
       cle_unicite,
-      latitude: coords.lat,
-      longitude: coords.lon,
+      latitude: 10.00,
+      longitude: 10.00,
       from,
     });
 
-    return NextResponse.json({ message: "Adresse created successfully", adresse }, { status: 201 });
+    return NextResponse.json({ message: "Adresse créée avec succès", adresse }, { status: 201 });
 
   } catch (error: any) {
     console.error(error);
     return NextResponse.json({ error: `Internal Server Error: ${error.message}` }, { status: 500 });
   }
 }
+
 
 
 
