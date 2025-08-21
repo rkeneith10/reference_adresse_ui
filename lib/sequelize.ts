@@ -14,7 +14,7 @@ const sequelize = new Sequelize({
   try {
     await sequelize.authenticate();
     console.log("Connected to MySQL");
-    await sequelize.sync({ alter: true });
+    await sequelize.sync({ alter: false, force: false });
   } catch (error) {
     console.error("Unable to connect to the database", error);
   }

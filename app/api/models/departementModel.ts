@@ -62,7 +62,7 @@ Departement.init(
     sequelize,
     modelName: "departement",
     tableName: "departements",
-    timestamps: false, // Automatically adds createdAt and updatedAt fields
+    timestamps: true, // Automatically adds createdAt and updatedAt fields
   }
 );
 

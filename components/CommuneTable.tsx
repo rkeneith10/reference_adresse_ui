@@ -39,7 +39,7 @@ const CommuneTable: React.FC<CommuneTableProps> = ({
                 #
               </th>
               <th scope="col" className="px-6 py-3">
-                Commune
+                Ville
               </th>
 
               <th scope="col" className="px-6 py-3">
@@ -54,7 +54,7 @@ const CommuneTable: React.FC<CommuneTableProps> = ({
             {filteredCommune.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-center py-4">
-                  Aucune commune trouv&eacute;e
+                  Aucune ville trouv&eacute;e
                 </td>
               </tr>
             ) : (
@@ -84,7 +84,7 @@ const CommuneTable: React.FC<CommuneTableProps> = ({
                         <FaRegTrashAlt className="text-lg" />
                       </Button>
 
-                      <Link href={`/communes/${co.id_commune}`}>
+                      <Link href={`/villes/${co.id_commune}`}>
                         <Button
                           size="sm"
                           colorScheme="blue"

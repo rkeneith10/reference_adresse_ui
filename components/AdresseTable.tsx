@@ -51,20 +51,18 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
               <th scope="col" className="px-6 py-3">
                 Cle unicite
               </th>
+
               <th scope="col" className="px-6 py-3">
-                Latitude
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Longitude
+                Type batiment
               </th>
               <th scope="col" className="px-6 py-3">
                 Statut
               </th>
               <th scope="col" className="px-6 py-3">
-                Commune
+                Ville
               </th>
               <th scope="col" className="px-6 py-3">
-                Section Communale
+                Commune / Quartier / County
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -96,11 +94,9 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     {adr.cle_unicite}
                   </td>
+
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.latitude ? adr.latitude : ""}
-                  </td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.longitude ? adr.longitude : ""}
+                    {adr.type_batiment}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     {adr.statut}

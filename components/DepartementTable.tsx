@@ -39,7 +39,7 @@ const DepartementTable: React.FC<DepartementTableProps> = ({
                 #
               </th>
               <th scope="col" className="px-6 py-3">
-                D&eacute;partement
+                D&eacute;partement /Province /Etat /Canton
               </th>
               <th scope="col" className="px-6 py-3">
                 Code d&eacute;partement

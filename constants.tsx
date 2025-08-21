@@ -32,8 +32,8 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
   },
 
   {
-    title: "Communes",
-    path: "/communes",
+    title: "Villes",
+    path: "/villes",
     icon: <FaTreeCity size={20} />,
   },
 

@@ -168,7 +168,7 @@ const DepartementFormModal: React.FC<DepartementFormModal> = ({ isOpen, onClose,
             </div>
             <div className="mb-2">
               <label htmlFor="libelle" className="block text-medium font-normal mb-2">
-                Nom du departement
+                Département /Province /Etat /Canton
                 <TooltipIcon field="libelle_departement" tooltipMessage={tooltips['libelle_departement']} />
 
 

@@ -36,6 +36,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
     libelle_adresse: "",
     statut: "En creation",
     code_postal: "",
+    type_batiment: "Résidence",
     from: "moi"
 
   });
@@ -45,7 +46,8 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
     libelle_adresse: "",
     id_commune: "",
     section_communale: "",
-    code_postal: ""
+    code_postal: "",
+
   });
 
   const [tooltips, setTooltips] = useState<Record<string, string>>({});
@@ -141,6 +143,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
           statut: "En creation",
           code_postal: "",
           from: "moi",
+          type_batiment: "Résidence"
 
         });
         onClose();
@@ -158,6 +161,23 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
     setAdresse({ ...adresse, id_commune: selectedOption.value });
     setErrors({ ...errors, id_commune: "" });
   };
+
+  const batimentsOption = [
+    { value: "Résidence", label: "Résidence" },
+    { value: "Hôtel", label: "Hôtel" },
+    { value: "Hôpital", label: "Hôpital" },
+    { value: "École", label: "École" },
+    { value: "Université", label: "Université" },
+    { value: "Commissariat", label: "Commissariat" },
+    { value: "Commerce", label: "Commerce" },
+    { value: "Pharmacie", label: "Pharmacie" },
+    { value: "Restaurant", label: "Restaurant" },
+  ];
+  const handleBatimentChange = (selectedOption: any) => {
+    setAdresse({ ...adresse, type_batiment: selectedOption.value });
+  };
+
+
 
   const adresseOption = communes.map((comm) => ({
     value: comm.id_commune,
@@ -282,7 +302,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
 
             <div className="mb-4 relative">
               <label htmlFor="section_communale" className="block text-sm font-normal mb-2">
-                Section Communale
+                Commune /Quartier /County
                 <div
                   className="ml-2 inline-block cursor-pointer relative"
                   onMouseEnter={() => handleTooltipToggle('section_communale')}
@@ -309,6 +329,39 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
               {errors.section_communale && (
                 <span className="text-red-500 text-sm">{errors.section_communale}</span>
               )}
+            </div>
+
+
+
+
+            <div className="mb-4 relative">
+              <label htmlFor="type_batiment" className="block text-sm font-normal mb-2">
+                Choisir un type de batiment
+                <div
+                  className="ml-2 inline-block cursor-pointer relative"
+                  onMouseEnter={() => handleTooltipToggle('type_batiment')}
+                  onMouseLeave={handleTooltipHide}
+                >
+                  <FaQuestionCircle className="text-gray-500" size={15} />
+                  {visibleTooltip === 'type_batiment' && (
+                    <div className="absolute z-10 bg-gray-900 text-white text-md rounded-lg shadow-lg p-3 -top-12 left-1/2 transform -translate-x-1/2 w-72 text-center">
+                      {tooltips['type_batiment']}
+                      <div className="absolute left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-gray-900 rotate-45 bottom-[-5px]"></div>
+                    </div>
+                  )}
+                </div>
+              </label>
+              <Select
+                placeholder="Choisir un type de bâtiment"
+                name="type_batiment"
+                onChange={handleBatimentChange}
+                options={batimentsOption}
+                value={batimentsOption.find(opt => opt.value === adresse.type_batiment)}
+                className="w-full"
+              />
+
+
+
             </div>
 
 

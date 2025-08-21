@@ -15,6 +15,7 @@ export interface AdresseAttributes {
   code_postal?: string;
   cle_unicite: string;
   from: string;
+  type_batiment:string;
   commune?: CommuneAttributes;
 
 }
@@ -33,6 +34,7 @@ class Adresse extends Model<AdresseAttributes, AdresseCreationAttributes> implem
   public code_postal!: string;
   public section_communale!: string;
   public from!: string;
+  public type_batiment!: string;
   commune: any;
 
 }
@@ -79,6 +81,11 @@ Adresse.init(
       type: DataTypes.STRING(20),
       allowNull: true,
 
+    },
+    type_batiment:{
+      type:DataTypes.STRING,
+      allowNull:false,
+      defaultValue:"Résidence"
     },
     id_commune: {
       type: DataTypes.INTEGER.UNSIGNED,

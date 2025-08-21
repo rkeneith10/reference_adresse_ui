@@ -57,7 +57,7 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
       valid = false;
     }
     if (!commune.libelle_commune) {
-      newErrors.libelle_commune = "Nom de la commune est requis";
+      newErrors.libelle_commune = "Nom de la ville est requis";
       valid = false;
     }
 
@@ -113,7 +113,7 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
       }
     } catch (error) {
       onFailed();
-      console.error("Échec de l'ajout de la commune", error);
+      console.error("Échec de l'ajout de la ville", error);
     } finally {
       setAdding(false);
     }
@@ -145,7 +145,7 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
       <ModalContent>
         <>
           <ModalHeader className="flex flex-col gap-1">
-            Ajouter une commune
+            Ajouter une ville
           </ModalHeader>
           <ModalBody>
             <div className="mb-4">
@@ -172,12 +172,12 @@ const CommuneFormModal: React.FC<CommuneFormModalProps> = ({ isOpen, onClose, on
                 htmlFor="libelle"
                 className="block text-sm font-normal mb-2"
               >
-                Commune
+                Ville
                 <TooltipIcon field='libelle_commune' tooltipMessage={tooltips['libelle_commune'] || ""} />
               </label>
               <input
                 type="text"
-                placeholder="Entrer la commune"
+                placeholder="Entrer la ville"
                 id="libelle_commune"
                 name="libelle_commune"
                 onChange={handleinputChange}

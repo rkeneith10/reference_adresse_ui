@@ -76,6 +76,7 @@ export async function POST(req: NextRequest) {
       section_communale,
       code_postal,
       from,
+      type_batiment
     } = await req.json();
 
     const commune = await Commune.findOne({ where: { id_commune } });
@@ -126,6 +127,7 @@ export async function POST(req: NextRequest) {
       latitude: 10.00,
       longitude: 10.00,
       from,
+      type_batiment
     });
 
     return NextResponse.json({ message: "Adresse créée avec succès", adresse }, { status: 201 });
