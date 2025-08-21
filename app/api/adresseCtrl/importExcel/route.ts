@@ -30,7 +30,8 @@ export async function POST(req: NextRequest) {
         statut: adr.statut,
         section_communale: adr.section_communale,
         id_commune: adr.id_commune,
-        from: adr.from
+        from: adr.from,
+        type_batiment: adr.type_batiment,
       });
 
       console.log("Created addresses:", createdAdresses);
