@@ -66,7 +66,7 @@ Country.init(
     sequelize,
     modelName: "country",
     tableName: "countries",
-    timestamps: true, // Automatically adds createdAt and updatedAt fields
+    timestamps: false, // Automatically adds createdAt and updatedAt fields
   }
 );
 
