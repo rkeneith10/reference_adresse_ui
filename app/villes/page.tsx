@@ -98,7 +98,7 @@ const Commune: React.FC = () => {
 
   const getDepartementNameById = (id: number) => {
     const dept = departements.find((d) => d.id_departement === id);
-    return dept ? dept.libelle_departement : "Pays Inconnu";
+    return dept ? dept.libelle_departement : "Departement Inconnu";
   };
 
   return (
