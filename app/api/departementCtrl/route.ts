@@ -5,7 +5,7 @@ export async function GET() {
 
   try {
     const alldepartements = await Departement.findAll({
-        order: [['createdAt', 'DESC']],
+      order: [['id_departement', 'DESC']],
     });
     if (alldepartements) {
       return NextResponse.json({ data: alldepartements }, { status: 200 })
