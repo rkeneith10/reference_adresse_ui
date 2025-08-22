@@ -105,7 +105,7 @@ const GestionUtilisateurs: React.FC = () => {
               </Button>
             </div>
             <UserTable
-              user={users}
+              user={users ||[]}
 
               searchTerm={searchTerm}
               currentPage={currentPage}

@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import Country from "../models/paysModel";
-import Departement from "../models/departementModel";
 import Commune from "../models/communeModel";
+import Departement from "../models/departementModel";
+import Country from "../models/paysModel";
 
 
 export async function GET() {
   try {
     const allcountries = await Country.findAll({
+      order: [['createdAt', 'DESC']],
+
       include: [
         {
           model: Departement,
@@ -17,6 +19,8 @@ export async function GET() {
           ],
         },
       ],
+     
+
     });
     if (allcountries) {
       return NextResponse.json({ data: allcountries }, { status: 200 });

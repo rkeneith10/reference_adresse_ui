@@ -21,9 +21,10 @@ const UserTable: React.FC<UserTableProps> = ({
   setCurrentPage,
   onDelete,
 }) => {
-  const filteredUser = user.filter((u) =>
-    u.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+const filteredUser = (user ?? []).filter((u) =>
+  u.name.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
   const { data: session } = useSession()
   const startIndex = currentPage * itemsPerPage;
   const endIndex = Math.min((currentPage + 1) * itemsPerPage, filteredUser.length);

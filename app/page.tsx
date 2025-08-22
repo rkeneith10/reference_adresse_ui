@@ -168,7 +168,7 @@ const LoginPage: React.FC = () => {
             )}
 
             <div className="mt-6 text-center">
-              <Link href="/forgot-password">Mot de passe oublié?</Link>
+              <Link href="#">Mot de passe oublié?</Link>
             </div>
           </form>
         </div>

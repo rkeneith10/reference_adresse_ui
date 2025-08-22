@@ -94,11 +94,11 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ isOpen, onClose, onSucces
     let valid = true;
     const newErrors = { name: "", email: "", role: "" };
     if (!user.name) {
-      newErrors.name = "Le no de l'utilisateur est requis";
+      newErrors.name = "Le nom de l'utilisateur est requis";
       valid = false;
     }
     if (!user.email) {
-      newErrors.email = "L'email de reference est requise";
+      newErrors.email = "L'email  est requis";
       valid = false;
     }
     if (!validator.isEmail(user.email)) {

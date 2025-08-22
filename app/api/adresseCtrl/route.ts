@@ -10,6 +10,7 @@ import { default as Country, default as Pays } from "../models/paysModel";
 export async function GET(req: NextRequest) {
   try {
     const adresses = await Adresse.findAll({
+      
       include: [
         {
           model: Commune,

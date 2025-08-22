@@ -3,7 +3,7 @@ import Commune from "../models/communeModel";
 
 export async function GET() {
   try {
-    const commune = await Commune.findAll({})
+    const commune = await Commune.findAll({ })
     if (commune) {
       return NextResponse.json({ data: commune }, { status: 200 })
     }

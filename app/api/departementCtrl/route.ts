@@ -4,7 +4,9 @@ import Departement from "../models/departementModel";
 export async function GET() {
 
   try {
-    const alldepartements = await Departement.findAll({});
+    const alldepartements = await Departement.findAll({
+        order: [['createdAt', 'DESC']],
+    });
     if (alldepartements) {
       return NextResponse.json({ data: alldepartements }, { status: 200 })
     }

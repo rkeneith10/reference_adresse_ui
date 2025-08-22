@@ -8,6 +8,8 @@ export async function GET() {
   try {
     const allUsers = await User.findAll({
       attributes: { exclude: ['password'] },
+      order: [['createdAt', 'DESC']]
+
     });
     if (allUsers) {
       return NextResponse.json({ data: allUsers }, { status: 200 });
@@ -29,6 +31,7 @@ export async function POST(req: NextRequest) {
 
     const userCount = await User.count();
     const role = userCount === 0 ? 'admin' : 'user';
+    const statutUser = userCount === 0 ? 1 : 0;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -37,6 +40,7 @@ export async function POST(req: NextRequest) {
       email,
       password: hashedPassword,
       role,
+      status: statutUser
     });
 
     return NextResponse.json(

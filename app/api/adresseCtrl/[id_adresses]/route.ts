@@ -56,6 +56,7 @@ export async function GET(
       cle_unicite: detailAdresse.cle_unicite,
       statut: detailAdresse.statut,
       section_communale: detailAdresse.section_communale,
+      type_batiment: detailAdresse.type_batiment,
       from: detailAdresse.from,
       commune: {
         libelle_commune: detailAdresse.commune.libelle_commune,
