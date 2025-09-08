@@ -45,7 +45,6 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
     numero_rue: "",
     libelle_adresse: "",
     id_commune: "",
-    section_communale: "",
     code_postal: "",
 
   });
@@ -95,11 +94,11 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = { libelle_adresse: "", numero_rue: "", id_commune: "", section_communale: "", code_postal: "" };
-    if (!adresse.section_communale) {
-      newErrors.section_communale = "La section communale est requise";
-      valid = false;
-    }
+    const newErrors = { libelle_adresse: "", numero_rue: "", id_commune: "", code_postal: "" };
+    // if (!adresse.section_communale) {
+    //   newErrors.section_communale = "La section communale est requise";
+    //   valid = false;
+    // }
     if (!adresse.id_commune) {
       newErrors.id_commune = "La commune de reference est requise";
       valid = false;
@@ -326,9 +325,9 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
                 value={adresse.section_communale}
                 className="border rounded-md w-full p-2 text-sm"
               />
-              {errors.section_communale && (
+              {/* {errors.section_communale && (
                 <span className="text-red-500 text-sm">{errors.section_communale}</span>
-              )}
+              )} */}
             </div>
 
 
