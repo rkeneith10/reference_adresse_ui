@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
       libelle_adresse,
       statut,
       id_commune,
-      section_communale,
+      section_communale: section_communale || commune.libelle_commune,
       code_postal,
       cle_unicite,
       latitude: 10.00,

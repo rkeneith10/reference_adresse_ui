@@ -210,7 +210,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
           <ModalBody>
             <div className="mb-4 relative">
               <label htmlFor="id_sectioncommunale" className="block text-sm font-normal mb-2">
-                Choisir une commune
+                Choisir une ville
                 <div
                   className="ml-2 inline-block cursor-pointer relative"
                   onMouseEnter={() => handleTooltipToggle('id_sectioncommunale')}
@@ -226,7 +226,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
                 </div>
               </label>
               <Select
-                placeholder="Choisir une commune"
+                placeholder="Choisir une ville"
                 name="id_commune"
                 onChange={handleSelectChange}
                 options={adresseOption}
@@ -319,7 +319,7 @@ const AdresseFormModal: React.FC<AdresseFormModalProps> = ({ isOpen, onClose, on
               </label>
               <input
                 type="text"
-                placeholder="Entrer la section communale"
+                placeholder="Entrer Commune /Quartier /County"
                 id="section_communale"
                 name="section_communale"
                 onChange={handleinputChange}
