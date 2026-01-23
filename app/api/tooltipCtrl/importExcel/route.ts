@@ -14,11 +14,19 @@ export async function POST(req: NextRequest) {
 
     // Itérer sur chaque tooltip dans le tableau et les créer dans la base de données
     for (let tool of tooltips) {
-      await Tooltip.create({
-        nom_application: tool.nom_application,
-        nom_champ: tool.nom_champ,
-        message_tooltip: tool.message_tooltip,
+      const exists = await Tooltip.findOne({
+        where: {
+          nom_application: tool.nom_application,
+          nom_champ: tool.nom_champ,
+        },
       });
+      if (!exists) {
+        await Tooltip.create({
+          nom_application: tool.nom_application,
+          nom_champ: tool.nom_champ,
+          message_tooltip: tool.message_tooltip,
+        });
+      }
     }
 
     const response = NextResponse.json(
