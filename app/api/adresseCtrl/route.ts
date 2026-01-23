@@ -10,21 +10,18 @@ import { default as Country, default as Pays } from "../models/paysModel";
 export async function GET(req: NextRequest) {
   try {
     const adresses = await Adresse.findAll({
-
+      
       include: [
         {
           model: Commune,
-          as: 'commune',
           attributes: ["libelle_commune", "id_commune"],
           include: [
             {
               model: Departement,
-              as: 'departement',
               attributes: ["libelle_departement", "id_departement"],
               include: [
                 {
                   model: Country,
-                  as: 'country',
                   attributes: ["libelle_pays", "id_pays"],
                 },
               ],
@@ -72,7 +69,7 @@ async function getCoordinates(adresse: string): Promise<{ lat: number; lon: numb
 
 export async function POST(req: NextRequest) {
   try {
-    const {
+    const {  
       numero_rue,
       libelle_adresse,
       statut,
@@ -141,3 +138,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: `Internal Server Error: ${error.message}` }, { status: 500 });
   }
 }
+
+
+
+
+
+

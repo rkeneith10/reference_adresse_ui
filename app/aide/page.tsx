@@ -94,14 +94,17 @@ const Aide = () => {
   const fetchAide = async () => {
     setLoading(true);
     try {
-      const nom_application = "Adresse"
+      const nom_application = "Adresse";
       const response = await axios.get(`/api/tooltipCtrl?nom_application=${nom_application}`);
-      setAide(response.data.tooltip);
-      setLoading(false);
+      setAide(response.data.tooltip || []);
     } catch (error) {
-      console.error("Error fetching departments:", error);
+      console.error("Error fetching tooltips:", error);
+      setAide([]);
+    } finally {
+      setLoading(false);
     }
   };
+
 
   return (
     <RootLayout isAuthenticated={true}>
