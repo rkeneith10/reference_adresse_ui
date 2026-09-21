@@ -1,11 +1,12 @@
+import { formatValue } from "@/lib/helper";
 import { TooltipAttributes } from "@/app/api/models/tooltipModel";
 import { Button } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
-import { FaChevronLeft, FaChevronRight, FaRegEye, FaRegTrashAlt } from "react-icons/fa";
+import { FaRegEye, FaRegTrashAlt } from "react-icons/fa";
+import Pagination from "./Pagination";
 
-
-interface AdresseTableProps {
+interface AideTableProps {
   aide: TooltipAttributes[];
   searchTerm: string;
   currentPage: number;
@@ -14,19 +15,22 @@ interface AdresseTableProps {
   onDelete: (id: number) => void;
 }
 
-const AideTable: React.FC<AdresseTableProps> = ({ aide = [],
+const AideTable: React.FC<AideTableProps> = ({
+  aide = [],
   searchTerm,
   currentPage,
   itemsPerPage,
   setCurrentPage,
   onDelete,
 }) => {
-  const filteredAide = aide.filter((a) =>
-    a.nom_champ.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredAide = (aide ?? []).filter((a) =>
+    (a.nom_champ ?? "").toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const startIndex = currentPage * itemsPerPage;
-  const endIndex = Math.min((currentPage + 1) * itemsPerPage, filteredAide.length);
+  const totalPages = Math.ceil(filteredAide.length / itemsPerPage);
+  const safeCurrentPage = totalPages > 0 ? Math.min(currentPage, totalPages - 1) : 0;
+  const startIndex = safeCurrentPage * itemsPerPage;
+  const endIndex = Math.min((safeCurrentPage + 1) * itemsPerPage, filteredAide.length);
 
   return (
     <div className="mt-4">
@@ -55,7 +59,7 @@ const AideTable: React.FC<AdresseTableProps> = ({ aide = [],
           <tbody>
             {filteredAide.length === 0 ? (
               <tr>
-                <td colSpan={6} className="text-center py-4">
+                <td colSpan={5} className="text-center py-4">
                   Aucune donn&eacute;e trouv&eacute;e
                 </td>
               </tr>
@@ -63,16 +67,16 @@ const AideTable: React.FC<AdresseTableProps> = ({ aide = [],
               filteredAide.slice(startIndex, endIndex).map((a, index) => (
                 <tr key={a.id_tooltip}>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {index + 1}
+                    {startIndex + index + 1}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {a.nom_application}
+                    {formatValue(a.nom_application)}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {a.nom_champ}
+                    {formatValue(a.nom_champ)}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {a.message_tooltip}
+                    {formatValue(a.message_tooltip)}
                   </td>
 
                   <td className="text-left py-3 px-4 border-b border-gray-200">
@@ -108,33 +112,17 @@ const AideTable: React.FC<AdresseTableProps> = ({ aide = [],
           </tbody>
         </table>
       </div>
-      <div className="flex justify-center my-4">
-        <button
-          onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 0}
-          className="mx-1 py-1 px-3 rounded-full hover:bg-gray-300"
-        >
-          <FaChevronLeft className="text-gray-500 h-2 w-2" />
-        </button>
-        {[...Array(Math.ceil(filteredAide.length / itemsPerPage))].map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentPage(index)}
-            className={`mx-1 py-1 px-3 rounded-full ${currentPage === index ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-          >
-            {index + 1}
-          </button>
-        ))}
-        <button
-          onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={currentPage === Math.ceil(filteredAide.length / itemsPerPage) - 1}
-          className="mx-1 py-1 px-3 rounded-full hover:bg-gray-300"
-        >
-          <FaChevronRight className="text-gray-500 h-2 w-2" />
-        </button>
-      </div>
-    </div>
-  )
-}
 
-export default AideTable
+      <Pagination
+        currentPage={safeCurrentPage}
+        totalItems={filteredAide.length}
+        itemsPerPage={itemsPerPage}
+        onPageChange={setCurrentPage}
+        previousLabel="Precedent"
+        nextLabel="Suivant"
+      />
+    </div>
+  );
+};
+
+export default AideTable;

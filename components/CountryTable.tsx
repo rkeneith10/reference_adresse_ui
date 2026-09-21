@@ -1,9 +1,10 @@
-// CountryTable.tsx
+import { formatValue } from "@/lib/helper";
 import { Button } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
-import { FaChevronLeft, FaChevronRight, FaRegEye, FaRegTrashAlt } from "react-icons/fa";
+import { FaRegEye, FaRegTrashAlt } from "react-icons/fa";
 import { CountryAttributes } from "../app/api/models/paysModel";
+import Pagination from "./Pagination";
 
 interface CountryTableProps {
   countries: CountryAttributes[];
@@ -23,11 +24,13 @@ const CountryTable: React.FC<CountryTableProps> = ({
   onDelete,
 }) => {
   const filteredCountries = countries.filter((country) =>
-    country.libelle_pays.toLowerCase().includes(searchTerm.toLowerCase())
+    (country.libelle_pays ?? "").toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const startIndex = currentPage * itemsPerPage;
-  const endIndex = Math.min((currentPage + 1) * itemsPerPage, filteredCountries.length);
+  const totalPages = Math.ceil(filteredCountries.length / itemsPerPage);
+  const safeCurrentPage = totalPages > 0 ? Math.min(currentPage, totalPages - 1) : 0;
+  const startIndex = safeCurrentPage * itemsPerPage;
+  const endIndex = Math.min((safeCurrentPage + 1) * itemsPerPage, filteredCountries.length);
 
   return (
     <>
@@ -47,19 +50,19 @@ const CountryTable: React.FC<CountryTableProps> = ({
           <tbody>
             {filteredCountries.length === 0 ? (
               <tr>
-                <td colSpan={6} className="text-center py-4 font-semibold">
+                <td colSpan={7} className="text-center py-4 font-semibold">
                   Pas de pays
                 </td>
               </tr>
             ) : (
               filteredCountries.slice(startIndex, endIndex).map((country, index) => (
-                <tr key={country.indicatif_tel} className="bg-white hover:bg-gray-50">
-                  <td className="text-left py-3 px-4 border-b border-gray-200">{index + 1}</td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">{country.libelle_pays}</td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">{country.code_pays}</td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">{country.continent}</td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">{country.indicatif_tel}</td>
-                  <td className="text-left py-3 px-4 border-b border-gray-200">{country.fuseau_horaire}</td>
+                <tr key={country.indicatif_tel || country.id_pays || index} className="bg-white hover:bg-gray-50">
+                  <td className="text-left py-3 px-4 border-b border-gray-200">{startIndex + index + 1}</td>
+                  <td className="text-left py-3 px-4 border-b border-gray-200">{formatValue(country.libelle_pays)}</td>
+                  <td className="text-left py-3 px-4 border-b border-gray-200">{formatValue(country.code_pays)}</td>
+                  <td className="text-left py-3 px-4 border-b border-gray-200">{formatValue(country.continent)}</td>
+                  <td className="text-left py-3 px-4 border-b border-gray-200">{formatValue(country.indicatif_tel)}</td>
+                  <td className="text-left py-3 px-4 border-b border-gray-200">{formatValue(country.fuseau_horaire)}</td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     <div className="flex">
                       <Button
@@ -93,31 +96,15 @@ const CountryTable: React.FC<CountryTableProps> = ({
           </tbody>
         </table>
       </div>
-      <div className="flex justify-center my-4">
-        <button
-          onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 0}
-          className="mx-1 py-1 px-3 rounded-full hover:bg-gray-300"
-        >
-          <FaChevronLeft className="text-gray-500 h-2 w-2" />
-        </button>
-        {[...Array(Math.ceil(filteredCountries.length / itemsPerPage))].map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentPage(index)}
-            className={`mx-1 py-1 px-3 rounded-full ${currentPage === index ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-          >
-            {index + 1}
-          </button>
-        ))}
-        <button
-          onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={currentPage === Math.ceil(filteredCountries.length / itemsPerPage) - 1}
-          className="mx-1 py-1 px-3 rounded-full hover:bg-gray-300"
-        >
-          <FaChevronRight className="text-gray-500 h-2 w-2" />
-        </button>
-      </div>
+
+      <Pagination
+        currentPage={safeCurrentPage}
+        totalItems={filteredCountries.length}
+        itemsPerPage={itemsPerPage}
+        onPageChange={setCurrentPage}
+        previousLabel="Precedent"
+        nextLabel="Suivant"
+      />
     </>
   );
 };

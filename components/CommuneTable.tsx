@@ -1,8 +1,10 @@
+import { formatValue } from "@/lib/helper";
 import { Button } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
-import { FaChevronLeft, FaChevronRight, FaRegEye, FaRegTrashAlt } from "react-icons/fa";
+import { FaRegEye, FaRegTrashAlt } from "react-icons/fa";
 import { CommuneAttributes } from "../app/api/models/communeModel";
+import Pagination from "./Pagination";
 
 interface CommuneTableProps {
   comm: CommuneAttributes[];
@@ -11,7 +13,7 @@ interface CommuneTableProps {
   itemsPerPage: number;
   setCurrentPage: (page: number) => void;
   onDelete: (id: number) => void;
-  getDepartementNameById: (id: number) => string,
+  getDepartementNameById: (id: number) => string;
 }
 
 const CommuneTable: React.FC<CommuneTableProps> = ({
@@ -21,14 +23,17 @@ const CommuneTable: React.FC<CommuneTableProps> = ({
   itemsPerPage,
   setCurrentPage,
   onDelete,
-  getDepartementNameById
+  getDepartementNameById,
 }) => {
   const filteredCommune = comm.filter((c) =>
-    c.libelle_commune.toLowerCase().includes(searchTerm.toLowerCase())
+    (c.libelle_commune ?? "").toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const startIndex = currentPage * itemsPerPage;
-  const endIndex = Math.min((currentPage + 1) * itemsPerPage, filteredCommune.length);
+  const totalPages = Math.ceil(filteredCommune.length / itemsPerPage);
+  const safeCurrentPage = totalPages > 0 ? Math.min(currentPage, totalPages - 1) : 0;
+  const startIndex = safeCurrentPage * itemsPerPage;
+  const endIndex = Math.min((safeCurrentPage + 1) * itemsPerPage, filteredCommune.length);
+
   return (
     <div>
       <div className="overflow-x-auto">
@@ -53,7 +58,7 @@ const CommuneTable: React.FC<CommuneTableProps> = ({
           <tbody>
             {filteredCommune.length === 0 ? (
               <tr>
-                <td colSpan={6} className="text-center py-4">
+                <td colSpan={4} className="text-center py-4">
                   Aucune ville trouv&eacute;e
                 </td>
               </tr>
@@ -61,14 +66,14 @@ const CommuneTable: React.FC<CommuneTableProps> = ({
               filteredCommune.slice(startIndex, endIndex).map((co, index) => (
                 <tr key={co.id_commune}>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {index + 1}
+                    {startIndex + index + 1}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {co.libelle_commune}
+                    {formatValue(co.libelle_commune)}
                   </td>
 
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {getDepartementNameById(co.id_departement)}
+                    {formatValue(getDepartementNameById(co.id_departement))}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     <div className="flex space-x-2">
@@ -95,7 +100,6 @@ const CommuneTable: React.FC<CommuneTableProps> = ({
                           <FaRegEye className="text-lg" />
                         </Button>
                       </Link>
-
                     </div>
                   </td>
                 </tr>
@@ -104,33 +108,17 @@ const CommuneTable: React.FC<CommuneTableProps> = ({
           </tbody>
         </table>
       </div>
-      <div className="flex justify-center my-4">
-        <button
-          onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 0}
-          className="mx-1 py-1 px-3 rounded-full hover:bg-gray-300"
-        >
-          <FaChevronLeft className="text-gray-500 h-2 w-2" />
-        </button>
-        {[...Array(Math.ceil(filteredCommune.length / itemsPerPage))].map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentPage(index)}
-            className={`mx-1 py-1 px-3 rounded-full ${currentPage === index ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-          >
-            {index + 1}
-          </button>
-        ))}
-        <button
-          onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={currentPage === Math.ceil(filteredCommune.length / itemsPerPage) - 1}
-          className="mx-1 py-1 px-3 rounded-full hover:bg-gray-300"
-        >
-          <FaChevronRight className="text-gray-500 h-2 w-2" />
-        </button>
-      </div>
-    </div>
-  )
-}
 
-export default CommuneTable
+      <Pagination
+        currentPage={safeCurrentPage}
+        totalItems={filteredCommune.length}
+        itemsPerPage={itemsPerPage}
+        onPageChange={setCurrentPage}
+        previousLabel="Precedent"
+        nextLabel="Suivant"
+      />
+    </div>
+  );
+};
+
+export default CommuneTable;

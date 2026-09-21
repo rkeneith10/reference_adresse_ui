@@ -1,9 +1,10 @@
+import { formatValue } from "@/lib/helper";
 import { Button } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
-import { FaChevronLeft, FaChevronRight, FaRegEye, FaRegTrashAlt } from "react-icons/fa";
+import { FaRegEye, FaRegTrashAlt } from "react-icons/fa";
 import { DepartementAttributes } from "../app/api/models/departementModel";
-
+import Pagination from "./Pagination";
 
 interface DepartementTableProps {
   dept: DepartementAttributes[];
@@ -12,8 +13,9 @@ interface DepartementTableProps {
   itemsPerPage: number;
   setCurrentPage: (page: number) => void;
   onDelete: (id: number) => void;
-  getCountryNameById: (id: number) => string,
+  getCountryNameById: (id: number) => string;
 }
+
 const DepartementTable: React.FC<DepartementTableProps> = ({
   dept,
   searchTerm,
@@ -21,14 +23,17 @@ const DepartementTable: React.FC<DepartementTableProps> = ({
   itemsPerPage,
   setCurrentPage,
   onDelete,
-  getCountryNameById
+  getCountryNameById,
 }) => {
   const filteredDepartements = dept.filter((dp) =>
-    dp.libelle_departement.toLowerCase().includes(searchTerm.toLowerCase())
+    (dp.libelle_departement ?? "").toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const startIndex = currentPage * itemsPerPage;
-  const endIndex = Math.min((currentPage + 1) * itemsPerPage, filteredDepartements.length);
+  const totalPages = Math.ceil(filteredDepartements.length / itemsPerPage);
+  const safeCurrentPage = totalPages > 0 ? Math.min(currentPage, totalPages - 1) : 0;
+  const startIndex = safeCurrentPage * itemsPerPage;
+  const endIndex = Math.min((safeCurrentPage + 1) * itemsPerPage, filteredDepartements.length);
+
   return (
     <div>
       <div className="overflow-x-auto">
@@ -66,19 +71,19 @@ const DepartementTable: React.FC<DepartementTableProps> = ({
               filteredDepartements.slice(startIndex, endIndex).map((dp, index) => (
                 <tr key={dp.id_departement}>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {index + 1}
+                    {startIndex + index + 1}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {dp.libelle_departement}
+                    {formatValue(dp.libelle_departement)}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {dp.code_departement}
+                    {formatValue(dp.code_departement)}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {dp.chef_lieux}
+                    {formatValue(dp.chef_lieux)}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {getCountryNameById(dp.id_pays)}
+                    {formatValue(getCountryNameById(dp.id_pays))}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     <div className="flex space-x-2">
@@ -113,33 +118,17 @@ const DepartementTable: React.FC<DepartementTableProps> = ({
           </tbody>
         </table>
       </div>
-      <div className="flex justify-center my-4">
-        <button
-          onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 0}
-          className="mx-1 py-1 px-3 rounded-full hover:bg-gray-300"
-        >
-          <FaChevronLeft className="text-gray-500 h-2 w-2" />
-        </button>
-        {[...Array(Math.ceil(filteredDepartements.length / itemsPerPage))].map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentPage(index)}
-            className={`mx-1 py-1 px-3 rounded-full ${currentPage === index ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-          >
-            {index + 1}
-          </button>
-        ))}
-        <button
-          onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={currentPage === Math.ceil(filteredDepartements.length / itemsPerPage) - 1}
-          className="mx-1 py-1 px-3 rounded-full hover:bg-gray-300"
-        >
-          <FaChevronRight className="text-gray-500 h-2 w-2" />
-        </button>
-      </div>
-    </div>
-  )
-}
 
-export default DepartementTable
+      <Pagination
+        currentPage={safeCurrentPage}
+        totalItems={filteredDepartements.length}
+        itemsPerPage={itemsPerPage}
+        onPageChange={setCurrentPage}
+        previousLabel="Precedent"
+        nextLabel="Suivant"
+      />
+    </div>
+  );
+};
+
+export default DepartementTable;

@@ -1,8 +1,10 @@
+import { formatValue } from "@/lib/helper";
 import { UserAttributes } from "@/app/api/models/userModel";
 import { Button } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import React from "react";
-import { FaChevronLeft, FaChevronRight, FaRegTrashAlt } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
+import Pagination from "./Pagination";
 
 interface UserTableProps {
   user: UserAttributes[];
@@ -21,13 +23,16 @@ const UserTable: React.FC<UserTableProps> = ({
   setCurrentPage,
   onDelete,
 }) => {
-const filteredUser = (user ?? []).filter((u) =>
-  u.name.toLowerCase().includes(searchTerm.toLowerCase())
-);
+  const filteredUser = (user ?? []).filter((u) =>
+    (u.name ?? "").toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  const { data: session } = useSession()
-  const startIndex = currentPage * itemsPerPage;
-  const endIndex = Math.min((currentPage + 1) * itemsPerPage, filteredUser.length);
+  const { data: session } = useSession();
+  const totalPages = Math.ceil(filteredUser.length / itemsPerPage);
+  const safeCurrentPage = totalPages > 0 ? Math.min(currentPage, totalPages - 1) : 0;
+  const startIndex = safeCurrentPage * itemsPerPage;
+  const endIndex = Math.min((safeCurrentPage + 1) * itemsPerPage, filteredUser.length);
+
   return (
     <div>
       <div className="overflow-x-auto">
@@ -55,79 +60,62 @@ const filteredUser = (user ?? []).filter((u) =>
           <tbody>
             {filteredUser.length === 0 ? (
               <tr>
-                <td colSpan={6} className="text-center py-4">
-                  Aucune commune trouv&eacute;e
+                <td colSpan={5} className="text-center py-4">
+                  Aucun utilisateur trouv&eacute;
                 </td>
               </tr>
             ) : (
-              filteredUser.slice(startIndex, endIndex).map((user, index) => (
-                <tr key={user.id}>
+              filteredUser.slice(startIndex, endIndex).map((userItem, index) => (
+                <tr key={userItem.id}>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {index + 1}
+                    {startIndex + index + 1}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {user.name}
+                    {formatValue(userItem.name)}
                   </td>
 
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {user.email}
+                    {formatValue(userItem.email)}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {user.role}
+                    {formatValue(userItem.role)}
                   </td>
-                  {session?.user.email !== user.email ? (
-                    <td className="text-left py-3 px-4 border-b border-gray-200">
+                  <td className="text-left py-3 px-4 border-b border-gray-200">
+                    {session?.user.email !== userItem.email ? (
                       <div className="flex space-x-2">
                         <Button
                           size="sm"
                           colorScheme="red"
                           mr={2}
                           variant="ghost"
-                          onClick={() => onDelete(user.id)}
+                          onClick={() => onDelete(userItem.id)}
                           p={0}
                           minWidth="auto"
                         >
                           <FaRegTrashAlt className="text-lg" />
                         </Button>
-
-
-
                       </div>
-                    </td>
-                  ) : ""}
+                    ) : (
+                      <span className="text-gray-400"> </span>
+                    )}
+                  </td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
       </div>
-      <div className="flex justify-center my-4">
-        <button
-          onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 0}
-          className="mx-1 py-1 px-3 rounded-full hover:bg-gray-300"
-        >
-          <FaChevronLeft className="text-gray-500 h-2 w-2" />
-        </button>
-        {[...Array(Math.ceil(filteredUser.length / itemsPerPage))].map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentPage(index)}
-            className={`mx-1 py-1 px-3 rounded-full ${currentPage === index ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-          >
-            {index + 1}
-          </button>
-        ))}
-        <button
-          onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={currentPage === Math.ceil(filteredUser.length / itemsPerPage) - 1}
-          className="mx-1 py-1 px-3 rounded-full hover:bg-gray-300"
-        >
-          <FaChevronRight className="text-gray-500 h-2 w-2" />
-        </button>
-      </div>
-    </div>
-  )
-}
 
-export default UserTable
+      <Pagination
+        currentPage={safeCurrentPage}
+        totalItems={filteredUser.length}
+        itemsPerPage={itemsPerPage}
+        onPageChange={setCurrentPage}
+        previousLabel="Precedent"
+        nextLabel="Suivant"
+      />
+    </div>
+  );
+};
+
+export default UserTable;

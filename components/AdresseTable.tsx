@@ -1,10 +1,10 @@
+import { formatValue } from "@/lib/helper";
 import { Button } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
-import { FaChevronLeft, FaChevronRight, FaRegEye, FaRegTrashAlt } from "react-icons/fa";
+import { FaRegEye, FaRegTrashAlt } from "react-icons/fa";
 import { AdresseAttributes } from "../app/api/models/adresseModel";
-
-
+import Pagination from "./Pagination";
 
 interface AdresseTableProps {
   adresse: AdresseAttributes[];
@@ -13,22 +13,26 @@ interface AdresseTableProps {
   itemsPerPage: number;
   setCurrentPage: (page: number) => void;
   onDelete: (id: number) => void;
-  getCommuneNameById: (id: number) => string,
+  getCommuneNameById: (id: number) => string;
 }
 
-const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
+const AdresseTable: React.FC<AdresseTableProps> = ({
+  adresse,
   searchTerm,
   currentPage,
   itemsPerPage,
   setCurrentPage,
   onDelete,
-  getCommuneNameById }) => {
-  const filteredAdresse = adresse.filter((adr) =>
-    adr.libelle_adresse.toLowerCase().includes(searchTerm.toLowerCase())
+  getCommuneNameById,
+}) => {
+  const filteredAdresse = (adresse ?? []).filter((adr) =>
+    (adr.libelle_adresse ?? "").toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const startIndex = currentPage * itemsPerPage;
-  const endIndex = Math.min((currentPage + 1) * itemsPerPage, filteredAdresse.length);
+  const totalPages = Math.ceil(filteredAdresse.length / itemsPerPage);
+  const safeCurrentPage = totalPages > 0 ? Math.min(currentPage, totalPages - 1) : 0;
+  const startIndex = safeCurrentPage * itemsPerPage;
+  const endIndex = Math.min((safeCurrentPage + 1) * itemsPerPage, filteredAdresse.length);
 
   return (
     <div>
@@ -72,7 +76,7 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
           <tbody>
             {filteredAdresse.length === 0 ? (
               <tr>
-                <td colSpan={6} className="text-center py-4">
+                <td colSpan={10} className="text-center py-4">
                   Aucune adresse trouv&eacute;e
                 </td>
               </tr>
@@ -80,33 +84,32 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
               filteredAdresse.slice(startIndex, endIndex).map((adr, index) => (
                 <tr key={adr.id_adresses}>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {index + 1}
+                    {startIndex + index + 1}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.libelle_adresse}
+                    {formatValue(adr.libelle_adresse)}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.numero_rue}
+                    {formatValue(adr.numero_rue)}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.code_postal ? adr.code_postal : "XXXXX"}
+                    {formatValue(adr.code_postal)}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.cle_unicite}
+                    {formatValue(adr.cle_unicite)}
                   </td>
 
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.type_batiment}
+                    {formatValue(adr.type_batiment)}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.statut}
+                    {formatValue(adr.statut)}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {getCommuneNameById(adr.id_commune)
-                    }
+                    {formatValue(getCommuneNameById(adr.id_commune))}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
-                    {adr.section_communale}
+                    {formatValue(adr.section_communale)}
                   </td>
                   <td className="text-left py-3 px-4 border-b border-gray-200">
                     <div className="flex space-x-2">
@@ -122,7 +125,8 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                             mr={2}
                           >
                             <FaRegTrashAlt className="text-lg" />
-                          </Button><Link href={`/adresses/${adr.id_adresses}`}>
+                          </Button>
+                          <Link href={`/adresses/${adr.id_adresses}`}>
                             <Button
                               size="sm"
                               colorScheme="blue"
@@ -132,8 +136,11 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
                             >
                               <FaRegEye className="text-lg" />
                             </Button>
-                          </Link></>
-                      ) : (<span className="text-gray-400"> </span>)}
+                          </Link>
+                        </>
+                      ) : (
+                        <span className="text-gray-400"> </span>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -142,35 +149,17 @@ const AdresseTable: React.FC<AdresseTableProps> = ({ adresse,
           </tbody>
         </table>
       </div>
-      <div className="flex justify-center my-4">
-        <button
-          onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 0}
-          className="mx-1 py-1 px-3 rounded-full hover:bg-gray-300"
-        >
-          <FaChevronLeft className="text-gray-500 h-2 w-2" />
-        </button>
-        {[...Array(Math.ceil(filteredAdresse.length / itemsPerPage))].map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentPage(index)}
-            className={`mx-1 py-1 px-3 rounded-full ${currentPage === index ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-          >
-            {index + 1}
-          </button>
-        ))}
-        <button
-          onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={currentPage === Math.ceil(filteredAdresse.length / itemsPerPage) - 1}
-          className="mx-1 py-1 px-3 rounded-full hover:bg-gray-300"
-        >
-          <FaChevronRight className="text-gray-500 h-2 w-2" />
-        </button>
-      </div>
 
-
+      <Pagination
+        currentPage={safeCurrentPage}
+        totalItems={filteredAdresse.length}
+        itemsPerPage={itemsPerPage}
+        onPageChange={setCurrentPage}
+        previousLabel="Precedent"
+        nextLabel="Suivant"
+      />
     </div>
-  )
-}
+  );
+};
 
-export default AdresseTable
+export default AdresseTable;
