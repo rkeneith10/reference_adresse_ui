@@ -116,7 +116,21 @@ export async function POST(req: NextRequest) {
 
     const cle_unicite = `${cle_unicite_base}${sequence}`;
 
-    // Création sans latitude et longitude
+    // Tentative de géolocalisation automatique
+    let latitude: number | undefined = undefined;
+    let longitude: number | undefined = undefined;
+
+    try {
+      const fullQuery = `${numero_rue || ''} ${libelle_adresse}, ${commune.libelle_commune}, ${pays.libelle_pays}`;
+      const coords = await getCoordinates(fullQuery);
+      if (coords) {
+        latitude = coords.lat;
+        longitude = coords.lon;
+      }
+    } catch (e) {
+      console.warn("Geocoding non bloquant échoué:", e);
+    }
+
     const adresse = await Adresse.create({
       numero_rue,
       libelle_adresse,
@@ -125,10 +139,10 @@ export async function POST(req: NextRequest) {
       section_communale: section_communale || commune.libelle_commune,
       code_postal: code_postal || "XXXXX",
       cle_unicite,
-      latitude: 10.00,
-      longitude: 10.00,
+      latitude,
+      longitude,
       from,
-      type_batiment
+      type_batiment,
     });
 
     return NextResponse.json({ message: "Adresse créée avec succès", adresse }, { status: 201 });

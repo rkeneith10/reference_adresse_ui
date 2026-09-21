@@ -10,7 +10,7 @@ const MapComponent = dynamic(() => import("../../components/MapComponent"), { ss
 const MapAdresse = () => {
   const router = useRouter();
   useEffect(() => {
-    document.title = "Map"
+    document.title = "Carte des Adresses";
     const checkSession = async () => {
       const session = await getSession();
 
@@ -21,13 +21,24 @@ const MapAdresse = () => {
 
     checkSession();
   }, [router]);
+
   return (
     <RootLayout isAuthenticated={true}>
-      <div>
+      <div className="bg-gray-100 min-h-screen">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <div>
+            <h1 className="font-semibold text-xl text-gray-900">
+              Cartographie des Adresses
+            </h1>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Visualisation géographique et localisation interactive des adresses enregistrées
+            </p>
+          </div>
+        </div>
         <MapComponent />
       </div>
     </RootLayout>
-  )
-}
+  );
+};
 
-export default MapAdresse
+export default MapAdresse;
