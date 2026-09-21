@@ -88,20 +88,20 @@ const Pagination: React.FC<PaginationProps> = ({
         )}
       </div>
 
-      {/* Dark sleek pagination bar matching the design */}
+      {/* Sleek gray pagination bar matching the design */}
       <nav
         aria-label="Pagination"
-        className="inline-flex items-center gap-1.5 sm:gap-2 bg-[#09090b] text-white px-3.5 py-2 rounded-2xl shadow-md border border-neutral-800 text-sm font-medium"
+        className="inline-flex items-center gap-1.5 sm:gap-2 bg-gray-100 text-gray-700 px-3.5 py-1.5 rounded-xl shadow-sm border border-gray-200 text-sm font-medium"
       >
         {/* Previous Button */}
         <button
           type="button"
           onClick={() => onPageChange(Math.max(0, currentPage - 1))}
           disabled={isFirstPage}
-          className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg transition-all duration-150 ${
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all duration-150 ${
             isFirstPage
-              ? "text-neutral-500 opacity-40 cursor-not-allowed"
-              : "text-neutral-200 hover:text-white hover:bg-neutral-800/70 active:scale-95 cursor-pointer"
+              ? "text-gray-400 opacity-40 cursor-not-allowed"
+              : "text-gray-700 hover:text-gray-900 hover:bg-gray-200/80 active:scale-95 cursor-pointer"
           }`}
           aria-label={previousLabel}
         >
@@ -116,7 +116,7 @@ const Pagination: React.FC<PaginationProps> = ({
               return (
                 <span
                   key={`${item}-${idx}`}
-                  className="w-7 h-7 flex items-center justify-center text-neutral-400 font-bold tracking-widest text-xs select-none"
+                  className="w-7 h-7 flex items-center justify-center text-gray-400 font-bold tracking-widest text-xs select-none"
                 >
                   &hellip;
                 </span>
@@ -134,8 +134,8 @@ const Pagination: React.FC<PaginationProps> = ({
                 aria-current={isActive ? "page" : undefined}
                 className={`min-w-[2rem] h-8 px-2 flex items-center justify-center rounded-lg text-xs sm:text-sm font-medium transition-all duration-150 ${
                   isActive
-                    ? "bg-[#222226] text-white border border-neutral-700/80 shadow-sm font-semibold ring-1 ring-white/10"
-                    : "text-neutral-300 hover:text-white hover:bg-neutral-800/60 active:scale-95 cursor-pointer"
+                    ? "bg-white text-gray-900 border border-gray-300 shadow-sm font-semibold ring-1 ring-black/5"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/80 active:scale-95 cursor-pointer"
                 }`}
               >
                 {pageIndex + 1}
@@ -149,10 +149,10 @@ const Pagination: React.FC<PaginationProps> = ({
           type="button"
           onClick={() => onPageChange(Math.min(totalPages - 1, currentPage + 1))}
           disabled={isLastPage}
-          className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg transition-all duration-150 ${
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all duration-150 ${
             isLastPage
-              ? "text-neutral-500 opacity-40 cursor-not-allowed"
-              : "text-neutral-200 hover:text-white hover:bg-neutral-800/70 active:scale-95 cursor-pointer"
+              ? "text-gray-400 opacity-40 cursor-not-allowed"
+              : "text-gray-700 hover:text-gray-900 hover:bg-gray-200/80 active:scale-95 cursor-pointer"
           }`}
           aria-label={nextLabel}
         >
