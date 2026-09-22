@@ -1,9 +1,9 @@
-
+import { SideNavItem } from "@/types";
 
 export const getVisibleSideNavItems = (
-  items: { title: string; path: string; isAdminOnly?: boolean }[],
+  items: SideNavItem[],
   userRole: string | undefined
-) => {
+): SideNavItem[] => {
   return items.filter((item) => {
     if (item.isAdminOnly && userRole !== "admin") return false;
     return true;

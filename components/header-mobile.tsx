@@ -2,209 +2,268 @@
 
 import { SIDENAV_ITEMS } from "@/constants";
 import { getVisibleSideNavItems } from "@/lib/helper";
-import { Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure } from '@chakra-ui/react';
-import { motion, useCycle } from "framer-motion";
-import { signOut, useSession } from 'next-auth/react';
+import {
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { AnimatePresence, motion } from "framer-motion";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ReactNode, useEffect, useRef } from "react";
-import { FaSignOutAlt, FaUser } from 'react-icons/fa';
-const sidebar = {
-  open: (height = 1000) => ({
-    clipPath: `circle(${height * 2 + 200}px at 100% 0)`,
-    transition: {
-      type: "spring",
-      stiffness: 20,
-      restDelta: 2,
-    },
-  }),
-  closed: {
-    clipPath: "circle(0px at 100% 0)",
-    transition: {
-      type: "spring",
-      stiffness: 400,
-      damping: 40,
-    },
-  },
-};
+import { ReactNode, useRef } from "react";
+import { FaBars, FaMapMarkerAlt, FaSignOutAlt, FaTimes, FaUser } from "react-icons/fa";
+import { MdPerson } from "react-icons/md";
 
 const HeaderMobile = () => {
   const pathname = usePathname();
-  const containerRef = useRef(null);
-  const { height } = useDimensions(containerRef);
-  const [isOpen, toggleOpen] = useCycle(false, true);
   const { data: session } = useSession();
   const userRole = session?.user?.role;
-
   const visibleItems = getVisibleSideNavItems(SIDENAV_ITEMS, userRole);
-  const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
-  const btnRef = useRef(null);
+  const {
+    isOpen: isMenuOpen,
+    onOpen: onMenuOpen,
+    onClose: onMenuClose,
+  } = useDisclosure();
+  const {
+    isOpen: isProfileOpen,
+    onOpen: onProfileOpen,
+    onClose: onProfileClose,
+  } = useDisclosure();
+  const btnRef = useRef<HTMLButtonElement>(null);
+
+  const initials = session?.user?.name
+    ? session.user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
+    : "U";
 
   return (
-    <motion.nav
-      initial={false}
-      animate={isOpen ? "open" : "closed"}
-      custom={height}
-      className={`fixed inset-0 z-50 w-full md:hidden ${isOpen ? "" : "pointer-events-none"}`}
-      ref={containerRef}
-    >
-      <motion.div
-        className="absolute inset-0 right-0 w-full bg-white"
-        variants={sidebar}
-      />
-      <motion.ul
-        variants={variants}
-        className="absolute grid w-full gap-3 px-10 py-16 max-h-screen overflow-y-auto"
+    <>
+      {/* Mobile Top Bar */}
+      <div
+        className="md:hidden sticky top-0 z-40 flex items-center justify-between px-4 h-14 bg-white"
+        style={{
+          borderBottom: "1px solid var(--gray-100)",
+          boxShadow: "var(--shadow-xs)",
+        }}
       >
-        {visibleItems.map((item, idx) => {
-          const isLastItem = idx === SIDENAV_ITEMS.length - 1;
-
-          return (
-            <div key={idx}>
-           {session?.user.status !==0 && (
-               <MenuItem>
-               <Link
-                 href={item.path}
-
-                 onClick={() => toggleOpen()}
-                 className={`flex w-full text-2xl ${item.path === pathname ? "font-bold" : ""}`}
-               >
-                 {item.title}
-               </Link>
-             </MenuItem>
-           )}
-              {!isLastItem && <MenuItem className="my-3 h-px w-full bg-gray-300" />}
-            </div>
-          );
-        })}
-      </motion.ul>
-      <MenuToggle toggle={toggleOpen} />
-      {session && session.user && (
-        <>
-          <button
-            ref={btnRef}
-            onClick={onDrawerOpen}
-            className="pointer-events-auto absolute right-4 bottom-14 z-30 bg-blue-500 text-white p-2 rounded-full"
+        {/* Logo */}
+        <Link href="/dashboard" className="flex items-center gap-2">
+          <div
+            className="w-7 h-7 rounded-lg flex items-center justify-center"
+            style={{ background: "linear-gradient(135deg, #3b82f6, #8b5cf6)" }}
           >
-            <FaUser />
-          </button>
-          <Drawer isOpen={isDrawerOpen} placement='right' onClose={onDrawerClose} finalFocusRef={btnRef}>
-            <DrawerOverlay />
-            <DrawerContent>
-              <DrawerCloseButton />
-              <DrawerHeader></DrawerHeader>
-              <DrawerBody>
-                <p className='text-gray-900 font-bold px-4 py-2 mt-4'>Bienvenue</p>
-                <p className="px-4 text-gray-500 font-semibold mb-4">{session.user.name}</p>
+            <FaMapMarkerAlt className="text-white text-xs" />
+          </div>
+          <span
+            className="font-extrabold text-sm"
+            style={{ color: "var(--gray-900)" }}
+          >
+            Référentiel
+          </span>
+        </Link>
 
-                <div className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer border border-gray-200 rounded-md">
-                  <FaUser className="h-5 w-5 text-blue-500 mr-2" />
-                  <div>
-                    <span className="font-bold">Profil</span>
-                    <span className="block text-sm text-gray-500">{session.user.email}</span>
+        {/* Right actions */}
+        <div className="flex items-center gap-2">
+          {/* Avatar */}
+          {session?.user && (
+            <button
+              ref={btnRef}
+              onClick={onProfileOpen}
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
+              style={{
+                background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+                boxShadow: "0 0 0 2px white, 0 0 0 3px var(--gray-200)",
+              }}
+            >
+              {initials}
+            </button>
+          )}
+
+          {/* Hamburger */}
+          <button
+            onClick={isMenuOpen ? onMenuClose : onMenuOpen}
+            className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors"
+            style={{ background: "var(--gray-100)", color: "var(--gray-700)" }}
+          >
+            {isMenuOpen ? <FaTimes size={15} /> : <FaBars size={15} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Side Nav Drawer */}
+      <Drawer
+        isOpen={isMenuOpen}
+        placement="left"
+        onClose={onMenuClose}
+        size="xs"
+      >
+        <DrawerOverlay backdropFilter="blur(2px)" />
+        <DrawerContent
+          style={{
+            borderRight: "1px solid var(--gray-100)",
+            boxShadow: "var(--shadow-xl)",
+          }}
+        >
+          <DrawerHeader
+            borderBottomWidth="1px"
+            borderColor="var(--gray-100)"
+          >
+            <div className="flex items-center gap-2.5">
+              <div
+                className="w-8 h-8 rounded-xl flex items-center justify-center"
+                style={{ background: "linear-gradient(135deg, #3b82f6, #8b5cf6)" }}
+              >
+                <FaMapMarkerAlt className="text-white text-sm" />
+              </div>
+              <span className="font-bold text-base" style={{ color: "var(--gray-900)" }}>
+                Navigation
+              </span>
+            </div>
+            <DrawerCloseButton style={{ color: "var(--gray-400)" }} />
+          </DrawerHeader>
+
+          <DrawerBody p={3} style={{ background: "var(--gray-50)" }}>
+            <nav className="space-y-1">
+              {visibleItems.map((item, idx) => {
+                if (session?.user?.status === 0) return null;
+                const isActive = pathname === item.path || pathname.startsWith(item.path + "/");
+                const isAdmin = item.title === "Gestion Utilisateurs";
+
+                return (
+                  <div key={idx}>
+                    {isAdmin && (
+                      <div
+                        className="h-px my-3"
+                        style={{ background: "var(--gray-200)" }}
+                      />
+                    )}
+                    <Link
+                      href={item.path}
+                      onClick={onMenuClose}
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all"
+                      style={{
+                        background: isActive ? "var(--brand-50)" : "transparent",
+                        color: isActive ? "var(--brand-600)" : "var(--gray-600)",
+                        fontWeight: isActive ? "600" : "500",
+                        fontSize: "13.5px",
+                      }}
+                    >
+                      <span
+                        className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                        style={{
+                          background: isActive ? "var(--brand-100)" : "white",
+                          color: isActive ? "var(--brand-600)" : "var(--gray-400)",
+                          border: "1px solid var(--gray-100)",
+                        }}
+                      >
+                        {item.icon}
+                      </span>
+                      {item.title}
+                    </Link>
                   </div>
+                );
+              })}
+            </nav>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+
+      {/* Profile Drawer */}
+      <Drawer
+        isOpen={isProfileOpen}
+        placement="right"
+        onClose={onProfileClose}
+        finalFocusRef={btnRef}
+        size="xs"
+      >
+        <DrawerOverlay backdropFilter="blur(2px)" />
+        <DrawerContent
+          style={{
+            borderLeft: "1px solid var(--gray-100)",
+            boxShadow: "var(--shadow-xl)",
+          }}
+        >
+          <DrawerCloseButton style={{ color: "var(--gray-400)" }} />
+          <DrawerHeader
+            borderBottomWidth="1px"
+            borderColor="var(--gray-100)"
+            pb={4}
+          >
+            <div className="flex items-center gap-3 mt-1">
+              <div
+                className="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                style={{
+                  background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+                  boxShadow: "0 0 0 3px rgba(59,130,246,.15)",
+                }}
+              >
+                {initials}
+              </div>
+              <div className="min-w-0">
+                <p className="font-bold text-sm truncate" style={{ color: "var(--gray-900)" }}>
+                  {session?.user?.name ?? "Utilisateur"}
+                </p>
+                <p className="text-xs truncate" style={{ color: "var(--gray-400)" }}>
+                  {session?.user?.email ?? ""}
+                </p>
+              </div>
+            </div>
+          </DrawerHeader>
+
+          <DrawerBody p={4} style={{ background: "var(--gray-50)" }}>
+            <div className="space-y-2">
+              <div
+                className="flex items-center gap-3 p-3 rounded-xl cursor-pointer"
+                style={{ background: "white", border: "1px solid var(--gray-100)" }}
+              >
+                <div
+                  className="w-8 h-8 rounded-lg flex items-center justify-center"
+                  style={{ background: "var(--brand-100)", color: "var(--brand-600)" }}
+                >
+                  <MdPerson size={16} />
                 </div>
-                <div className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer border border-gray-200 rounded-md mt-5" onClick={() => signOut({ callbackUrl: '/' })}>
-                  <FaSignOutAlt className="h-5 w-5 text-blue-500 mr-2" />
-                  <div>
-                    <span className="font-bold">Se Déconnecter</span>
-                    <span className="block text-sm text-gray-500">Fermer votre session</span>
-                  </div>
+                <div>
+                  <p className="text-sm font-semibold" style={{ color: "var(--gray-900)" }}>
+                    Mon Profil
+                  </p>
+                  <p className="text-xs" style={{ color: "var(--gray-400)" }}>
+                    Gérer mes informations
+                  </p>
                 </div>
-              </DrawerBody>
-            </DrawerContent>
-          </Drawer>
-        </>
-      )}
-    </motion.nav>
+              </div>
+
+              <div style={{ height: "1px", background: "var(--gray-100)", margin: "8px 0" }} />
+
+              <button
+                className="w-full flex items-center gap-3 p-3 rounded-xl text-left"
+                style={{ background: "white", border: "1px solid var(--gray-100)" }}
+                onClick={() => signOut({ callbackUrl: "/" })}
+              >
+                <div
+                  className="w-8 h-8 rounded-lg flex items-center justify-center"
+                  style={{ background: "#ffe4e6", color: "#e11d48" }}
+                >
+                  <FaSignOutAlt size={13} />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold" style={{ color: "#be123c" }}>
+                    Se Déconnecter
+                  </p>
+                  <p className="text-xs" style={{ color: "var(--gray-400)" }}>
+                    Fermer votre session
+                  </p>
+                </div>
+              </button>
+            </div>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 };
 
 export default HeaderMobile;
-
-const MenuToggle = ({ toggle }: { toggle: any }) => (
-  <button
-    onClick={toggle}
-    className="pointer-events-auto absolute right-4 top-[14px] z-30"
-  >
-    <svg width="23" height="23" viewBox="0 0 23 23">
-      <Path
-        variants={{
-          closed: { d: "M 2 2.5 L 20 2.5" },
-          open: { d: "M 3 16.5 L 17 2.5" },
-        }}
-      />
-      <Path
-        d="M 2 9.423 L 20 9.423"
-        variants={{
-          closed: { opacity: 1 },
-          open: { opacity: 0 },
-        }}
-        transition={{ duration: 0.1 }}
-      />
-      <Path
-        variants={{
-          closed: { d: "M 2 16.346 L 20 16.346" },
-          open: { d: "M 3 2.5 L 17 16.346" },
-        }}
-      />
-    </svg>
-  </button>
-);
-
-const Path = (props: any) => (
-  <motion.path
-    fill="transparent"
-    strokeWidth="2"
-    stroke="hsl(0, 0%, 18%)"
-    strokeLinecap="round"
-    {...props}
-  />
-);
-
-const MenuItem = ({ className, children }: { className?: string; children?: ReactNode; }) => (
-  <motion.li variants={MenuItemVariants} className={className}>
-    {children}
-  </motion.li>
-);
-
-const MenuItemVariants = {
-  open: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      y: { stiffness: 1000, velocity: -100 },
-    },
-  },
-  closed: {
-    y: 50,
-    opacity: 0,
-    transition: {
-      y: { stiffness: 1000 },
-      duration: 0.02,
-    },
-  },
-};
-
-const variants = {
-  open: {
-    transition: { staggerChildren: 0.02, delayChildren: 0.15 },
-  },
-  closed: {
-    transition: { staggerChildren: 0.01, staggerDirection: -1 },
-  },
-};
-
-const useDimensions = (ref: any) => {
-  const dimensions = useRef({ width: 0, height: 0 });
-
-  useEffect(() => {
-    if (ref.current) {
-      dimensions.current.width = ref.current.offsetWidth;
-      dimensions.current.height = ref.current.offsetHeight;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref]);
-
-  return dimensions.current;
-};
